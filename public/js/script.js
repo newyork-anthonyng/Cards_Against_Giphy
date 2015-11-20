@@ -5,7 +5,7 @@ let myUser;
 
 $(function() {
 
-  // Login button
+  // Login entered
   $('#login-input').keypress((event) => {
     if(event.keyCode === 13) {
       let username = $('#login-input').val();
@@ -13,10 +13,11 @@ $(function() {
       socket.emit('add user', username);
       $('#login-input').val('');
       $('#loginpage').hide();
+      $('#form').show();
     }
   });
 
-  // Message button
+  // Message entered
   $('#message').keypress(function(event) {
     if(event.keyCode === 13) {
       let message = $('#message').val();
