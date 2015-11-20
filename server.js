@@ -4,10 +4,20 @@ let express     = require('express');
 let app         = express();
 let server      = require('http').createServer(app);
 let io          = require('socket.io')(server);
+let moongoose   = require('mongoose');
 
 // set up port that our server will be using
 app.set('port', 3000);
 app.use(express.static('public'));
+
+// connect to MongoDB
+mongoose.connect('mongodb://localhost/giphy', (err) => {
+  if(err) {
+    console.log('Connection error.', err);
+  } else {
+    console.log('Connection successful');
+  }
+});
 
 let users     = [];
 let addedUser = false;
@@ -44,6 +54,36 @@ io.on('connection', (client) => {
       });
     }
   });
+});
+
+// ===========================================================================
+// Set up routes =============================================================
+// ===========================================================================
+
+// go to homepage
+app.get('/', (req, res) => {
+  console.log('get \'/\'');
+});
+
+// go into our database and get random terms
+// the 'numberOfTerms' is how many documents from the
+// database that you want to get
+app.get('/randomTerms/:numberOfTerms', (req, res) => {
+  console.log('get /randomTerms/:numberOfTerms');
+});
+
+// hit the Giphy API and grab random giphys
+// grab all of the array of player cards,
+// and retrieve the image_url's from giphy
+app.get('/createCards', (req, res) => {
+  console.log('get /createCards');
+});
+
+// hit the 'Cards Against Humanity' API
+// http://www.crhallberg.com/cah/json
+// grab a list of questions and save it into our database
+app.get('/createQuestions', (req, res) => {
+  console.log('get /createQuestions');
 });
 
 // set up server

@@ -10,7 +10,7 @@ body {
 	position: absolute;
 	left: 0;
 	border: solid 1px black;
-	float: left;
+	float: right;
 	width: 15%;
 	height: 100%;
 }
