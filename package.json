@@ -1,0 +1,24 @@
+{
+  "name": "cards_against_giphy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/newyork-anthonyng/Cards_Against_Giphy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/newyork-anthonyng/Cards_Against_Giphy/issues"
+  },
+  "homepage": "https://github.com/newyork-anthonyng/Cards_Against_Giphy#readme",
+  "dependencies": {
+    "express": "^4.13.3",
+    "http": "0.0.0",
+    "socket.io": "^1.3.7"
+  }
+}
