@@ -4,10 +4,20 @@ let express     = require('express');
 let app         = express();
 let server      = require('http').createServer(app);
 let io          = require('socket.io')(server);
+let moongoose   = require('mongoose');
 
 // set up port that our server will be using
 app.set('port', 3000);
 app.use(express.static('public'));
+
+// connect to MongoDB
+mongoose.connect('mongodb://localhost/giphy', (err) => {
+  if(err) {
+    console.log('Connection error.', err);
+  } else {
+    console.log('Connection successful');
+  }
+});
 
 let users     = [];
 let addedUser = false;
@@ -69,6 +79,12 @@ app.get('/createCards', (req, res) => {
   console.log('get /createCards');
 });
 
+// hit the 'Cards Against Humanity' API
+// http://www.crhallberg.com/cah/json
+// grab a list of questions and save it into our database
+app.get('/createQuestions', (req, res) => {
+  console.log('get /createQuestions');
+});
 
 // set up server
 server.listen(app.get('port'), () => {
