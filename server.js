@@ -46,6 +46,30 @@ io.on('connection', (client) => {
   });
 });
 
+// ===========================================================================
+// Set up routes =============================================================
+// ===========================================================================
+
+// go to homepage
+app.get('/', (req, res) => {
+  console.log('get \'/\'');
+});
+
+// go into our database and get random terms
+// the 'numberOfTerms' is how many documents from the
+// database that you want to get
+app.get('/randomTerms/:numberOfTerms', (req, res) => {
+  console.log('get /randomTerms/:numberOfTerms');
+});
+
+// hit the Giphy API and grab random giphys
+// grab all of the array of player cards,
+// and retrieve the image_url's from giphy
+app.get('/createCards', (req, res) => {
+  console.log('get /createCards');
+});
+
+
 // set up server
 server.listen(app.get('port'), () => {
   let host = server.address().address;
