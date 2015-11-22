@@ -6,14 +6,14 @@ const server      = require('http').createServer(app);
 const io          = require('socket.io')(server);
 const request     = require('request');
 const bodyParser  = require('body-parser');
-const moongoose   = require('mongoose');
+const mongoose   = require('mongoose');
 const userRoutes  = require('./controllers/userController');
 
 // set up port that our server will be using
 app.set('port', 3000);
 
 app.use(bodyParser.json());
-app.use('/', userRoutes);
+// app.use('/', userRoutes);
 
 app.use(express.static('public'));
 
@@ -86,7 +86,11 @@ app.get('/randomTerms/:numberOfTerms', (req, res) => {
 app.get('/createCards', (req, res) => {
   console.log('get /createCards');
 
-  let searchTerm = 'kitten';
+  console.log(req.query.search);
+  // TO DO
+  // With game module, grab all of the search terms from the player
+
+  let searchTerm = req.query.search;
   let searchURL = 'http://api.giphy.com/v1/gifs/search?q='
                   + searchTerm + '&limit=1&api_key=dc6zaTOxFJmzC';
 
@@ -95,13 +99,12 @@ app.get('/createCards', (req, res) => {
     let giphyArray = [];
 
     // giphyArray will hold onto the ID, GIF, and still image
-    giphyArray[0] = info['data']['id'];
-    giphyArray[1] = info['data']['images']['fixed_height'];
-    giphyArray[2] = info['data']['images']['fixed_height_still'];
+    giphyArray[0] = info['data'][0]['id'];
+    giphyArray[1] = info['data'][0]['images']['fixed_height']['url'];
+    giphyArray[2] = info['data'][0]['images']['fixed_height_still']['url'];
 
     res.send(giphyArray);
   });
-
 
 });
 
