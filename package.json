@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/newyork-anthonyng/Cards_Against_Giphy#readme",
   "dependencies": {
+    "bcrypt": "^0.8.5",
+    "body-parser": "^1.14.1",
     "express": "^4.13.3",
     "http": "0.0.0",
     "mongoose": "^4.2.6",
