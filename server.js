@@ -1,13 +1,17 @@
 'use strict';
 
-let express     = require('express');
-let app         = express();
-let server      = require('http').createServer(app);
-let io          = require('socket.io')(server);
-let moongoose   = require('mongoose');
+const express     = require('express');
+const app         = express();
+const server      = require('http').createServer(app);
+const io          = require('socket.io')(server);
+const moongoose   = require('mongoose');
 
 // set up port that our server will be using
 app.set('port', 3000);
+
+app.use(bodyParser.json());
+app.use('/', userRoutes);
+
 app.use(express.static('public'));
 
 // connect to MongoDB
