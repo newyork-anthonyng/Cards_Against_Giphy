@@ -6,14 +6,15 @@ const server      = require('http').createServer(app);
 const io          = require('socket.io')(server);
 const request     = require('request');
 const bodyParser  = require('body-parser');
-const moongoose   = require('mongoose');
+const mongoose    = require('mongoose');
 const userRoutes  = require('./controllers/userController');
+const Game        = require('./public/js/game');
 
 // set up port that our server will be using
 app.set('port', 3000);
 
 app.use(bodyParser.json());
-app.use('/', userRoutes);
+// app.use('/', userRoutes);
 
 app.use(express.static('public'));
 
@@ -33,6 +34,9 @@ let addedUser = false;
 // Emit events ===============================================================
 // user joined, send message, disconnect
 // ===========================================================================
+// Socket pattern: IO will emit events from server.js
+// In script.js, we will receive these events and manipulate the DOM as needed
+// ===========================================================================
 
 io.on('connection', (socket) => {
   console.log('User has connected.');
@@ -48,6 +52,10 @@ io.on('connection', (socket) => {
 
   socket.on('send message', (data) => {
     io.emit('send message', data);
+  });
+
+  socket.on('start round', (data) => {
+    io.emit('start round', data);
   });
 
   socket.on('disconnect', () => {
@@ -86,7 +94,7 @@ app.get('/randomTerms/:numberOfTerms', (req, res) => {
 app.get('/createCards', (req, res) => {
   console.log('get /createCards');
 
-  let searchTerm = 'kitten';
+  let searchTerm = req.query.search;
   let searchURL = 'http://api.giphy.com/v1/gifs/search?q='
                   + searchTerm + '&limit=1&api_key=dc6zaTOxFJmzC';
 
@@ -95,13 +103,12 @@ app.get('/createCards', (req, res) => {
     let giphyArray = [];
 
     // giphyArray will hold onto the ID, GIF, and still image
-    giphyArray[0] = info['data']['id'];
-    giphyArray[1] = info['data']['images']['fixed_height'];
-    giphyArray[2] = info['data']['images']['fixed_height_still'];
+    giphyArray[0] = info['data'][0]['id'];
+    giphyArray[1] = info['data'][0]['images']['fixed_height']['url'];
+    giphyArray[2] = info['data'][0]['images']['fixed_height_still']['url'];
 
     res.send(giphyArray);
   });
-
 
 });
 
@@ -110,6 +117,12 @@ app.get('/createCards', (req, res) => {
 // grab a list of questions and save it into our database
 app.get('/createQuestions', (req, res) => {
   console.log('get /createQuestions');
+});
+
+// Start Round
+app.get('/startRound', (req, res) => {
+  Game.startRound();
+  io.emit('start round');
 });
 
 // set up server
