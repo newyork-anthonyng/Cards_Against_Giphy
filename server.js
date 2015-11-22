@@ -4,7 +4,10 @@ const express     = require('express');
 const app         = express();
 const server      = require('http').createServer(app);
 const io          = require('socket.io')(server);
+const request     = require('request');
+const bodyParser  = require('body-parser');
 const moongoose   = require('mongoose');
+const userRoutes  = require('./controllers/userController');
 
 // set up port that our server will be using
 app.set('port', 3000);
@@ -17,9 +20,9 @@ app.use(express.static('public'));
 // connect to MongoDB
 mongoose.connect('mongodb://localhost/giphy', (err) => {
   if(err) {
-    console.log('Connection error.', err);
+    console.log('Mongo connection error.', err);
   } else {
-    console.log('Connection successful');
+    console.log('Mongo connection successful');
   }
 });
 
@@ -31,28 +34,28 @@ let addedUser = false;
 // user joined, send message, disconnect
 // ===========================================================================
 
-io.on('connection', (client) => {
+io.on('connection', (socket) => {
   console.log('User has connected.');
 
-  client.on('add user', (username) => {
+  socket.on('add user', (username) => {
     let userObj = {};
     userObj.name = username;
-    userObj.id = client.id;
+    userObj.id = socket.id;
     users.push(userObj);
     addedUser = true;
     io.emit('user joined', users);
   });
 
-  client.on('send message', (data) => {
+  socket.on('send message', (data) => {
     io.emit('send message', data);
   });
 
-  client.on('disconnect', () => {
+  socket.on('disconnect', () => {
     console.log('User has disconnected.');
     if(addedUser) {
       // go through each user and remove the person who logged out
       users.forEach((user) => {
-        if(user.id === client.id) {
+        if(user.id === socket.id) {
           users.splice(users.indexOf(user), 1);
         }
       });
@@ -79,8 +82,27 @@ app.get('/randomTerms/:numberOfTerms', (req, res) => {
 // hit the Giphy API and grab random giphys
 // grab all of the array of player cards,
 // and retrieve the image_url's from giphy
+// http://api.giphy.com/v1/gifs/search?q=cat&limit=1&api_key=dc6zaTOxFJmzC
 app.get('/createCards', (req, res) => {
   console.log('get /createCards');
+
+  let searchTerm = 'kitten';
+  let searchURL = 'http://api.giphy.com/v1/gifs/search?q='
+                  + searchTerm + '&limit=1&api_key=dc6zaTOxFJmzC';
+
+  request(searchURL, (err, response, body) => {
+    let info = JSON.parse(body);
+    let giphyArray = [];
+
+    // giphyArray will hold onto the ID, GIF, and still image
+    giphyArray[0] = info['data']['id'];
+    giphyArray[1] = info['data']['images']['fixed_height'];
+    giphyArray[2] = info['data']['images']['fixed_height_still'];
+
+    res.send(giphyArray);
+  });
+
+
 });
 
 // hit the 'Cards Against Humanity' API
