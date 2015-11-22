@@ -49,12 +49,10 @@ module.exports = User;
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-
 const secret = "iahsofh"; // this needs to be moved out of the app!
 
-
-
 function create(req, res){
+
   console.log(req.body.user);
   let userObject = new User(req.body.user);
 
@@ -111,18 +109,17 @@ function auth(req, res){
   console.log(req.body.user);
   // Validation for undefined email or password
   if (userParams.username == undefined || userParams.password == undefined)
-  return res.status(401).send({message: "Please provide correct credentials"});
+  return res.status(401).send({message: "incorrect credentials"});
 
-  User.findOne({ username: userParams.username }, function(err, user) {
+  User.findOne({ username: userParams.username }, (err, user) => {
     console.log(user);
-    /* mongoose method with similar name! */
-    user.authenticate(userParams.password, function (err, isMatch) {
+    user.authenticate(userParams.password, (err, isMatch) => {
       if (err) throw err;
       // check if passwords match and token generation
       if (isMatch) {
-        return res.status(200).send({message: "Valid Credentials", token: jwt.sign(user, secret)});
+        return res.status(200).send({message: "valid credentials", token: jwt.sign(user, secret)});
       } else {
-        return res.status(401).send({message: "Invalid Credentials"});
+        return res.status(401).send({message: "invalid credentials"});
       }
     });
   });
@@ -152,6 +149,8 @@ router.route('/user')
     userProperty: 'auth'
   }))
   .get(user.retrieve);
+
+router.route('/user/edit')
   .put(user.update);
   .delete(user.destroy);
 
