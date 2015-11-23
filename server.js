@@ -7,14 +7,14 @@ const io          = require('socket.io')(server);
 const request     = require('request');
 const bodyParser  = require('body-parser');
 const mongoose    = require('mongoose');
-const userRoutes  = require('./controllers/userController');
+const userRoutes  = require('./routes/userRoutes');
 const Game        = require('./public/js/game');
 
 // set up port that our server will be using
 app.set('port', 3000);
 
 app.use(bodyParser.json());
-// app.use('/', userRoutes);
+app.use('/', userRoutes);
 
 app.use(express.static('public'));
 

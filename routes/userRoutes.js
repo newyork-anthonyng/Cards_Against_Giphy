@@ -14,7 +14,8 @@ router.route('/user')
 
 router.route('/user/edit')
   .put(user.update);
-  .delete(user.destroy);
+  // must check unexpected token error
+  // .delete(user.destroy);
 
 router.route('/user/auth')
   .post(user.auth);
