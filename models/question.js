@@ -1,5 +1,6 @@
 'use strict';
 let mongoose = require('mongoose');
+let questionArray = require('../resources/qa-array.js');
 
 let QuestionSchema = new mongoose.Schema({
 	// id: Number,
