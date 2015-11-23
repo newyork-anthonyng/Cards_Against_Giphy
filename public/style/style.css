@@ -16,37 +16,71 @@ div.container {
 	width: 1200px;
 	height: 600px;
 	margin: 0px;
-	/*overflow: scroll;*/
 }
 
-div#menu {
+#menu {
 	height: auto;
 	padding: 5px;
 	font-size: 20px;
 	text-align: right;
+	background-color: lightgrey;
+	padding-bottom: 5px;
+	border-bottom: 2px solid black;
 }
 
 div.gameboard {
 	position: relative;
 	float: left;
-	width: 900px;
-	height: 558px;
-	border: 2px solid red;
-	margin-top: 5px;
+	width: 910px;
+	height: 567px;
+}
+
+#question {
+	height: 60px;
+	text-align: center;
+	font-size: 20pt;
+}
+
+#cards-in-play {
+	height: 170px;
+}
+
+#user-cards {
+	height: 335px;
+	border-top: 2px solid black;
 }
 
 div.sidebar {
 	position: relative;
 	float: right;
-	width: 270px;
-	height: 558px;
-	border: 2px solid red;
-	margin-top: 5px;
-	/*margin: 5px auto;*/
+	padding: 10px;
+	width: 268px;
+	height: 547px;
+	border-left: 2px solid black;
 }
 
+#game-status {
+	height: 150px;
+	border-bottom: 2px dotted black;
+}
 
+#messages {
+	height: 300px;
+	border: 2px solid black;
+}
 
+#message {
+	height: 50px;
+	width: 200px;
+	border: 2px solid black;
+}
+
+.chat button {
+	margin-left: 10px;
+	width: 50px;
+	height: 50px;
+	border: 2px solid black;
+}
 
 
 /*==============
