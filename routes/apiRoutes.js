@@ -65,8 +65,8 @@ router.get('/createCards', (req, res) => {
 
 // hit the questions collection in our database (giphy)
 // grab one random question out of the total questions
-router.get('/createQuestions/:number', (req, res) => {
-  console.log('get /createQuestions/:number');
+router.get('/createQuestion', (req, res) => {
+  console.log('get /createQuestion');
   Question.find({id: {$gt: 1}}).sort('-id').limit(1).exec((err, result) => {
 	  console.log(result.id);
 	  Question.find({id: (Math.ceil(Math.random()*result.id))}, (error, output) => {
