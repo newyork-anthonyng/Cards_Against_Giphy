@@ -21,18 +21,14 @@ router.get('/randomTerms/:numberOfTerms', (req, res) => {
   console.log('get /randomTerms/:numberOfTerms');
 });
 
-// hit the Giphy API and grab random giphys
-// grab all of the array of player cards,
-// and retrieve the image_url's from giphy
-// http://api.giphy.com/v1/gifs/search?q=cat&limit=1&api_key=dc6zaTOxFJmzC
+// hit the Giphy API and grab a random giphy based on search term
+// returns an object containing the giphy ID, the actual Giphy, and still image
 router.get('/createCards/:searchTerm', (req, res) => {
   console.log('get /createCards');
 
   let searchTerm = req.params.searchTerm;
   let searchURL = 'http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=' +
                   searchTerm;
-  // let searchURL = 'http://api.giphy.com/v1/gifs/search?q='
-  //                 + searchTerm + '&limit=1&api_key=dc6zaTOxFJmzC';
 
   request(searchURL, (err, response, body) => {
     let info = JSON.parse(body);
