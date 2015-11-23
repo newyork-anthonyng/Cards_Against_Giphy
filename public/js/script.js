@@ -26,6 +26,32 @@ $(function() {
     }
   });
 
+// ===========================================================================
+// Test Events ===============================================================
+// ===========================================================================
+  $('#createGiphy').click((event) => {
+    event.preventDefault();
+
+    let searchTerm = $('#giphyInput').val();
+    console.log('Search Term: ' + searchTerm);
+
+    $.ajax({
+      url: 'http://localhost:3000/createCards',
+      data: { search: searchTerm }
+    }).done((data) => {
+      $('#giphy').empty();
+      $('#giphy').append('<div><img src=' + data[1] +'></img></div>');
+    });
+  });
+
+  $('#startRound').click((event) => {
+    event.preventDefault();
+
+    $.ajax({
+      url: 'http://localhost:3000/startRound'
+    });
+  });
+
 });
 
 // ===========================================================================
@@ -49,4 +75,8 @@ socket.on('send message', (data) => {
   let message = $('<li>');
   message.text(data.name + ' : ' + data.message);
   chatList.append(message);
+});
+
+socket.on('start round', (data) => {
+  console.log('Script.js: Start Round');
 });
