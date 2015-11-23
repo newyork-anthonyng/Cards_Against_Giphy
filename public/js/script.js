@@ -99,9 +99,6 @@ socket.on('show hand', (hand) => {
   let handList = $('#myHand');
 
   // go through each card and add it to list
-  hand.forEach((card) => {
-    let myHand = $('<li>');
-    myHand.text(card);
-    handList.append(myHand);
-  });
+  let myHand = $('<img src=' + hand + '></img>');
+  handList.append(myHand);
 });
