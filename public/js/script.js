@@ -57,8 +57,8 @@ $(function() {
       myUser = username;
       socket.emit('add user', username);
       $('#login-input').val('');
-      $('#loginpage').hide();
-      $('#form').show();
+      $('#login-view').hide();
+      // $('#form').show();
     }
   });
 
@@ -69,6 +69,14 @@ $(function() {
       socket.emit('send message', {name: myUser, message: message});
       $('#message').val('');
     }
+  });
+
+  $('#start-round').click((event) => {
+    event.preventDefault();
+
+    $.ajax({
+      url: 'http://localhost:3000/startRound'
+    });
   });
 
 // ===========================================================================
@@ -89,13 +97,6 @@ $(function() {
     });
   });
 
-  $('#startRound').click((event) => {
-    event.preventDefault();
-
-    $.ajax({
-      url: 'http://localhost:3000/game/startRound'
-    });
-  });
 
   $('#showHand').click((event) => {
     event.preventDefault();
@@ -121,14 +122,26 @@ $(function() {
 // ===========================================================================
 
 socket.on('user joined', (users) => {
-    let usersList = $('#users ul');
+    // update list of users online
+    let usersList = $('#game-status');
     usersList.empty();
-    // update user list
     users.forEach((user) => {
       let userElement = $('<li>');
       userElement.text(user.name);
       usersList.append(userElement);
     });
+});
+
+socket.on('show judge', (user) => {
+  let container = $('#cards-in-play');
+  let text = '';
+  if(user.isJudge) {
+    text = 'I\'m a judge';
+  } else {
+    text = 'I\'m a player';
+  }
+
+  container.text(text);
 });
 
 socket.on('send message', (data) => {
@@ -137,6 +150,7 @@ socket.on('send message', (data) => {
   let message = $('<li>');
   message.text(data.name + ' : ' + data.message);
   chatList.append(message);
+
 });
 
 // get giphy's for hand
@@ -170,7 +184,8 @@ socket.on('get hand', (data) => {
 // ===========================================================================
 
 socket.on('start round', (data) => {
-  console.log('Script.js: Start Round');
+  console.log(data);
+
 });
 
 socket.on('show hand', (hand) => {
