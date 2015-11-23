@@ -7,8 +7,8 @@ const io          = require('socket.io')(server);
 const request     = require('request');
 const bodyParser  = require('body-parser');
 const mongoose    = require('mongoose');
+const users        = require('./public/js/global');
 
-var users     = [];
 let addedUser = false;
 
 const userRoutes  = require('./routes/userRoutes');
@@ -22,7 +22,6 @@ let Answer		  = require('./models/Answer')
 
 // set up port that our server will be using
 app.set('port', 3000);
-
 
 app.use(bodyParser.json());
 app.use('/', userRoutes);

@@ -7,6 +7,7 @@ const router      = express.Router();
 const request     = require('request');
 const bodyParser  = require('body-parser');
 const Game        = require('../public/js/game');
+const users       = require('../public/js/global');
 
 router.get('/', (req, res) => {
   console.log('hit / route inside of gameRoutes.js');
@@ -15,7 +16,7 @@ router.get('/', (req, res) => {
 
 // Start Round
 router.get('/startRound', (req, res) => {
-  // Game.startRound(users);
+  Game.startRound(users);
   io.emit('start round');
 });
 
