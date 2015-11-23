@@ -6,8 +6,8 @@ const secret = "iahsofh"; // this needs to be moved out of the app!
 
 function create(req, res){
 
-  console.log(req.body.user);
-  let userObject = new User(req.body.user);
+  console.log(req.body);
+  let userObject = new User(req.body);
 
   userObject.save((err, user) => {
     if(err){
@@ -28,7 +28,7 @@ function retrieve(req, res){
 
 function update(req, res){
 
-  let userParams = req.body.user;
+  let userParams = req.body;
   // find by username
   let query = {username: userParams.username};
   // fields to update
@@ -44,7 +44,7 @@ function update(req, res){
 
 function destroy(req, res){
 
-  let userParams = req.body.user;
+  let userParams = req.body;
   // find by username
   let query = {username: userParams.username};
   // find and remove
@@ -59,8 +59,8 @@ function destroy(req, res){
 
 function auth(req, res){
 
-  var userParams = req.body.user;
-  console.log(req.body.user);
+  var userParams = req.body;
+  console.log(req.body);
   // Validation for undefined email or password
   if (userParams.username == undefined || userParams.password == undefined)
   return res.status(401).send({message: "incorrect credentials"});

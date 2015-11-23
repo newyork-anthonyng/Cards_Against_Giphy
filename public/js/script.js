@@ -3,7 +3,52 @@
 let socket = io();
 let myUser;
 
+// hide user signup and game views
+$('.container').hide();
+$('.usersignup').hide();
+
 $(function() {
+
+  // user signup
+  $('#signuplink').click((event) => {
+    $('.userlogin').hide();
+    $('.usersignup').show();
+  });
+
+  $('#signup-submit').click((event) => {
+    let username = $("#signup-username").val();
+    let password = $("#signup-password").val();
+    let userData = {
+      username: username,
+      password: password
+    }
+
+    $.ajax({
+      url: "/user/signup",
+      method: "post",
+      data: userData
+    }).done(function(user){
+    });
+  });
+
+  // login user using token
+  $('#login-submit').click((event) => {
+
+    let username = $("#login-username").val();
+    let password = $("#login-password").val();
+    let userData = {
+      username: username,
+      password: password
+    }
+
+    $.ajax({
+      url: "/user/auth",
+      method: "post",
+      data: userData
+    }).done(function(user){
+
+    });
+  });
 
   // Login entered
   $('#login-input').keypress((event) => {
