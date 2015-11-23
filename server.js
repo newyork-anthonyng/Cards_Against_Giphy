@@ -121,7 +121,7 @@ app.get('/createQuestions', (req, res) => {
 
 // Start Round
 app.get('/startRound', (req, res) => {
-  Game.startRound();
+  Game.startRound(users);
   io.emit('start round');
 });
 
