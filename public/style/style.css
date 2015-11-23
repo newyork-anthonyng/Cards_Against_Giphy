@@ -16,7 +16,6 @@ div.container {
 	width: 1200px;
 	height: 600px;
 	margin: 0px;
-	/*overflow: scroll;*/
 }
 
 div#menu {
@@ -29,20 +28,36 @@ div#menu {
 div.gameboard {
 	position: relative;
 	float: left;
-	width: 900px;
-	height: 558px;
-	border: 2px solid red;
+	width: 910px;
+	height: 560px;
+	/*border: 2px solid red;*/
 	margin-top: 5px;
+}
+
+#question {
+	/*border: 2px solid blue;*/
+	height: 58px;
+	text-align: center;
+	font-size: 20pt;
+}
+
+#cards-in-play {
+	/*border: 2px solid blue;*/
+	height: 170px;
+}
+
+#user-cards {
+	/*border: 2px solid blue;*/
+	height: 320px;
 }
 
 div.sidebar {
 	position: relative;
 	float: right;
-	width: 270px;
+	width: 280px;
 	height: 558px;
 	border: 2px solid red;
 	margin-top: 5px;
-	/*margin: 5px auto;*/
 }
 
 
