@@ -36,7 +36,7 @@ $(function() {
     console.log('Search Term: ' + searchTerm);
 
     $.ajax({
-      url: 'http://localhost:3000/createCards',
+      url: 'http://localhost:3000/api/createCards',
       data: { search: searchTerm }
     }).done((data) => {
       $('#giphy').empty();
@@ -48,7 +48,7 @@ $(function() {
     event.preventDefault();
 
     $.ajax({
-      url: 'http://localhost:3000/startRound'
+      url: 'http://localhost:3000/game/startRound'
     });
   });
 
@@ -56,7 +56,7 @@ $(function() {
     event.preventDefault();
 
     $.ajax({
-      url: 'http://localhost:3000/showHand/' + myUser
+      url: 'http://localhost:3000/game/showHand/' + myUser
     });
   });
 
