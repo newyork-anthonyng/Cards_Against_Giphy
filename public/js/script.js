@@ -26,6 +26,14 @@ $(function() {
     }
   });
 
+  $('#start-round').click((event) => {
+    event.preventDefault();
+
+    $.ajax({
+      url: 'http://localhost:3000/startRound'
+    });
+  });
+
 // ===========================================================================
 // Test Events ===============================================================
 // ===========================================================================
@@ -44,13 +52,6 @@ $(function() {
     });
   });
 
-  $('#startRound').click((event) => {
-    event.preventDefault();
-
-    $.ajax({
-      url: 'http://localhost:3000/game/startRound'
-    });
-  });
 
   $('#showHand').click((event) => {
     event.preventDefault();
@@ -104,6 +105,7 @@ socket.on('send message', (data) => {
   let message = $('<li>');
   message.text(data.name + ' : ' + data.message);
   chatList.append(message);
+
 });
 
 // get giphy's for hand
@@ -137,7 +139,8 @@ socket.on('get hand', (data) => {
 // ===========================================================================
 
 socket.on('start round', (data) => {
-  console.log('Script.js: Start Round');
+  console.log(data);
+
 });
 
 socket.on('show hand', (hand) => {

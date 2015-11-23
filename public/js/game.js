@@ -14,7 +14,7 @@ let Game = (function() {
 
     // start round
     startRound: function(users) {
-      
+
       console.log('Game Module: Start round');
 
       // reset players and add in all players
@@ -23,10 +23,12 @@ let Game = (function() {
         let newPlayer = {};
         newPlayer.id = users[i]['id'];
         newPlayer.name = users[i]['name'];
-        this.dealCards(newPlayer);
+        // this.dealCards(newPlayer);
 
         players.push(newPlayer);
+
       }
+      return players;
 
       // test: print out all player's name
       console.log('Player\'s name:');
@@ -38,7 +40,12 @@ let Game = (function() {
     // deal cards
     dealCards: function(user) {
       // grab user and deal a new hand of 6 terms to them
-      user['hand'] = ['cat', 'dog', 'pig', 'chicken', 'obama', 'mcdonalds'];
+      $.ajax({
+        url: 'http://localhost:3000/api/randomTerms/6'
+      }).done((data) => {
+        let searchTerms = data;
+        user.hand = searchTerms;
+      });
     },
 
     // show players hand

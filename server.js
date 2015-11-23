@@ -18,7 +18,7 @@ const Game        = require('./public/js/game');
 
 // Temporary Link to Models
 let Question	  = require('./models/question');
-let Answer		  = require('./models/answer');
+let answer		  = require('./controllers/answerController');
 
 // set up port that our server will be using
 app.set('port', 3000);
@@ -133,9 +133,18 @@ app.post('/createCardsURL', (req, res) => {
 
 // Start Round
 app.get('/startRound', (req, res) => {
-  Game.startRound(users);
-  io.emit('start round');
+  let playersArray = Game.startRound(users);
+  console.log('get /startRound');
+
+  for (var i = 0; i < playersArray.length; i++) {
+    let termsArray = answer(6);
+    playersArray[i]['hand'] = termsArray;
+  }
+  console.log('Server.js get /startRound :' + playersArray);
+  console.log(playersArray);
+  io.emit('start round', playersArray);
 });
+
 
 // set up server
 server.listen(app.get('port'), () => {
