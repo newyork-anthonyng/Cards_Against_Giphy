@@ -28,13 +28,13 @@ UserSchema.pre('save', function(next) {
   });
 });
 
-let User = mongoose.model('User', UserSchema);
-
-User.methods.authenticate = function(password, callback) {
+UserSchema.methods.authenticate = function(password, callback) {
   // if the first password once encrypted matches to the second argument
   bcrypt.compare(password, this.password, (err, isMatch) => {
     callback(null, isMatch);
   });
 };
+
+let User = mongoose.model('User', UserSchema);
 
 module.exports = User;
