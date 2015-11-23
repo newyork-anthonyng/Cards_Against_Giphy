@@ -16,6 +16,10 @@ const gameRoutes  = require('./routes/gameRoutes.js');
 const apiRoutes   = require('./routes/apiRoutes');
 const Game        = require('./public/js/game');
 
+// Temporary Link to Models
+let Question	  = require('./models/Question');
+let Answer		  = require('./models/Answer')
+
 // set up port that our server will be using
 app.set('port', 3000);
 

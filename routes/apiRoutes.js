@@ -53,4 +53,14 @@ router.get('/createQuestions', (req, res) => {
   console.log('get /createQuestions');
 });
 
+// app.get('/createQuestions', (req, res) => {
+//   console.log('get /createQuestions');
+//   Question.find({}, (err, data) => {
+// 	  console.log(data);
+// 	  console.log(datad[0][Math.floor(Math.random()*423)].text);
+// 	  res.send(datad[0][Math.floor(Math.random()*423)].text);
+//   });
+
+// });
+
 module.exports = router;
