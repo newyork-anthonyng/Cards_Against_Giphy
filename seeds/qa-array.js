@@ -22,6 +22,7 @@ let questionObject = {"blackCards":[{"text":"Why can't I sleep at night?","pick"
 // Loop to seed individual questions
 for (let i = 0; i < questionObject.blackCards.length; i++) {
 	let blkCard = new Question({
+		id: i+1,
 		text: questionObject.blackCards[i].text,
 		pick: questionObject.blackCards[i].pick
 	});
