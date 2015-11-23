@@ -6,23 +6,50 @@ let Game = (function() {
   // players, judge, phases
   // submitted cards for judge
   // question
-  let players = ['Anthony', 'Amy', 'Trevor'];
+  let players = [];
   let judge = undefined;
   let phases = ['round start', 'player chooses', 'judging', 'winner revealed'];
-  let currentPhase = phases[0];
+  let currentPhase = 0;
 
   return {
 
-    test: function() {
-      console.log('Testing game module');
+    // start round
+    startRound: function(users) {
+      console.log('Game Module: Start round');
+
+      // reset players and add in all players
+      players = [];
+      for(let i = 0, j = users.length; i < j; i++) {
+        let newPlayer = {};
+        newPlayer.id = users[i]['id'];
+        newPlayer.name = users[i]['name'];
+        this.dealCards(newPlayer);
+
+        players.push(newPlayer);
+      }
+
+      // test: print out all player's name
+      console.log('Player\'s name:');
+      for(let i = 0, j = players.length; i < j; i++) {
+        console.log(players[i]['name'] + ': ' + players[i]['hand']);
+      }
     },
 
-    // start round
-    startRound: function() {
-      console.log('Game Module: Start round');
-    }
-
     // deal cards
+    dealCards: function(user) {
+      // grab user and deal a new hand of 6 terms to them
+      user['hand'] = ['cat', 'dog', 'pig', 'chicken', 'obama', 'mcdonalds'];
+    },
+
+    // show players hand
+    showHand: function(userName) {
+      for(let i = 0, j = players.length; i < j; i++) {
+        if(players[i]['name'] === userName) {
+          console.log(userName + '\'s hand: ' + players[i]['hand']);
+          return players[i]['hand'];
+        }
+      }
+    },
 
     // player selects card
 
@@ -33,6 +60,13 @@ let Game = (function() {
     // round is over
 
     // next phase
+    nextPhase: function() {
+      if (currentPhase === phases.length) {
+        currentPhase = 0;
+      } else {
+        currentPhase++;
+      }
+    },
 
     // play a card
 
