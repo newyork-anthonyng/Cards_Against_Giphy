@@ -2,13 +2,43 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link href="style/style.css">
+    <link rel="stylesheet" href="/style/style.css">
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <title>Gifs Against Humanity</title>
   </head>
   <body>
-    <div id="loginpage">
+<!-- ===============
+gameboard view
+=============== -->
+    <div class="container">
+      <div id="menu">
+        PROFILE | STATS | LOGOUT
+      </div>
+
+      <div class="gameboard">
+        <div id="question">
+        </div>
+        <div id="cards-in-play">
+        </div>
+        <div id="user-cards">
+        </div>
+      </div>
+
+      <div class="sidebar">
+        fhaoshfosah
+        <div id="game-status">
+        </div>
+        <div id="chat">
+        </div>
+      </div>
+    </div>
+
+<!-- ==========
+giphy testing
+========== -->
+
+    <!-- <div id="loginpage">
       <div class="loginform">
          <input type="text" id="login-input" placeholder="Enter your username and press enter">
       </div>
@@ -23,16 +53,16 @@
 
       <div id="form">
         <input id="message" autocomplete="off" placeholder="Enter message" />
-      </div>
+      </div> -->
 
       <!-- Giphy test -->
-      <input id="giphyInput" placeholder="Enter giphy search term" />
+      <!-- <input id="giphyInput" placeholder="Enter giphy search term" />
       <button id="createGiphy">Create Giphy</button>
       <div id="giphy"></div>
       <button id="startRound">Start Round</button>
       <button id="showHand">Show Hand</button>
 
-      <ul id="myHand"></ul>
+      <ul id="myHand"></ul> -->
 
     <script src="js/script.js"></script>
   </body>
