@@ -52,10 +52,18 @@ $(function() {
     });
   });
 
+  $('#showHand').click((event) => {
+    event.preventDefault();
+
+    $.ajax({
+      url: 'http://localhost:3000/showHand/' + myUser
+    });
+  });
+
 });
 
 // ===========================================================================
-// Socket Events =============================================================
+// Socket Events - Chat Room =================================================
 // ===========================================================================
 
 socket.on('user joined', (users) => {
@@ -77,6 +85,23 @@ socket.on('send message', (data) => {
   chatList.append(message);
 });
 
+// ===========================================================================
+// Socket Events - Game ======================================================
+// ===========================================================================
+
 socket.on('start round', (data) => {
   console.log('Script.js: Start Round');
+});
+
+socket.on('show hand', (hand) => {
+  console.log('Script.js: Showing Hand');
+
+  let handList = $('#myHand');
+
+  // go through each card and add it to list
+  hand.forEach((card) => {
+    let myHand = $('<li>');
+    myHand.text(card);
+    handList.append(myHand);
+  });
 });

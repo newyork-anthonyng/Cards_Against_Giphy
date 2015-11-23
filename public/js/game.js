@@ -21,6 +21,7 @@ let Game = (function() {
       players = [];
       for(let i = 0, j = users.length; i < j; i++) {
         let newPlayer = {};
+        newPlayer.id = users[i]['id'];
         newPlayer.name = users[i]['name'];
         this.dealCards(newPlayer);
 
@@ -37,7 +38,17 @@ let Game = (function() {
     // deal cards
     dealCards: function(user) {
       // grab user and deal a new hand of 6 terms to them
-      user['hand'] = ['cat', 'dog'];
+      user['hand'] = ['cat', 'dog', 'pig', 'chicken', 'obama', 'mcdonalds'];
+    },
+
+    // show players hand
+    showHand: function(userName) {
+      for(let i = 0, j = players.length; i < j; i++) {
+        if(players[i]['name'] === userName) {
+          console.log(userName + '\'s hand: ' + players[i]['hand']);
+          return players[i]['hand'];
+        }
+      }
     },
 
     // player selects card

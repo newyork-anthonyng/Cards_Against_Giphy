@@ -125,6 +125,15 @@ app.get('/startRound', (req, res) => {
   io.emit('start round');
 });
 
+// Show user's hand
+app.get('/showHand/:userName', (req, res) => {
+  let userName = req.params.userName;
+  let myHand = Game.showHand(userName);
+
+  console.log('Server.js show hand: ' + myHand);
+  io.emit('show hand', myHand);
+});
+
 // set up server
 server.listen(app.get('port'), () => {
   let host = server.address().address;
