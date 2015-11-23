@@ -8,6 +8,8 @@ const express     = require('express');
 const router      = express.Router();
 const request     = require('request');
 const bodyParser  = require('body-parser');
+let Question	  = require('../models/question');
+let Answer		  = require('../models/answer');
 
 router.get('/', (req, res) => {
   console.log('hit / route inside of apiRoute.js');
@@ -19,6 +21,21 @@ router.get('/', (req, res) => {
 // database that you want to get
 router.get('/randomTerms/:numberOfTerms', (req, res) => {
   console.log('get /randomTerms/:numberOfTerms');
+
+  Answer.find({id: {$gt: 1}}).sort('-id').limit(1).exec((err, result) => {
+	console.log(req.params.numberOfTerms);
+	console.log(result.id);
+
+	// Loop to find needed number of gif search-terms
+	let termsArray = [];
+	let neededTerms = req.params.numberOfTerms;
+	for (var i = 0; i < neededTerms; i++) {
+		Answer.find({id: (Math.ceil(Math.random()*result.id))}, (error, output) => {
+			termsArray.push(output.text);
+		});
+	};
+	res.send(termsArray);
+  });
 });
 
 // hit the Giphy API and grab random giphys
@@ -46,21 +63,19 @@ router.get('/createCards', (req, res) => {
 
 });
 
-// hit the 'Cards Against Humanity' API
-// http://www.crhallberg.com/cah/json
-// grab a list of questions and save it into our database
-router.get('/createQuestions', (req, res) => {
-  console.log('get /createQuestions');
+// hit the questions collection in our database (giphy)
+// grab one random question out of the total questions
+router.get('/createQuestions/:number', (req, res) => {
+  console.log('get /createQuestions/:number');
+  Question.find({id: {$gt: 1}}).sort('-id').limit(1).exec((err, result) => {
+	  console.log(result.id);
+	  Question.find({id: (Math.ceil(Math.random()*result.id))}, (error, output) => {
+		  res.send(output.text);
+	  });
+
+  });
+
 });
 
-// app.get('/createQuestions', (req, res) => {
-//   console.log('get /createQuestions');
-//   Question.find({}, (err, data) => {
-// 	  console.log(data);
-// 	  console.log(datad[0][Math.floor(Math.random()*423)].text);
-// 	  res.send(datad[0][Math.floor(Math.random()*423)].text);
-//   });
-
-// });
 
 module.exports = router;
