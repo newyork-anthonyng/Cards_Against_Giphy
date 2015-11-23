@@ -1,21 +1,22 @@
-// I'm thinking it would be easy to store all objects in a simple array.
+'use strict';
 
-// Possibile data structure solutions:
-	// Have list of adjective objects and noun objects;
-		// combine them to create distinctive pairs of
-	// Fetch trending topics from Giphy
-		// used the current topics listed on
-		// http://giphy.com/categories
+// Setup
+let Question = require('.models/answer.js');
+let mongoose = require('mongoose');
 
-// var gifWords = [
-// 	{descriptor:
-// 		{id: 1, text: 'silly'}
-// 	},
-// 	{noun:
-// 		{id: "x", text: 'potato'}}
-// ];
 
-module.exports = [
+// Connecting to Mongo DB
+mongoose.connect('mongodb://localhost/cardsAgainstGiphyApp', (error) => {
+	if (error) {
+		console.log('Cannot connect to db. Error: ', err);
+	} else {
+		console.log('Connected to database.');
+	}
+});
+
+// List of search terms (objects in an array)
+let answerObject = [
+
 // Actions
 {id: #, text: 'breaking up'},
 {id: #, text: 'cooking'},
@@ -1333,18 +1334,18 @@ module.exports = [
 ]
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+// Loop for seeding answerObject
+for (let i = 0; i < answerObject.length; i++) {
+	let searchTerm = new Answer({
+		id: i+1,
+		text: answerObject[i].text
+	});
+	searchTerm.save((error) => {
+		if (error) {
+			console.log(error);
+		};
+	});
+};
 
 
 
