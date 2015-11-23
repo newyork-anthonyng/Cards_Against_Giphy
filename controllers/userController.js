@@ -37,6 +37,7 @@ function update(req, res){
   // find and update user
   User.findOneAndUpdate(query, update, options, (err, user) => {
     if (err) throw err;
+    res.send(user);
   });
 
 }
@@ -51,7 +52,7 @@ function destroy(req, res){
     if (err) {
       console.log(err);
     } else {
-      res.redirect('/');
+      res.send({"record" : "deleted"});
     }
   })
 }
