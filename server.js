@@ -24,6 +24,7 @@ let Answer		  = require('./models/answer');
 app.set('port', 3000);
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', userRoutes);
 app.use('/game', gameRoutes);
 app.use('/api', apiRoutes);
@@ -108,6 +109,14 @@ app.get('/showHand/:userName', (req, res) => {
   });
 
 });
+
+// Take an array of search terms
+// Give an array of image_url
+app.post('/createCardsURL', (req, res) => {
+  let searchTerms = req.body.test;
+
+
+})
 
 // Start Round
 app.get('/startRound', (req, res) => {

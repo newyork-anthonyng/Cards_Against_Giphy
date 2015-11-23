@@ -55,10 +55,18 @@ $(function() {
   $('#showHand').click((event) => {
     event.preventDefault();
 
-    $.ajax({
-      // url: 'http://localhost:3000/game/showHand/' + myUser
-      url: 'http://localhost:3000/showHand/' + myUser
-    });
+    // go through ever single term and get the img_url for them
+    // get the img_url
+    let searchTerms = ['dog', 'kitten', 'tarzan'];
+    for(let i = 0, j = searchTerms.length; i < j; i++) {
+      (function(i) {
+        $.ajax({
+          url: 'http://localhost:3000/api/createCards/' + searchTerms[i]
+        }).done((data) => {
+          console.log(i + ': ' + data['giphy']);
+        });
+      })(i);
+    }
   });
 
 });
@@ -122,6 +130,8 @@ socket.on('start round', (data) => {
 
 socket.on('show hand', (hand) => {
   console.log('Script.js: Showing Hand');
+
+
 
   let handList = $('#myHand');
 
