@@ -11,10 +11,7 @@ router.route('/user')
     userProperty: 'auth'
   }))
   .get(user.retrieve);
-
-router.route('/user/edit')
-  .put(user.update);
-  // must check unexpected token error
+  // .put(user.update);
   // .delete(user.destroy);
 
 router.route('/user/auth')

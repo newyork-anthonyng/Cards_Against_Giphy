@@ -38,25 +38,23 @@ router.get('/randomTerms/:numberOfTerms', (req, res) => {
   });
 });
 
-// hit the Giphy API and grab random giphys
-// grab all of the array of player cards,
-// and retrieve the image_url's from giphy
-// http://api.giphy.com/v1/gifs/search?q=cat&limit=1&api_key=dc6zaTOxFJmzC
-router.get('/createCards', (req, res) => {
+// hit the Giphy API and grab a random giphy based on search term
+// returns an object containing the giphy ID, the actual Giphy, and still image
+router.get('/createCards/:searchTerm', (req, res) => {
   console.log('get /createCards');
 
-  let searchTerm = req.query.search;
-  let searchURL = 'http://api.giphy.com/v1/gifs/search?q='
-                  + searchTerm + '&limit=1&api_key=dc6zaTOxFJmzC';
+  let searchTerm = req.params.searchTerm;
+  let searchURL = 'http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=' +
+                  searchTerm;
 
   request(searchURL, (err, response, body) => {
     let info = JSON.parse(body);
-    let giphyArray = [];
+    let giphyArray = {};
 
     // giphyArray will hold onto the ID, GIF, and still image
-    giphyArray[0] = info['data'][0]['id'];
-    giphyArray[1] = info['data'][0]['images']['fixed_height']['url'];
-    giphyArray[2] = info['data'][0]['images']['fixed_height_still']['url'];
+    giphyArray['id']    = info['data']['id'];
+    giphyArray['giphy'] = info['data']['fixed_height_downsampled_url'];
+    giphyArray['still']  = info['data']['fixed_height_small_still_url'];
 
     res.send(giphyArray);
   });

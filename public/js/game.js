@@ -1,7 +1,6 @@
 'use strict';
 
 let Game = (function() {
-
   // variables
   // players, judge, phases
   // submitted cards for judge

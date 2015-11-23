@@ -55,9 +55,18 @@ $(function() {
   $('#showHand').click((event) => {
     event.preventDefault();
 
-    $.ajax({
-      url: 'http://localhost:3000/game/showHand/' + myUser
-    });
+    // go through ever single term and get the img_url for them
+    // get the img_url
+    let searchTerms = ['dog', 'kitten', 'tarzan'];
+    for(let i = 0, j = searchTerms.length; i < j; i++) {
+      (function(i) {
+        $.ajax({
+          url: 'http://localhost:3000/api/createCards/' + searchTerms[i]
+        }).done((data) => {
+          console.log(i + ': ' + data['giphy']);
+        });
+      })(i);
+    }
   });
 
 });
@@ -85,6 +94,32 @@ socket.on('send message', (data) => {
   chatList.append(message);
 });
 
+// get giphy's for hand
+// data will be an array of search terms
+socket.on('get hand', (data) => {
+  // get search terms
+  let searchTerm = data;
+
+  for(let i = 0, j = searchTerm.length; i < j; i++) {
+    let currentTerm = searchTerm[i];
+
+    $.ajax({
+      url: 'http://localhost:3000/api/createCards',
+      data: { search: currentTerm }
+    }).done((data) => {
+      $('#myHand').empty();
+      let newHand = $('<ul>');
+      for(let i = 0, j = data.length; i < j; i++) {
+        let newCard = $('<li><img src=' + data[i] + '></img></li>');
+        newHand.append(newCard);
+      }
+
+      $('#myHand').append(newHand);
+    });
+  }
+
+});
+
 // ===========================================================================
 // Socket Events - Game ======================================================
 // ===========================================================================
@@ -95,6 +130,8 @@ socket.on('start round', (data) => {
 
 socket.on('show hand', (hand) => {
   console.log('Script.js: Showing Hand');
+
+
 
   let handList = $('#myHand');
 
