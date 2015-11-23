@@ -56,7 +56,8 @@ $(function() {
     event.preventDefault();
 
     $.ajax({
-      url: 'http://localhost:3000/game/showHand/' + myUser
+      // url: 'http://localhost:3000/game/showHand/' + myUser
+      url: 'http://localhost:3000/showHand/' + myUser
     });
   });
 
@@ -83,6 +84,32 @@ socket.on('send message', (data) => {
   let message = $('<li>');
   message.text(data.name + ' : ' + data.message);
   chatList.append(message);
+});
+
+// get giphy's for hand
+// data will be an array of search terms
+socket.on('get hand', (data) => {
+  // get search terms
+  let searchTerm = data;
+
+  for(let i = 0, j = searchTerm.length; i < j; i++) {
+    let currentTerm = searchTerm[i];
+
+    $.ajax({
+      url: 'http://localhost:3000/api/createCards',
+      data: { search: currentTerm }
+    }).done((data) => {
+      $('#myHand').empty();
+      let newHand = $('<ul>');
+      for(let i = 0, j = data.length; i < j; i++) {
+        let newCard = $('<li><img src=' + data[i] + '></img></li>');
+        newHand.append(newCard);
+      }
+
+      $('#myHand').append(newHand);
+    });
+  }
+
 });
 
 // ===========================================================================

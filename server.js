@@ -12,7 +12,7 @@ const users        = require('./public/js/global');
 let addedUser = false;
 
 const userRoutes  = require('./routes/userRoutes');
-const gameRoutes  = require('./routes/gameRoutes');
+const gameRoutes  = require('./routes/gameRoutes.js');
 const apiRoutes   = require('./routes/apiRoutes');
 const Game        = require('./public/js/game');
 
@@ -74,6 +74,41 @@ io.on('connection', (socket) => {
       });
     }
   });
+});
+
+// Show user's hand
+app.get('/showHand/:userName', (req, res) => {
+  let userName = req.params.userName;
+  let myHand = Game.showHand(userName);
+
+  let searchTerm = myHand[0];
+  let searchURL = 'http://api.giphy.com/v1/gifs/search?q='
+                  + searchTerm + '&limit=1&api_key=dc6zaTOxFJmzC';
+
+  request(searchURL, (err, response, body) => {
+    let info = JSON.parse(body);
+    let giphyArray = [];
+    let handImage;
+
+    // giphyArray will hold onto the ID, GIF, and still image
+    giphyArray[0] = info['data'][0]['id'];
+    giphyArray[1] = info['data'][0]['images']['fixed_height']['url'];
+    giphyArray[2] = info['data'][0]['images']['fixed_height_still']['url'];
+
+    handImage = giphyArray[1];
+
+    console.log('Server.js show hand: ' + myHand);
+    io.emit('show hand', handImage);
+
+    res.send(giphyArray);
+  });
+
+});
+
+// Start Round
+app.get('/startRound', (req, res) => {
+  Game.startRound(users);
+  io.emit('start round');
 });
 
 // set up server
