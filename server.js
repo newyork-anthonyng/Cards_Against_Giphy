@@ -10,6 +10,10 @@ const mongoose    = require('mongoose');
 const userRoutes  = require('./routes/userRoutes');
 const Game        = require('./public/js/game');
 
+// Temporary Link to Models
+let Question	  = require('./models/Question');
+let Answer		  = require('./models/Answer')
+
 // set up port that our server will be using
 app.set('port', 3000);
 
@@ -85,6 +89,7 @@ app.get('/', (req, res) => {
 // database that you want to get
 app.get('/randomTerms/:numberOfTerms', (req, res) => {
   console.log('get /randomTerms/:numberOfTerms');
+
 });
 
 // hit the Giphy API and grab random giphys
@@ -115,8 +120,16 @@ app.get('/createCards', (req, res) => {
 // hit the 'Cards Against Humanity' API
 // http://www.crhallberg.com/cah/json
 // grab a list of questions and save it into our database
+	// Instead, have database resource qa-array
+	// Grab questions from blackCards object
 app.get('/createQuestions', (req, res) => {
   console.log('get /createQuestions');
+  Question.find({}, (err, data) => {
+	  console.log(data);
+	  console.log(datad[0][Math.floor(Math.random()*423)].text);
+	  res.send(datad[0][Math.floor(Math.random()*423)].text);
+  });
+
 });
 
 // Start Round
