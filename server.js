@@ -53,11 +53,24 @@ io.on('connection', (socket) => {
 
   socket.on('add user', (username) => {
     let userObj = {};
+
+    // check if user was first
+    if (users.length === 0) {
+      userObj.isJudge = true;
+    } else {
+      userObj.isJudge = false;
+    }
+
     userObj.name = username;
     userObj.id = socket.id;
     users.push(userObj);
     addedUser = true;
+
+    // displaying users
     io.emit('user joined', users);
+
+    // show judge
+    io.emit('show judge', userObj);
   });
 
   socket.on('send message', (data) => {

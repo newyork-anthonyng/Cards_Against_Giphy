@@ -12,8 +12,8 @@ $(function() {
       myUser = username;
       socket.emit('add user', username);
       $('#login-input').val('');
-      $('#loginpage').hide();
-      $('#form').show();
+      $('#login-view').hide();
+      // $('#form').show();
     }
   });
 
@@ -76,14 +76,26 @@ $(function() {
 // ===========================================================================
 
 socket.on('user joined', (users) => {
-    let usersList = $('#users ul');
+    // update list of users online
+    let usersList = $('#game-status');
     usersList.empty();
-    // update user list
     users.forEach((user) => {
       let userElement = $('<li>');
       userElement.text(user.name);
       usersList.append(userElement);
     });
+});
+
+socket.on('show judge', (user) => {
+  let container = $('#cards-in-play');
+  let text = '';
+  if(user.isJudge) {
+    text = 'I\'m a judge';
+  } else {
+    text = 'I\'m a player';
+  }
+
+  container.text(text);
 });
 
 socket.on('send message', (data) => {

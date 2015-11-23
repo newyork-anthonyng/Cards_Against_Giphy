@@ -14,6 +14,7 @@ let Game = (function() {
 
     // start round
     startRound: function(users) {
+      
       console.log('Game Module: Start round');
 
       // reset players and add in all players
