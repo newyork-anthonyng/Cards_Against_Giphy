@@ -8,7 +8,7 @@ let mongoose = require('mongoose');
 
 
 // Connecting to Mongo DB
-mongoose.connect('mongodb://localhost/cardsAgainstGiphyApp', (error) => {
+mongoose.connect('mongodb://localhost/giphy', (error) => {
 	if (error) {
 		console.log('Cannot connect to db. Error: ', err);
 	} else {
