@@ -7,5 +7,5 @@ let AnswerSchema = new mongoose.Schema({
 	// total wins: Number,
 });
 
-module.exports = Answer;
 let Answer = mongoose.model('Answer', AnswerSchema);
+module.exports = Answer;

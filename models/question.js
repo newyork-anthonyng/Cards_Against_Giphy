@@ -7,5 +7,5 @@ let QuestionSchema = new mongoose.Schema({
 	pick: Number,
 });
 
-module.exports = Question;
 let Question = mongoose.model('Question', QuestionSchema);
+module.exports = Question;
