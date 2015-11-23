@@ -3,7 +3,7 @@
 	// 	Added 423 odd questions (top through holiday packs, hacker, and xkcd).
 
 // Setup
-let Question = require('.models/question.js');
+let Question = require('../models/question.js');
 let mongoose = require('mongoose');
 
 

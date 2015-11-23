@@ -1,7 +1,7 @@
 'use strict';
 
 // Setup
-let Question = require('.models/answer.js');
+let Answer = require('../models/answer.js');
 let mongoose = require('mongoose');
 
 
