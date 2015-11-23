@@ -34,6 +34,44 @@ gameboard view
       </div>
     </div>
 
+
+<!-- ==========
+Templates
+========== -->
+
+<!-- Login Template -->
+<template id="login-view" type="text/x-handlebars-template">
+	<h2 class="title-card">Gifs Against Humanity</h2>
+	<form id="login-form">
+		<div class="form-box">
+			<input type="text" placeholder="User Name" id="login-username">
+			<input type="text" placeholder="Email" id="login-email">
+		</div>
+		<button class="submit-butt" id="login-submit">Login</button>
+	</form>
+	<a href="localhost:3000/signup">
+		<h4 class="alt-link">Sign Up</h4>
+	</a>
+</template>
+
+<!-- Signup Template -->
+<template id="signup-view" type="text/x-handlebars-template">
+	<h2 class="title-card">Gifs Against Humanity</h2>
+	<form id="signup-form">
+		<div class="form-box">
+			<input type="text" placeholder="User Name" id="signup-username">
+			<input type="text" placeholder="Email" id="signup-email">
+			<input type="text" placeholder="Password" id="signup-password">
+			<input type="text" placeholder="Confirm Password" id="signup-confirmp">
+		</div>
+		<button class="submit-butt" id="signup-submit">Sign Up</button>
+	</form>
+	<a href="localhost:3000/login">
+		<h4 class="alt-link">Login</h4>
+	</a>
+</template>
+
+
 <!-- ==========
 giphy testing
 ========== -->
