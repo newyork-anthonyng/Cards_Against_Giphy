@@ -10,9 +10,9 @@ router.route('/user')
     secret: secret,
     userProperty: 'auth'
   }))
-  .get(user.retrieve);
-  // .put(user.update);
-  // .delete(user.destroy);
+  .get(user.retrieve)
+  .put(user.update)
+  .delete(user.destroy);
 
 router.route('/user/auth')
   .post(user.auth);

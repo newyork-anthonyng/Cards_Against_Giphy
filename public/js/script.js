@@ -98,9 +98,9 @@ $(function() {
   });
 
   // set up interval method
-  let timerID = window.setInterval(() => {
-    socket.emit('show hand');
-  }, 200);
+  // let timerID = window.setInterval(() => {
+  //   socket.emit('show hand');
+  // }, 200);
 
 });
 
