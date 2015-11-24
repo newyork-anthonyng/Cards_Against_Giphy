@@ -6,14 +6,13 @@ const secret = "iahsofh"; // this needs to be moved out of the app!
 
 function create(req, res){
 
-  console.log(req.body);
   let userObject = new User(req.body);
 
   userObject.save((err, user) => {
     if(err){
-      return res.status(401).send({message: err.errmsg});
+      res.status(401).send({message: err.errmsg});
     } else {
-      return res.status(200).send(user);
+      res.status(200).send(user);
     }
   });
 }
@@ -60,21 +59,22 @@ function destroy(req, res){
 function auth(req, res){
 
   var userParams = req.body;
-  console.log(req.body);
   // Validation for undefined email or password
   if (userParams.username == undefined || userParams.password == undefined)
-  return res.status(401).send({message: "incorrect credentials"});
+  res.status(401).send({message: "incorrect credentials"});
 
   User.findOne({ username: userParams.username }, (err, user) => {
-    console.log(user);
     user.authenticate(userParams.password, (err, isMatch) => {
       if (err) throw err;
       // check if passwords match and token generation
       if (isMatch) {
-        return res.status(200).send({message: "valid credentials", token: jwt.sign(user, secret)});
+        console.log({message: "valid credentials", token: jwt.sign(user, secret)});
+        // res.setHeader(200, token: jwt.sign(user, secret)});
+        res.status(200).send({message: "valid credentials", token: jwt.sign(user, secret)});
+
       } else {
-        return res.status(401).send({message: "invalid credentials"});
-      }
+        res.status(401).send({message: "invalid credentials"});
+      };
     });
   });
 }
