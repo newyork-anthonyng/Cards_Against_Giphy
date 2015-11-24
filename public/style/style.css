@@ -41,6 +41,7 @@ a {
 
 div.container {
 	border: 2px solid black;
+	border-bottom: 0;
 	position: absolute;
 	left: 50%;
 	top: 50%;
@@ -54,7 +55,7 @@ div.container {
 #menu {
 	height: auto;
 	padding: 5px;
-	font-size: 20px;
+	font-size: 15px;
 	text-align: right;
 	background-color: lightgrey;
 	padding-bottom: 5px;
@@ -66,6 +67,7 @@ div.gameboard {
 	float: left;
 	width: 910px;
 	height: 567px;
+	border-bottom: 2px solid black;
 }
 
 #question {
@@ -90,6 +92,7 @@ div.sidebar {
 	width: 268px;
 	height: 547px;
 	border-left: 2px solid black;
+	border-bottom: 2px solid black;
 }
 
 #game-status {
@@ -113,6 +116,17 @@ div.sidebar {
 	width: 50px;
 	height: 50px;
 	border: 2px solid black;
+}
+
+
+/* Navigation Bar and Buttons*/
+.nav-tool {
+	display: inline-block;
+}
+
+#nav-bar {
+	display: inline-block;
+	margin: 0;
 }
 
 
