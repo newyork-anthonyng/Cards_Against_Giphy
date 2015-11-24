@@ -1,8 +1,13 @@
 'use strict';
 
+// Client user information
 let socket = io();
 let myUser;
 let myId;
+
+// Client board information
+let isQuestionShowing = false;
+let areCardsShowing = false;
 
 // hide user signup and game views
 $('.container').hide();
@@ -47,7 +52,6 @@ $(function() {
 
   // login user using token
   $('#login-submit').click((event) => {
-
     let username = $("#login-username").val();
     let password = $("#login-password").val();
     let userData = {
@@ -100,17 +104,28 @@ $(function() {
 // ==========================================================================
 // Giphy Cards ==============================================================
 // ==========================================================================
-  // Giphy cards are clicked
-  $('.card').click((event) => {
-    console.log('Giphy card was clicked');
-  });
 
+  // user can click and select card
+  $(document.body).on('click', '.card', (event) => {
+    // console.log(event.target);
+
+    // remove the ID from any other card
+    let priorSelectedCards = $('#selected');
+    $('#selected').removeAttr('id');
+
+    let currentlySelectedCard = event.target;
+
+    // add ID of selected to the clicked card
+    $(currentlySelectedCard).attr('id', 'selected');
+  });
 
   // set up interval method
   let timerID = window.setInterval(() => {
-    socket.emit('show hand');
-    socket.emit('show question');
-  }, 200);
+    if(!areCardsShowing) socket.emit('show hand');
+
+    if(!isQuestionShowing) socket.emit('show question');
+
+  }, 500);
 });
 
 // ===========================================================================
@@ -161,8 +176,6 @@ socket.on('start round', (users) => {
 });
 
 socket.on('show hand', (users) => {
-  console.log('Script.js: Showing Hand');
-
   // only show hand when there are current hands
   let currentUser = getCurrentUser(users, myId);
   if (currentUser === undefined) {
@@ -178,8 +191,12 @@ socket.on('show hand', (users) => {
       $('<li><div class="card"><img src=' +
       currentUser['images'][i]['giphy']
       + '></img></div></li>');
-
     handList.append(myCard);
+  }
+
+  // stop updating this when all cards are shown
+  if(currentUser['images'].length === 6) {
+    areCardsShowing = true;
   }
 });
 
@@ -187,11 +204,13 @@ socket.on('show question', (question) => {
   if(!question) {
     return false;
   }
+  console.log('Script.js: Showing Hand');
 
   let questionContainer = $('#question');
   questionContainer.empty();
 
   questionContainer.append($('<p>' + question + '</p>'));
+  isQuestionShowing = true;
 });
 
 // convenience method
