@@ -19,34 +19,9 @@ $('#side-profile').hide();
 $(function() {
 
 
-	// Setup for Handlebars
+	// Setup for Handlebars (May Refactor Later)
 	let renderTemplate_userProfile = Handlebars.compile($('template#profile-template').html());
 
-	//////////////////
-	// User Profile //
-	//////////////////
-
-
-	// Show User Profile
-	$('#nav-profile').click((event) => {
-		event.preventDefault();
-
-		$.ajax({
-			url: '/user/retrieve'
-		}).done((user) => {
-			let $list = $('#profile-receiver');
-			let compiledTemplate = renderTemplate_userProfile(user);
-			$list.html('').append(compiledTemplate);
-			$('#side-chat').hide();
-			$('#side-profile').show();
-		})
-	})
-
-	// Hide User Profile
-	$('#side-back-button').click((event) => {
-		$('#side-profile').hide();
-		$('#side-chat').show();
-	})
 
 
   //////////////////
@@ -137,6 +112,50 @@ $(function() {
       url: 'http://localhost:3000/startRound'
     });
   });
+
+	//////////////////
+	// User Profile //
+	//////////////////
+
+
+	// Show User Profile
+	$('#nav-profile').click((event) => {
+		event.preventDefault();
+
+		$.ajax({
+			url: '/user'
+		}).done((user) => {
+			let $list = $('#profile-receiver');
+			let compiledTemplate = renderTemplate_userProfile(user);
+			$list.html('').append(compiledTemplate);
+			$('#side-chat').hide();
+			$('#side-profile').show();
+		})
+	})
+
+	// Hide User Profile
+	$('#side-back-button').click((event) => {
+		$('#side-profile').hide();
+		$('#side-chat').show();
+	})
+
+
+	//////////////////
+	// User Actions //
+	//////////////////
+
+
+
+	// User Logout
+	$('#nav-logout').click((event) => {
+		event.preventDefault();
+
+		$.ajax({
+			url: '/user/logout'
+		}).done
+	})
+
+
 
 // ==========================================================================
 // Giphy Cards ==============================================================
