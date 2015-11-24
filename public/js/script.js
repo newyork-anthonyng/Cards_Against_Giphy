@@ -9,6 +9,7 @@ let token;
 // Client board information
 let isQuestionShowing = false;
 let areCardsShowing = false;
+let didSubmitCard = false;
 
 // hide user signup and game views
 $('.container').hide();
@@ -219,7 +220,7 @@ $(function() {
       data['userId'] = myId;
       data['myCard'] = $('#selected img').attr('src');
 
-      console.log('Enter was pressed');
+      didSubmitCard = true;
       socket.emit('submit card', data);
     }
   });
@@ -328,6 +329,19 @@ socket.on('show question', (question) => {
 socket.on('submit card', (data) => {
   console.log('script.js: submit card');
   console.log(data);
+});
+
+// data is an object with keys of "userId" and...
+// "myCard", which holds the Giphy imgUrl
+socket.on('submit card', (data) => {
+	console.log('script.js socket.on submit card');
+
+	// move the submitted card to the game field
+	let submittedContainer = $('#submitted');
+	submittedContainer.append($('<img src=' + data['myCard'] + '></img>'));
+
+	// make all other cards inactive
+
 });
 
 // convenience method

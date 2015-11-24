@@ -98,10 +98,21 @@ let Game = (function() {
 
     // player submitted card
     // takes a User's ID, and a card giphy url
-    submitCard: function(userId, card) {
+    submitCard: function(userId, imgURL) {
       console.log('Game.js submit card');
-      console.log(userId);
-      console.log(card);
+
+      // find player object
+      let currentPlayer = undefined;
+      for(let i = 0, j = players.length; i < j; i++) {
+        if(players[i]['id'] === userId) {
+          currentPlayer = players[i];
+          break;
+        }
+      }
+
+      // set their Submitted key equal to the image
+      currentPlayer['submitted'] = imgURL;
+      console.log(currentPlayer['submitted']);
     },
 
   }
