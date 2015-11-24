@@ -123,25 +123,17 @@ app.get('/showHand/:userName', (req, res) => {
 
 });
 
-// Take an array of search terms
-// Give an array of image_url
-app.post('/createCardsURL', (req, res) => {
-  let searchTerms = req.body.test;
-
-
-})
-
 // Start Round
 app.get('/startRound', (req, res) => {
   let playersArray = Game.startRound(users);
   console.log('get /startRound');
 
-  for (var i = 0; i < playersArray.length; i++) {
-    let termsArray = answer(6);
-    playersArray[i]['hand'] = termsArray;
-  }
-  console.log('Server.js get /startRound :' + playersArray);
-  console.log(playersArray);
+  // for (var i = 0; i < playersArray.length; i++) {
+  //   let termsArray = answer(6);
+  //   playersArray[i]['hand'] = termsArray;
+  // }
+  // console.log('Server.js get /startRound :' + playersArray);
+  // console.log(playersArray);
   io.emit('start round', playersArray);
 });
 
