@@ -31,9 +31,9 @@ $(function() {
 
     $.ajax({
       url: "/user/signup",
-      method: "post",
+      method: "POST",
       data: userData
-    }).done(function(user){
+    }).done(function(){
       // if (save error)
         $('.usersignup').hide();
         $('.userlogin').show();
@@ -57,12 +57,12 @@ $(function() {
 
     $.ajax({
       url: "/user/auth",
-      method: "post",
+      method: "POST",
       data: userData
-    }).done(function(user){
-      console.log("hi there");
-      $('.container').show();
-      $('.userlogin').hide();
+    }).done(function(){
+      console.log('hi there again');
+      // $('.container').show();
+      // $('.userlogin').hide();
     });
   });
 
