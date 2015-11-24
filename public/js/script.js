@@ -9,11 +9,10 @@ $('.container').hide();
 $('.usersignup').hide();
 
 $(function() {
-
   // ==========================================================================
   // User Sign Up =============================================================
   // ==========================================================================
-  
+
   // user signup
   $('#signuplink').click((event) => {
     $('.userlogin').hide();
@@ -98,6 +97,11 @@ $(function() {
     });
   });
 
+  // set up interval method
+  let timerID = window.setInterval(() => {
+    socket.emit('show hand');
+  }, 200);
+
 });
 
 // ===========================================================================
@@ -136,60 +140,39 @@ socket.on('send message', (data) => {
 
 });
 
-// get giphy's for hand
-// data will be an array of search terms
-socket.on('get hand', (data) => {
-  // get search terms
-  let searchTerm = data;
-
-  for(let i = 0, j = searchTerm.length; i < j; i++) {
-    let currentTerm = searchTerm[i];
-
-    $.ajax({
-      url: 'http://localhost:3000/api/createCards',
-      data: { search: currentTerm }
-    }).done((data) => {
-      $('#myHand').empty();
-      let newHand = $('<ul>');
-      for(let i = 0, j = data.length; i < j; i++) {
-        let newCard = $('<li><img src=' + data[i] + '></img></li>');
-        newHand.append(newCard);
-      }
-
-      $('#myHand').append(newHand);
-    });
-  }
-
-});
-
 // ===========================================================================
 // Socket Events - Game ======================================================
 // ===========================================================================
 
 socket.on('start round', (users) => {
-  console.log('socket on start round');
-
-  let currentUser = undefined;
-
-  // find our current user
-  // match it by checking the Socket ID's
-  for(let i = 0, j = users.length; i < j; i++) {
-    if(users[i]['id'] === myId) {
-      currentUser = users[i];
-      break;
-    }
-  }
+  let currentUser = getCurrentUser(users, myId);
 
   let imageList = $('#hand');
   imageList.append('<p>' + currentUser['name'] + '</p>');
 });
 
-socket.on('show hand', (hand) => {
+socket.on('show hand', (users) => {
   console.log('Script.js: Showing Hand');
 
-  let handList = $('#myHand');
+  let currentUser = getCurrentUser(users, myId);
 
-  // go through each card and add it to list
-  let myHand = $('<img src=' + hand + '></img>');
-  handList.append(myHand);
+  // append all of our card images into the hand list
+  let handList = $('#hand');
+  handList.empty();
+  handList.append($('<li>' + currentUser['name'] + '</li>'));
+  for(let i = 0, j = currentUser['images'].length; i < j; i++) {
+    let myCard = $('<li><img src=' + currentUser['images'][i]['giphy'] + '></img></li>');
+    handList.append(myCard);
+  }
 });
+
+// convenience method
+// pass in all users in the game, and the client's unique ID
+// return the user object for the client
+let getCurrentUser = function(allUsers, currentUserId) {
+  for(let i = 0, j = allUsers.length; i < j; i++) {
+    if(allUsers[i]['id'] === currentUserId) {
+      return allUsers[i];
+    }
+  }
+}
