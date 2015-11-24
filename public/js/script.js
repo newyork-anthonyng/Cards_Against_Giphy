@@ -9,16 +9,43 @@ let token;
 $('.container').show();
 $('.usersignup').hide();
 $('.userlogin').hide();
+$('#side-profile').hide();
 
 $(function() {
 
 	// Setup for Handlebars
-	let renderTemplate_userProfile = Handlebars.compile($('div#side-profile').html());
+	let renderTemplate_userProfile = Handlebars.compile($('template#profile-template').html());
+
+	//////////////////
+	// User Profile //
+	//////////////////
 
 
-  // ==========================================================================
-  // User Sign Up =============================================================
-  // ==========================================================================
+	// Show User Profile
+	$('#nav-profile').click((event) => {
+		event.preventDefault();
+
+		$.ajax({
+			url: '/user/retrieve'
+		}).done((user) => {
+			let $list = $('#profile-receiver');
+			let compiledTemplate = renderTemplate_userProfile(user);
+			$list.html('').append(compiledTemplate);
+			$('#side-chat').hide();
+			$('#side-profile').show();
+		})
+	})
+
+	// Hide User Profile
+	$('#side-back-button').click((event) => {
+		$('#side-profile').hide();
+		$('#side-chat').show();
+	})
+
+
+  //////////////////
+  // User Sign Up //
+  //////////////////
 
   // user signup
   $('#signuplink').click((event) => {
@@ -110,17 +137,6 @@ $(function() {
   //   socket.emit('show hand');
   // }, 200);
 
-
-	// User Profile
-	$('#nav-profile').click((event) => {
-		event.preventDefault();
-
-		$.ajax({
-			url: '/user/retrieve',
-		}).done(() => {
-
-		})
-	})
 });
 
 
@@ -129,9 +145,9 @@ $(function() {
 
 
 
-// ===========================================================================
-// Socket Events - Chat Room =================================================
-// ===========================================================================
+///////////////////////////////
+// Socket Events - Chat Room //
+///////////////////////////////
 
 socket.on('user joined', (users) => {
     // update list of users online
@@ -165,9 +181,9 @@ socket.on('send message', (data) => {
 
 });
 
-// ===========================================================================
-// Socket Events - Game ======================================================
-// ===========================================================================
+//////////////////////////
+// Socket Events - Game //
+//////////////////////////
 
 socket.on('start round', (users) => {
   let currentUser = getCurrentUser(users, myId);

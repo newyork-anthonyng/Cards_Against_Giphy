@@ -23,9 +23,6 @@ gameboard view
 			<li class="nav-tool" id="nav-profile">
 				PROFILE
 			</li> |
-			<li class="nav-tool" id="nav-stats">
-				STATS
-			</li> |
 			<li class="nav-tool" id="nav-logout">
 				LOGOUT
 			</li>
@@ -94,17 +91,40 @@ Templates
     	</a>
     </div>
 
-	<!-- User Profile Template -->
+	<!-- Profile Display Div -->
 	<div id="side-profile" class="sidebar">
-		<ul>
-			<li>
-				<h3>My Profile</h3>
+		<div id="profile-receiver">
+		</div>
+		<ul id="profile-actions">
+			<li class="profile-actions-item" id="profile-edit">
+				Edit
+			</li> |
+			<li class="profile-actions-item" id="profile-delete">
+				Delete
 			</li>
-			<li>
-
+			<li class="profile-actions-item" id="side-back-button">
+				Back
 			</li>
 		</ul>
 	</div>
+
+	<!-- User Profile Template -->
+	<template id="profile-template">
+		<ul id="profile-list">
+			{{player}}
+			<li class="profile-list-item">
+				<h3>My Profile</h3>
+			</li>
+			<li class="profile-list-item">
+				Player Name: {{username}}
+			</li>
+			<li class="profile-list-item">
+				Total Wins: {{wins}}
+			</li>
+			<li class="profile-list-item">
+			</li>
+		</ul>
+	</template>
 
     <script src="js/script.js"></script>
   </body>

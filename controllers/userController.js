@@ -19,11 +19,9 @@ function create(req, res){
 
 function retrieve(req, res){
   let userParams = req.body;
-  // find only usernames
   User.findOne({username: userParams.username}, (err, user) => {
-    
+
     console.log(users.token)
-    // return all user usernames
     res.send(user);
   });
 }
