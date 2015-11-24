@@ -18,12 +18,14 @@ function create(req, res){
 }
 
 function retrieve(req, res){
+  let userParams = req.body;
   // find only usernames
-  User.find({}, 'username', (err, users) => {
+  User.findOne({username: userParams.username}, (err, user) => {
+    
     console.log(users.token)
     // return all user usernames
-    res.send(users);
-  })
+    res.send(user);
+  });
 }
 
 function update(req, res){
@@ -42,10 +44,13 @@ function update(req, res){
 
 }
 
-// function logout(req, res){
-//   let userParams = req.body;
-//   User.findOneAndUpdate
-// }
+function logout(req, res){
+  User.find({}, 'username', (err, users) => {
+    console.log(users.token)
+    // return all user usernames
+    res.send(users);
+  });
+}
 
 function destroy(req, res){
 
@@ -74,6 +79,7 @@ function auth(req, res){
       if (err) throw err;
       // check if passwords match and token generation
       if (isMatch) {
+        // token is made and set to expire in 5 hours / not related to logout
         res.status(200).send({message: "valid credentials", token: jwt.sign(user, secret, {expiresIn: '5h'})});
       } else {
         res.status(401).send({message: "invalid credentials"});
@@ -86,6 +92,7 @@ module.exports = {
   create: create,
   retrieve: retrieve,
   update: update,
+  logout: logout,
   destroy: destroy,
   auth: auth
 }
