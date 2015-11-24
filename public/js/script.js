@@ -66,6 +66,8 @@ $(function() {
       $('.container').show();
       $('.userlogin').hide();
 
+      myUser = username;
+      socket.emit('add user', username);
       // log the user into the chatroom and game
     });
   });
@@ -160,6 +162,7 @@ socket.on('show judge', (user) => {
 
 socket.on('send message', (data) => {
   // update chat messages
+  console.log(data);
   let chatList = $('#messages');
   let message = $('<li>');
   message.text(data.name + ' : ' + data.message);
