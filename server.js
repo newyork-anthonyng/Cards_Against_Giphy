@@ -105,7 +105,7 @@ app.get('/showHand', (req, res) => {
 
 // Start Round
 app.get('/startRound', (req, res) => {
-  console.log('get /startRound');
+  // console.log('get /startRound');
 
   // Start game round, and return the current user
   Game.startRound(users);
