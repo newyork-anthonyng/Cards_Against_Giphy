@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="/style/style.css">
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
     <title>Gifs Against Humanity</title>
   </head>
   <body>
@@ -20,16 +21,13 @@ gameboard view
     <div class="container">
       <div id="menu">
         <ul id="nav-bar">
-			    <li class="nav-tool" id="nav-profile">
-				    PROFILE
-			   </li> |
-			   <li class="nav-tool" id="nav-stats">
-				    STATS
-			   </li> |
-			   <li class="nav-tool" id="nav-logout">
-				    LOGOUT
-			   </li>
-		    </ul>
+			<li class="nav-tool" id="nav-profile">
+				PROFILE
+			</li> |
+			<li class="nav-tool" id="nav-logout">
+				LOGOUT
+			</li>
+		</ul>
       </div>
 
       <div class="gameboard">
@@ -44,7 +42,7 @@ gameboard view
         </div>
       </div>
 
-      <div class="sidebar">
+      <div id="side-chat" class="sidebar">
         <div id="game-status">
           game stats
         </div>
@@ -93,6 +91,41 @@ Templates
     		<h4 id="loginlink">Back to Login</h4>
     	</a>
     </div>
+
+	<!-- Profile Display Div -->
+	<div id="side-profile" class="sidebar">
+		<div id="profile-receiver">
+		</div>
+		<ul id="profile-actions">
+			<li class="profile-actions-item" id="profile-edit">
+				Edit
+			</li> |
+			<li class="profile-actions-item" id="profile-delete">
+				Delete
+			</li>
+			<li class="profile-actions-item" id="side-back-button">
+				Back
+			</li>
+		</ul>
+	</div>
+
+	<!-- User Profile Template -->
+	<template id="profile-template">
+		<ul id="profile-list">
+			{{player}}
+			<li class="profile-list-item">
+				<h3>My Profile</h3>
+			</li>
+			<li class="profile-list-item">
+				Player Name: {{username}}
+			</li>
+			<li class="profile-list-item">
+				Total Wins: {{wins}}
+			</li>
+			<li class="profile-list-item">
+			</li>
+		</ul>
+	</template>
 
     <script src="js/script.js"></script>
   </body>

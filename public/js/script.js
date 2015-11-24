@@ -13,11 +13,21 @@ let areCardsShowing = false;
 // hide user signup and game views
 $('.container').hide();
 $('.usersignup').hide();
+$('.userlogin').show();
+$('#side-profile').hide();
 
 $(function() {
-// ==========================================================================
-// User Sign Up =============================================================
-// ==========================================================================
+
+
+	// Setup for Handlebars (May Refactor Later)
+	let renderTemplate_userProfile = Handlebars.compile($('template#profile-template').html());
+
+
+
+  //////////////////
+  // User Sign Up //
+  //////////////////
+
 
   // user signup
   $('#signuplink').click((event) => {
@@ -138,6 +148,50 @@ $(function() {
     });
   });
 
+	//////////////////
+	// User Profile //
+	//////////////////
+
+
+	// Show User Profile
+	$('#nav-profile').click((event) => {
+		event.preventDefault();
+
+		$.ajax({
+			url: '/user'
+		}).done((user) => {
+			let $list = $('#profile-receiver');
+			let compiledTemplate = renderTemplate_userProfile(user);
+			$list.html('').append(compiledTemplate);
+			$('#side-chat').hide();
+			$('#side-profile').show();
+		})
+	})
+
+	// Hide User Profile
+	$('#side-back-button').click((event) => {
+		$('#side-profile').hide();
+		$('#side-chat').show();
+	})
+
+
+	//////////////////
+	// User Actions //
+	//////////////////
+
+
+
+	// User Logout
+	$('#nav-logout').click((event) => {
+		event.preventDefault();
+
+		$.ajax({
+			url: '/user/logout'
+		}).done
+	})
+
+
+
 // ==========================================================================
 // Giphy Cards ==============================================================
 // ==========================================================================
@@ -179,9 +233,15 @@ $(function() {
   }, 500);
 });
 
-// ===========================================================================
-// Socket Events - Chat Room =================================================
-// ===========================================================================
+
+
+
+
+
+
+///////////////////////////////
+// Socket Events - Chat Room //
+///////////////////////////////
 
 socket.on('user joined', (users) => {
     // update list of users online
@@ -216,9 +276,9 @@ socket.on('send message', (data) => {
 
 });
 
-// ===========================================================================
-// Socket Events - Game ======================================================
-// ===========================================================================
+//////////////////////////
+// Socket Events - Game //
+//////////////////////////
 
 socket.on('start round', (users) => {
   let currentUser = getCurrentUser(users, myId);
