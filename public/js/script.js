@@ -11,10 +11,11 @@ let isQuestionShowing = false;
 let areCardsShowing = false;
 
 // hide user signup and game views
-$('.container').hide();
-$('.usersignup').hide();
-$('.userlogin').show();
-$('#side-profile').hide();
+$('.container').hide();			// Naturally hidden
+$('.usersignup').hide();		// Naturally hidden
+$('.userlogin').show();			// Naturally shown
+$('#side-profile').show();		// Naturally shown
+// $('#side-chat').hide();		// Naturally n/a
 
 $(function() {
 
