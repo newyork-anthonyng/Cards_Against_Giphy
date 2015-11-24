@@ -2,12 +2,16 @@
 
 let socket = io();
 let myUser;
+let myId;
 
 // hide user signup and game views
 $('.container').hide();
 $('.usersignup').hide();
 
 $(function() {
+  // ==========================================================================
+  // User Sign Up =============================================================
+  // ==========================================================================
 
   // user signup
   $('#signuplink').click((event) => {
@@ -66,7 +70,9 @@ $(function() {
   $('#login-input').keypress((event) => {
     if(event.keyCode === 13) {
       let username = $('#login-input').val();
+      // set variables on client side
       myUser = username;
+      myId = socket.id;
       socket.emit('add user', username);
       $('#login-input').val('');
       $('#login-view').hide();
@@ -91,41 +97,10 @@ $(function() {
     });
   });
 
-// ===========================================================================
-// Test Events ===============================================================
-// ===========================================================================
-  $('#createGiphy').click((event) => {
-    event.preventDefault();
-
-    let searchTerm = $('#giphyInput').val();
-    console.log('Search Term: ' + searchTerm);
-
-    $.ajax({
-      url: 'http://localhost:3000/api/createCards',
-      data: { search: searchTerm }
-    }).done((data) => {
-      $('#giphy').empty();
-      $('#giphy').append('<div><img src=' + data[1] +'></img></div>');
-    });
-  });
-
-
-  $('#showHand').click((event) => {
-    event.preventDefault();
-
-    // go through ever single term and get the img_url for them
-    // get the img_url
-    let searchTerms = ['dog', 'kitten', 'tarzan'];
-    for(let i = 0, j = searchTerms.length; i < j; i++) {
-      (function(i) {
-        $.ajax({
-          url: 'http://localhost:3000/api/createCards/' + searchTerms[i]
-        }).done((data) => {
-          console.log(i + ': ' + data['giphy']);
-        });
-      })(i);
-    }
-  });
+  // set up interval method
+  let timerID = window.setInterval(() => {
+    socket.emit('show hand');
+  }, 200);
 
 });
 
@@ -165,49 +140,39 @@ socket.on('send message', (data) => {
 
 });
 
-// get giphy's for hand
-// data will be an array of search terms
-socket.on('get hand', (data) => {
-  // get search terms
-  let searchTerm = data;
-
-  for(let i = 0, j = searchTerm.length; i < j; i++) {
-    let currentTerm = searchTerm[i];
-
-    $.ajax({
-      url: 'http://localhost:3000/api/createCards',
-      data: { search: currentTerm }
-    }).done((data) => {
-      $('#myHand').empty();
-      let newHand = $('<ul>');
-      for(let i = 0, j = data.length; i < j; i++) {
-        let newCard = $('<li><img src=' + data[i] + '></img></li>');
-        newHand.append(newCard);
-      }
-
-      $('#myHand').append(newHand);
-    });
-  }
-
-});
-
 // ===========================================================================
 // Socket Events - Game ======================================================
 // ===========================================================================
 
-socket.on('start round', (data) => {
-  console.log(data);
+socket.on('start round', (users) => {
+  let currentUser = getCurrentUser(users, myId);
 
+  let imageList = $('#hand');
+  imageList.append('<p>' + currentUser['name'] + '</p>');
 });
 
-socket.on('show hand', (hand) => {
+socket.on('show hand', (users) => {
   console.log('Script.js: Showing Hand');
 
+  let currentUser = getCurrentUser(users, myId);
 
-
-  let handList = $('#myHand');
-
-  // go through each card and add it to list
-  let myHand = $('<img src=' + hand + '></img>');
-  handList.append(myHand);
+  // append all of our card images into the hand list
+  let handList = $('#hand');
+  handList.empty();
+  handList.append($('<li>' + currentUser['name'] + '</li>'));
+  for(let i = 0, j = currentUser['images'].length; i < j; i++) {
+    let myCard = $('<li><img src=' + currentUser['images'][i]['giphy'] + '></img></li>');
+    handList.append(myCard);
+  }
 });
+
+// convenience method
+// pass in all users in the game, and the client's unique ID
+// return the user object for the client
+let getCurrentUser = function(allUsers, currentUserId) {
+  for(let i = 0, j = allUsers.length; i < j; i++) {
+    if(allUsers[i]['id'] === currentUserId) {
+      return allUsers[i];
+    }
+  }
+}

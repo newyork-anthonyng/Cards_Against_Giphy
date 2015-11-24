@@ -77,8 +77,8 @@ io.on('connection', (socket) => {
     io.emit('send message', data);
   });
 
-  socket.on('start round', (data) => {
-    io.emit('start round', data);
+  socket.on('show hand', (data) => {
+    io.emit('show hand', Game.getPlayers());
   });
 
   socket.on('disconnect', () => {
@@ -94,57 +94,21 @@ io.on('connection', (socket) => {
   });
 });
 
-// Show user's hand
-app.get('/showHand/:userName', (req, res) => {
-  let userName = req.params.userName;
-  let myHand = Game.showHand(userName);
-
-  let searchTerm = myHand[0];
-  let searchURL = 'http://api.giphy.com/v1/gifs/search?q='
-                  + searchTerm + '&limit=1&api_key=dc6zaTOxFJmzC';
-
-  request(searchURL, (err, response, body) => {
-    let info = JSON.parse(body);
-    let giphyObject = {};
-    let handImage;
-
-    // giphyArray will hold onto the ID, GIF, and still image
-    giphyObject['id'] = info['data'][0]['id'];
-    giphyObject['giphy'] = info['data'][0]['images']['fixed_height']['url'];
-    giphyObject['still'] = info['data'][0]['images']['fixed_height_still']['url'];
-
-    handImage = giphyObject['giphy'];
-
-    console.log('Server.js show hand: ' + myHand);
-    io.emit('show hand', handImage);
-
-    res.send(giphyObject);
-  });
-
+// // Show user's hand
+app.get('/showHand', (req, res) => {
+  res.send('Showing Hand');
 });
-
-// Take an array of search terms
-// Give an array of image_url
-app.post('/createCardsURL', (req, res) => {
-  let searchTerms = req.body.test;
-
-
-})
 
 // Start Round
 app.get('/startRound', (req, res) => {
-  let playersArray = Game.startRound(users);
   console.log('get /startRound');
 
-  for (var i = 0; i < playersArray.length; i++) {
-    let termsArray = answer(6);
-    playersArray[i]['hand'] = termsArray;
-  }
-  console.log('Server.js get /startRound :' + playersArray);
-  console.log(playersArray);
-  io.emit('start round', playersArray);
-});
+  // Start game round, and return the current user
+  Game.startRound(users);
+  io.emit('start round', Game.getPlayers());
 
+  res.send('Starting Round');
+});
 
 // set up server
 server.listen(app.get('port'), () => {

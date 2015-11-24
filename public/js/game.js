@@ -13,6 +13,9 @@ let Game = (function() {
   let currentPhase    = 0;
 
   return {
+    getPlayers: function() {
+      return players;
+    },
 
     // start round
     startRound: function(users) {
@@ -24,12 +27,16 @@ let Game = (function() {
         let newPlayer = {};
         newPlayer.id = users[i]['id'];
         newPlayer.name = users[i]['name'];
+        // key: images will hold an array of objects, which have keys of...
+        // 'id', 'giphy', 'still'
         newPlayer.images = [];
         this.dealCards(newPlayer);
 
+        // add new player objects into our player array
         players.push(newPlayer);
-
       }
+
+      // get question
       this.getQuestion();
       return players;
     },
@@ -43,7 +50,7 @@ let Game = (function() {
         if(!err && res.statusCode == 200) {
           // use JSON.parse to transform body into Array
           user['hand'] = JSON.parse(body);
-          console.log(user['name'] + ': ' + user['hand']);
+          // console.log(user['name'] + ': ' + user['hand']);
 
           for(let i = 0, j = user['hand'].length; i < j; i++) {
             this.getImgURL(user, user['hand'][i]);
@@ -59,7 +66,6 @@ let Game = (function() {
       // format search term so that we are able to use it in Giphy API
       // replace spaces with '+'s
       let formattedSearchTerm = searchTerm.split(' ').join('+');
-      console.log('Formatted Search: ' + formattedSearchTerm);
 
       // use request module to hit route and get img_url for our searchTerm
       request('http://localhost:3000/api/createCards/' + searchTerm,
@@ -69,10 +75,10 @@ let Game = (function() {
             user['images'].push(image);
 
             // Test code to print out user images
-            console.log('User hand:');
-            for(let i = 0, j = user['images'].length; i < j; i++) {
-              console.log(user['images'][i]['giphy']);
-            }
+            // console.log('User hand:');
+            // for( let i = 0, j = user['images'].length; i < j; i++) {
+              // console.log(user['images'][i]['giphy']);
+            // }
           }
       });
     },
