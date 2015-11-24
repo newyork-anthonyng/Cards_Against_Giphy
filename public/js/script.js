@@ -11,9 +11,9 @@ let isQuestionShowing = false;
 let areCardsShowing = false;
 
 // hide user signup and game views
-$('.container').show();
+$('.container').hide();
 $('.usersignup').hide();
-$('.userlogin').hide();
+$('.userlogin').show();
 $('#side-profile').hide();
 
 $(function() {
