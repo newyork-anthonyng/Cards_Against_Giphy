@@ -28,9 +28,9 @@ router.get('/randomTerms/:numberOfTerms', (req, res) => {
 
   Answer.find((err, output) => {
     while(i < neededTerms) {
-      let whatwewant = output[Math.ceil(Math.random()*423)]['text'];
-      console.log(whatwewant)
-      termsArray.push(whatwewant);
+      let whatWeWant = output[Math.ceil(Math.random()*1264)]['text'];
+      console.log(whatWeWant)
+      termsArray.push(whatWeWant);
 
       i += 1;
     }
@@ -38,6 +38,8 @@ router.get('/randomTerms/:numberOfTerms', (req, res) => {
     res.send(termsArray);
   });
 });
+
+
 
 // hit the Giphy API and grab a random giphy based on search term
 // returns an object containing the giphy ID, the actual Giphy, and still image
@@ -65,14 +67,41 @@ router.get('/createCards/:searchTerm', (req, res) => {
 // hit the questions collection in our database (giphy)
 // grab one random question out of the total questions
 router.get('/createQuestion', (req, res) => {
-  console.log('get /createQuestion');
-  Question.find({id: {$gt: 1}}).sort('-id').limit(1).exec((err, result) => {
-	  console.log(result.id);
-	  Question.find({id: (Math.ceil(Math.random()*result.id))}, (error, output) => {
-		  res.send(output.text);
-	  });
 
-  });
+
+	Question.find({pick: 1}, (err, output) => {
+		let whatWeQuestion = output[Math.ceil(Math.random()*423)]['text'];
+		res.send(whatWeQuestion);
+	});
+
+
+
+
+	// var whatWeQuestion = undefined;
+	// var randomNum = Math.ceil(Math.random()*423);
+    // while (whatWeQuestion === undefined) {
+	// 	Question.find( { $and: [{pick: 1}, {id: randomNum}]}, (err, output) => {
+	// 		console.log(output);
+	// 		console.log(output['text']);
+	// 	    whatWeQuestion = output;
+	// 	    console.log(whatWeQuestion);
+	//
+	//     });
+	//       res.send(output['text']);
+    // }
+
+
+
+
+
+  // console.log('get /createQuestion');
+  // Question.find({id: {$gt: 1}}).sort('-id').limit(1).exec((err, result) => {
+  //  console.log(result.id);
+  //  Question.find({id: (Math.ceil(Math.random()*result.id))}, (error, output) => {
+  //   res.send(output.text);
+  //  });
+  //
+  // });
 
 });
 
