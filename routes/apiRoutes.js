@@ -20,23 +20,28 @@ router.get('/', (req, res) => {
 // the 'numberOfTerms' is how many documents from the
 // database that you want to get
 router.get('/randomTerms/:numberOfTerms', (req, res) => {
-  console.log('get /randomTerms/:numberOfTerms');
 
-  Answer.find({id: {$gt: 1}}).sort('-id').limit(1).exec((err, result) => {
-	console.log(req.params.numberOfTerms);
-	console.log(result.id);
+  let neededTerms = req.params.numberOfTerms;
 
-	// Loop to find needed number of gif search-terms
-	let termsArray = [];
-	let neededTerms = req.params.numberOfTerms;
-	for (var i = 0; i < neededTerms; i++) {
-		Answer.find({id: (Math.ceil(Math.random()*result.id))}, (error, output) => {
-			termsArray.push(output.text);
-		});
-	};
-	res.send(termsArray);
+  let termsArray = [];
+  let i = 0;
+
+  Answer.find((err, output) => {
+    while(i < neededTerms) {
+      let whatwewant = output[Math.ceil(Math.random()*423)]['text'];
+      console.log(whatwewant)
+      termsArray.push(whatwewant);
+
+      i += 1;
+    }
+
+    res.send(termsArray);
   });
 });
+
+
+
+
 
 // hit the Giphy API and grab a random giphy based on search term
 // returns an object containing the giphy ID, the actual Giphy, and still image
