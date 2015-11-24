@@ -14,6 +14,13 @@ router.route('/user')
   .put(user.update)
   .delete(user.destroy);
 
+router.route('/user/logout')
+  .all(expressJwt({
+    secret: secret,
+    userProperty: 'auth'
+  }))
+  .post(user.logout);
+
 router.route('/user/auth')
   .post(user.auth);
 

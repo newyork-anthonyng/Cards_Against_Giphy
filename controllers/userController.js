@@ -19,9 +19,11 @@ function create(req, res){
 
 function retrieve(req, res){
   let userParams = req.body;
+  // find user
   User.findOne({username: userParams.username}, (err, user) => {
 
     console.log(users.token)
+    // return that user
     res.send(user);
   });
 }
@@ -43,11 +45,13 @@ function update(req, res){
 }
 
 function logout(req, res){
-  User.find({}, 'username', (err, users) => {
-    console.log(users.token)
-    // return all user usernames
-    res.send(users);
-  });
+  let userParams = req.body;
+  // Authorization: Bearer userParams.token
+  console.log(userParams);
+  // User.findOne({token: userParams.token}, (err, user) => {
+  //   console.log(user.token);
+  //   res.send(user);
+  // });
 }
 
 function destroy(req, res){
