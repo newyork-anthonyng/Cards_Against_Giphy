@@ -154,7 +154,11 @@ socket.on('start round', (users) => {
 socket.on('show hand', (users) => {
   console.log('Script.js: Showing Hand');
 
+  // only show hand when there are current hands
   let currentUser = getCurrentUser(users, myId);
+  if (currentUser === undefined) {
+    return false;
+  }
 
   // append all of our card images into the hand list
   let handList = $('#hand');
