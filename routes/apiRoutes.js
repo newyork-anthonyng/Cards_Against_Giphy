@@ -12,7 +12,7 @@ let Question	  = require('../models/question');
 let Answer		  = require('../models/answer');
 
 router.get('/', (req, res) => {
-  console.log('hit / route inside of apiRoute.js');
+  // console.log('hit / route inside of apiRoute.js');
   res.send('Hello World');
 });
 
@@ -42,7 +42,7 @@ router.get('/randomTerms/:numberOfTerms', (req, res) => {
 // hit the Giphy API and grab a random giphy based on search term
 // returns an object containing the giphy ID, the actual Giphy, and still image
 router.get('/createCards/:searchTerm', (req, res) => {
-  console.log('get /createCards');
+  // console.log('get /createCards');
 
   let searchTerm = req.params.searchTerm;
   let searchURL = 'http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=' +
@@ -65,41 +65,10 @@ router.get('/createCards/:searchTerm', (req, res) => {
 // grab one random question out of the total questions
 router.get('/createQuestion', (req, res) => {
 
-
 	Question.find({pick: 1}, (err, output) => {
 		let whatWeQuestion = output[Math.ceil(Math.random()*423)]['text'];
 		res.send(whatWeQuestion);
 	});
-
-
-
-
-	// var whatWeQuestion = undefined;
-	// var randomNum = Math.ceil(Math.random()*423);
-    // while (whatWeQuestion === undefined) {
-	// 	Question.find( { $and: [{pick: 1}, {id: randomNum}]}, (err, output) => {
-	// 		console.log(output);
-	// 		console.log(output['text']);
-	// 	    whatWeQuestion = output;
-	// 	    console.log(whatWeQuestion);
-	//
-	//     });
-	//       res.send(output['text']);
-    // }
-
-
-
-
-
-  // console.log('get /createQuestion');
-  // Question.find({id: {$gt: 1}}).sort('-id').limit(1).exec((err, result) => {
-  //  console.log(result.id);
-  //  Question.find({id: (Math.ceil(Math.random()*result.id))}, (error, output) => {
-  //   res.send(output.text);
-  //  });
-  //
-  // });
-
 });
 
 
