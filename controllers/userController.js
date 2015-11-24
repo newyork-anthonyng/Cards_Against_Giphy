@@ -20,6 +20,7 @@ function create(req, res){
 function retrieve(req, res){
   // find only usernames
   User.find({}, 'username', (err, users) => {
+    console.log(users.token)
     // return all user usernames
     res.send(users);
   })
@@ -40,6 +41,11 @@ function update(req, res){
   });
 
 }
+
+// function logout(req, res){
+//   let userParams = req.body;
+//   User.findOneAndUpdate
+// }
 
 function destroy(req, res){
 
@@ -68,10 +74,7 @@ function auth(req, res){
       if (err) throw err;
       // check if passwords match and token generation
       if (isMatch) {
-        console.log({message: "valid credentials", token: jwt.sign(user, secret)});
-        // res.setHeader(200, token: jwt.sign(user, secret)});
-        res.status(200).send({message: "valid credentials", token: jwt.sign(user, secret)});
-
+        res.status(200).send({message: "valid credentials", token: jwt.sign(user, secret, {expiresIn: '5h'})});
       } else {
         res.status(401).send({message: "invalid credentials"});
       };
