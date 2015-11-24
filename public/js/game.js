@@ -65,7 +65,7 @@ let Game = (function() {
 
     // convert the random terms into img_urls
     getImgURL: function(user, searchTerm) {
-      console.log('Game.js : getting img_url');
+      // console.log('Game.js : getting img_url');
 
       // format search term so that we are able to use it in Giphy API
       // replace spaces with '+'s
