@@ -81,6 +81,10 @@ io.on('connection', (socket) => {
     io.emit('show hand', Game.getPlayers());
   });
 
+  socket.on('show question', () => {
+    io.emit('show question', Game.getQuestion());
+  });
+
   socket.on('disconnect', () => {
     console.log('User has disconnected.');
     if(addedUser) {

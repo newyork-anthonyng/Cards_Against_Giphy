@@ -100,6 +100,7 @@ $(function() {
   // set up interval method
   let timerID = window.setInterval(() => {
     socket.emit('show hand');
+    socket.emit('show question');
   }, 200);
 
 });
@@ -168,6 +169,17 @@ socket.on('show hand', (users) => {
     let myCard = $('<li><img src=' + currentUser['images'][i]['giphy'] + '></img></li>');
     handList.append(myCard);
   }
+});
+
+socket.on('show question', (question) => {
+  if(!question) {
+    return false;
+  }
+
+  let questionContainer = $('#question');
+  questionContainer.empty();
+
+  questionContainer.append($('<p>' + question + '</p>'));
 });
 
 // convenience method
