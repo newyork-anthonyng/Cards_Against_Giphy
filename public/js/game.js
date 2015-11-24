@@ -3,7 +3,7 @@ let request = require('request');
 
 let Game = (function() {
 
-  // each player will be an object with an id, name, and images
+  // each player will be an object with an id, name, images, and submitted card
   let players         = [];
   let judge           = undefined;
   let currentQuestion = undefined;
@@ -15,6 +15,10 @@ let Game = (function() {
   return {
     getPlayers: function() {
       return players;
+    },
+
+    getQuestion: function() {
+      return currentQuestion;
     },
 
     // start round
@@ -36,8 +40,8 @@ let Game = (function() {
         players.push(newPlayer);
       }
 
-      // get question
-      this.getQuestion();
+      // create question
+      this.createQuestion();
       return players;
     },
 
@@ -61,7 +65,7 @@ let Game = (function() {
 
     // convert the random terms into img_urls
     getImgURL: function(user, searchTerm) {
-      console.log('Game.js : getting img_url');
+      // console.log('Game.js : getting img_url');
 
       // format search term so that we are able to use it in Giphy API
       // replace spaces with '+'s
@@ -95,7 +99,7 @@ let Game = (function() {
 
 
     // get question for current round
-    getQuestion: function() {
+    createQuestion: function() {
       console.log('Game.js : getting question');
 
       // use request module to hit route and get a question
@@ -108,14 +112,6 @@ let Game = (function() {
 
     },
 
-    // player selects card
-
-    // judge selects winner
-
-    // award the winner
-
-    // round is over
-
     // next phase
     nextPhase: function() {
       if (currentPhase === phases.length) {
@@ -124,11 +120,7 @@ let Game = (function() {
         currentPhase++;
       }
     },
-
-    // play a card
-
   }
-
 })();
 
 module.exports = Game;
