@@ -108,9 +108,8 @@ $(function() {
 // ==========================================================================
 
   // user can click and select card
+  // must use document.body because cards are dynamically added to DOM
   $(document.body).on('click', '.card', (event) => {
-    // console.log(event.target);
-
     // remove the ID from any other card
     let priorSelectedCards = $('#selected');
     $('#selected').removeAttr('id');
@@ -119,6 +118,16 @@ $(function() {
 
     // add ID of selected to the clicked card
     $(currentlySelectedCard).attr('id', 'selected');
+  });
+
+  // user submits card
+  $(document.body).keypress((event) => {
+    let enterKeyPressed = (event.keyCode === 13);
+    let cardSelected = $('#selected').length > 0;
+
+    if(enterKeyPressed && cardSelected) {
+      console.log('Enter was pressed');
+    }
   });
 
   // set up interval method
