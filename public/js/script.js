@@ -4,6 +4,7 @@
 let socket = io();
 let myUser;
 let myId;
+let token;
 
 // Client board information
 let isQuestionShowing = false;
@@ -39,7 +40,6 @@ $(function() {
       method: "POST",
       data: userData
     }).done(function(){
-      // if (save error)
         $('.usersignup').hide();
         $('.userlogin').show();
     });
@@ -63,10 +63,12 @@ $(function() {
       url: "/user/auth",
       method: "POST",
       data: userData
-    }).done(function(){
-      console.log('hi there again');
-      // $('.container').show();
-      // $('.userlogin').hide();
+    }).done(function(user){
+      // ajax setup token default header
+      // token expire
+      token = user.token;
+      $('.container').show();
+      $('.userlogin').hide();
     });
   });
 
