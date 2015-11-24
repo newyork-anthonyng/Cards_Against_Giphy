@@ -105,20 +105,20 @@ app.get('/showHand/:userName', (req, res) => {
 
   request(searchURL, (err, response, body) => {
     let info = JSON.parse(body);
-    let giphyArray = [];
+    let giphyObject = {};
     let handImage;
 
     // giphyArray will hold onto the ID, GIF, and still image
-    giphyArray[0] = info['data'][0]['id'];
-    giphyArray[1] = info['data'][0]['images']['fixed_height']['url'];
-    giphyArray[2] = info['data'][0]['images']['fixed_height_still']['url'];
+    giphyObject['id'] = info['data'][0]['id'];
+    giphyObject['giphy'] = info['data'][0]['images']['fixed_height']['url'];
+    giphyObject['still'] = info['data'][0]['images']['fixed_height_still']['url'];
 
-    handImage = giphyArray[1];
+    handImage = giphyObject['giphy'];
 
     console.log('Server.js show hand: ' + myHand);
     io.emit('show hand', handImage);
 
-    res.send(giphyArray);
+    res.send(giphyObject);
   });
 
 });

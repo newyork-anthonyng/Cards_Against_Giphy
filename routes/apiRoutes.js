@@ -39,8 +39,6 @@ router.get('/randomTerms/:numberOfTerms', (req, res) => {
   });
 });
 
-
-
 // hit the Giphy API and grab a random giphy based on search term
 // returns an object containing the giphy ID, the actual Giphy, and still image
 router.get('/createCards/:searchTerm', (req, res) => {
@@ -61,7 +59,6 @@ router.get('/createCards/:searchTerm', (req, res) => {
 
     res.send(giphyArray);
   });
-
 });
 
 // hit the questions collection in our database (giphy)
