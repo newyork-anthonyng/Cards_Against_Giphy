@@ -23,12 +23,22 @@ $(function() {
       password: password
     }
 
+    // if(password === password)
+
     $.ajax({
       url: "/user/signup",
       method: "post",
       data: userData
     }).done(function(user){
+      // if (save error)
+        $('.usersignup').hide();
+        $('.userlogin').show();
     });
+  });
+
+  $('#loginlink').click((event) => {
+    $('.usersignup').hide();
+    $('.userlogin').show();
   });
 
   // login user using token
@@ -46,7 +56,9 @@ $(function() {
       method: "post",
       data: userData
     }).done(function(user){
-
+      console.log("hi there");
+      $('.container').show();
+      $('.userlogin').hide();
     });
   });
 
