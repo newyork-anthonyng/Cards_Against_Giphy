@@ -126,7 +126,12 @@ $(function() {
     let cardSelected = $('#selected').length > 0;
 
     if(enterKeyPressed && cardSelected) {
+      let data = {};
+      data['userId'] = myId;
+      data['myCard'] = $('#selected img').attr('src');
+
       console.log('Enter was pressed');
+      socket.emit('submit card', data);
     }
   });
 
@@ -222,6 +227,11 @@ socket.on('show question', (question) => {
 
   questionContainer.append($('<p>' + question + '</p>'));
   isQuestionShowing = true;
+});
+
+socket.on('submit card', (data) => {
+  console.log('script.js: submit card');
+  console.log(data);
 });
 
 // convenience method

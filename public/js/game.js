@@ -96,7 +96,13 @@ let Game = (function() {
 
     },
 
-    // player submitted question
+    // player submitted card
+    // takes a User's ID, and a card giphy url
+    submitCard: function(userId, card) {
+      console.log('Game.js submit card');
+      console.log(userId);
+      console.log(card);
+    },
 
   }
 })();
