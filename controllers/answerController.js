@@ -15,19 +15,19 @@ let Answer = require('../models/answer.js')
 // }
 
 let searchTermsFunc = function(numberOfTerms) {
-  let termsArray = [];
-  console.log('Inside answerController: ' + numberOfTerms);
-  Answer.find({id: {$gt: 1}}).sort('-id').limit(1).exec((err, result) => {
-    console.log(numberOfTerms);
-    console.log(result.id);
-    // Loop to find needed number of gif search-terms
-    for (let i = 0; i < numberOfTerms; i++) {
-      Answer.find({id: (Math.ceil(Math.random()*result.id))}, (er, output) => {
-        termsArray.push(output.text);
-      });
-    }
-  });
-  return termsArray;
+  // let termsArray = [];
+  // console.log('Inside answerController: ' + numberOfTerms);
+  // Answer.find({id: {$gt: 1}}).sort('-id').limit(1).exec((err, result) => {
+  //   console.log(numberOfTerms);
+  //   console.log(result.id);
+  //   // Loop to find needed number of gif search-terms
+  //   for (let i = 0; i < numberOfTerms; i++) {
+  //     Answer.find({id: (Math.ceil(Math.random()*result.id))}, (er, output) => {
+  //       termsArray.push(output.text);
+  //     });
+  //   }
+  // });
+  // return termsArray;
 }
 
 module.exports = searchTermsFunc;
