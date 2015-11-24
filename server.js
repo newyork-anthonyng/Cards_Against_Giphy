@@ -52,6 +52,7 @@ io.on('connection', (socket) => {
   console.log('User has connected.');
 
   socket.on('add user', (username) => {
+    console.log('server.js '+ username);
     let userObj = {};
 
     // check if user was first
