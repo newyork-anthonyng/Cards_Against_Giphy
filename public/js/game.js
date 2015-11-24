@@ -34,6 +34,7 @@ let Game = (function() {
         // key: images will hold an array of objects, which have keys of...
         // 'id', 'giphy', 'still'
         newPlayer.images = [];
+        newPlayer.submitted = undefined;
         this.dealCards(newPlayer);
 
         // add new player objects into our player array
@@ -77,26 +78,9 @@ let Game = (function() {
           if(!err && res.statusCode == 200) {
             let image = JSON.parse(body);
             user['images'].push(image);
-
-            // Test code to print out user images
-            // console.log('User hand:');
-            // for( let i = 0, j = user['images'].length; i < j; i++) {
-              // console.log(user['images'][i]['giphy']);
-            // }
           }
       });
     },
-
-    // show players hand
-    showHand: function(userName) {
-      for(let i = 0, j = players.length; i < j; i++) {
-        if(players[i]['name'] === userName) {
-          console.log(userName + '\'s hand: ' + players[i]['hand']);
-          return players[i]['hand'];
-        }
-      }
-    },
-
 
     // get question for current round
     createQuestion: function() {
@@ -112,14 +96,8 @@ let Game = (function() {
 
     },
 
-    // next phase
-    nextPhase: function() {
-      if (currentPhase === phases.length) {
-        currentPhase = 0;
-      } else {
-        currentPhase++;
-      }
-    },
+    // player submitted question
+
   }
 })();
 
