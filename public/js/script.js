@@ -118,6 +118,14 @@ $(function() {
     }
   });
 
+  $('#msg-submit').click((event) => {
+    event.preventDefault();
+
+    let message = $('#message').val();
+    socket.emit('send message', {name: myUser, message: message});
+    $('#message').val('');
+  });
+
   $('#start-round').click((event) => {
     event.preventDefault();
 
