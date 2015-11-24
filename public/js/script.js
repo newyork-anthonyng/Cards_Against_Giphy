@@ -61,10 +61,35 @@ $(function() {
       data: userData
     }).done(function(user){
       // ajax setup token default header
-      // token expire
       token = user.token;
+      console.log(token);
       $('.container').show();
       $('.userlogin').hide();
+
+      // log the user into the chatroom and game
+    });
+  });
+
+  $('#nav-logout').click((event) => {
+    console.log('hitting here');
+    // Authorization: Bearer token
+
+    let userData = {
+      token: token
+    }
+
+    console.log(userData);
+
+    $.ajax({
+      url: "/user/logout",
+      method: "POST",
+      data: userData
+      // Authorization: Bearer token
+    }).done(function(){
+      // ajax setup token default header
+      // user.token = null;
+      $('.container').hide();
+      $('.userlogin').show();
     });
   });
 
