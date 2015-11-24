@@ -1,4 +1,5 @@
 'use strict';
+let request = require('request');
 
 let Game = (function() {
   // variables
@@ -23,28 +24,26 @@ let Game = (function() {
         let newPlayer = {};
         newPlayer.id = users[i]['id'];
         newPlayer.name = users[i]['name'];
-        // this.dealCards(newPlayer);
+        this.dealCards(newPlayer);
 
         players.push(newPlayer);
 
       }
       return players;
-
-      // test: print out all player's name
-      console.log('Player\'s name:');
-      for(let i = 0, j = players.length; i < j; i++) {
-        console.log(players[i]['name'] + ': ' + players[i]['hand']);
-      }
     },
 
     // deal cards
     dealCards: function(user) {
-      // grab user and deal a new hand of 6 terms to them
-      $.ajax({
-        url: 'http://localhost:3000/api/randomTerms/6'
-      }).done((data) => {
-        let searchTerms = data;
-        user.hand = searchTerms;
+      console.log('Game.js : dealing cards');
+
+      // use request module to hit route and populate our hand
+      request('http://localhost:3000/api/randomTerms/6', (err, res, body) => {
+        console.log('inside of request');
+        if(!err && res.statusCode == 200) {
+          user['hand'] = body;
+          // print out player and their hand
+          console.log(user['name'] + ': ' + user['hand']);
+        }
       });
     },
 
