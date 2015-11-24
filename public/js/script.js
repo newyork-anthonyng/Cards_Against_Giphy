@@ -2,6 +2,7 @@
 
 let socket = io();
 let myUser;
+let myId;
 
 // hide user signup and game views
 $('.container').hide();
@@ -9,6 +10,10 @@ $('.usersignup').hide();
 
 $(function() {
 
+  // ==========================================================================
+  // User Sign Up =============================================================
+  // ==========================================================================
+  
   // user signup
   $('#signuplink').click((event) => {
     $('.userlogin').hide();
@@ -66,7 +71,9 @@ $(function() {
   $('#login-input').keypress((event) => {
     if(event.keyCode === 13) {
       let username = $('#login-input').val();
+      // set variables on client side
       myUser = username;
+      myId = socket.id;
       socket.emit('add user', username);
       $('#login-input').val('');
       $('#login-view').hide();
@@ -89,42 +96,6 @@ $(function() {
     $.ajax({
       url: 'http://localhost:3000/startRound'
     });
-  });
-
-// ===========================================================================
-// Test Events ===============================================================
-// ===========================================================================
-  $('#createGiphy').click((event) => {
-    event.preventDefault();
-
-    let searchTerm = $('#giphyInput').val();
-    console.log('Search Term: ' + searchTerm);
-
-    $.ajax({
-      url: 'http://localhost:3000/api/createCards',
-      data: { search: searchTerm }
-    }).done((data) => {
-      $('#giphy').empty();
-      $('#giphy').append('<div><img src=' + data[1] +'></img></div>');
-    });
-  });
-
-
-  $('#showHand').click((event) => {
-    event.preventDefault();
-
-    // go through ever single term and get the img_url for them
-    // get the img_url
-    let searchTerms = ['dog', 'kitten', 'tarzan'];
-    for(let i = 0, j = searchTerms.length; i < j; i++) {
-      (function(i) {
-        $.ajax({
-          url: 'http://localhost:3000/api/createCards/' + searchTerms[i]
-        }).done((data) => {
-          console.log(i + ': ' + data['giphy']);
-        });
-      })(i);
-    }
   });
 
 });
@@ -195,15 +166,26 @@ socket.on('get hand', (data) => {
 // Socket Events - Game ======================================================
 // ===========================================================================
 
-socket.on('start round', (data) => {
-  console.log(data);
+socket.on('start round', (users) => {
+  console.log('socket on start round');
 
+  let currentUser = undefined;
+
+  // find our current user
+  // match it by checking the Socket ID's
+  for(let i = 0, j = users.length; i < j; i++) {
+    if(users[i]['id'] === myId) {
+      currentUser = users[i];
+      break;
+    }
+  }
+
+  let imageList = $('#hand');
+  imageList.append('<p>' + currentUser['name'] + '</p>');
 });
 
 socket.on('show hand', (hand) => {
   console.log('Script.js: Showing Hand');
-
-
 
   let handList = $('#myHand');
 
