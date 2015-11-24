@@ -9,9 +9,9 @@ $('.container').hide();
 $('.usersignup').hide();
 
 $(function() {
-  // ==========================================================================
-  // User Sign Up =============================================================
-  // ==========================================================================
+// ==========================================================================
+// User Sign Up =============================================================
+// ==========================================================================
 
   // user signup
   $('#signuplink').click((event) => {
@@ -97,12 +97,20 @@ $(function() {
     });
   });
 
+// ==========================================================================
+// Giphy Cards ==============================================================
+// ==========================================================================
+  // Giphy cards are clicked
+  $('.card').click((event) => {
+    console.log('Giphy card was clicked');
+  });
+
+
   // set up interval method
   let timerID = window.setInterval(() => {
     socket.emit('show hand');
     socket.emit('show question');
   }, 200);
-
 });
 
 // ===========================================================================
@@ -166,7 +174,11 @@ socket.on('show hand', (users) => {
   handList.empty();
   handList.append($('<li>' + currentUser['name'] + '</li>'));
   for(let i = 0, j = currentUser['images'].length; i < j; i++) {
-    let myCard = $('<li><img src=' + currentUser['images'][i]['giphy'] + '></img></li>');
+    let myCard =
+      $('<li><div class="card"><img src=' +
+      currentUser['images'][i]['giphy']
+      + '></img></div></li>');
+
     handList.append(myCard);
   }
 });
