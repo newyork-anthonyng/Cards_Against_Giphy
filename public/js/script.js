@@ -6,10 +6,16 @@ let myId;
 let token;
 
 // hide user signup and game views
-$('.container').hide();
+$('.container').show();
 $('.usersignup').hide();
+$('.userlogin').hide();
 
 $(function() {
+
+	// Setup for Handlebars
+	let renderTemplate_userProfile = Handlebars.compile($('div#side-profile').html());
+
+
   // ==========================================================================
   // User Sign Up =============================================================
   // ==========================================================================
@@ -104,7 +110,24 @@ $(function() {
   //   socket.emit('show hand');
   // }, 200);
 
+
+	// User Profile
+	$('#nav-profile').click((event) => {
+		event.preventDefault();
+
+		$.ajax({
+			url: '/user/retrieve',
+		}).done(() => {
+
+		})
+	})
 });
+
+
+
+
+
+
 
 // ===========================================================================
 // Socket Events - Chat Room =================================================
