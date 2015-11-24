@@ -8,6 +8,10 @@
     <title>Gifs Against Humanity</title>
   </head>
   <body>
+    <input id="login-input" type="text">
+
+    </input>
+    <button id="start-round">Start Round</button>
 <!-- ===============
 gameboard view
 =============== -->
@@ -37,9 +41,7 @@ gameboard view
           <ul id="messages">
 
           </ul>
-          <form class="chat">
-            <input id="message" autocomplete="off" /><button>Send</button>
-          </form>
+          <input id="message" autocomplete="off" /><button>Send</button>
         </div>
 
       </div>
@@ -49,67 +51,36 @@ gameboard view
 Templates
 ========== -->
 
-<!-- Login Template -->
-<template id="login-view" type="text/x-handlebars-template">
-	<h2 class="title-card">Gifs Against Humanity</h2>
+<!-- Login -->
+<div class="user-view userlogin">
+	<h1 class="title-card">Gifs Against Humanity</h1>
 	<form id="login-form">
 		<div class="form-box">
-			<input type="text" placeholder="User Name" id="login-username">
-			<input type="text" placeholder="Email" id="login-email">
+			<input type="text" placeholder="Username" id="login-username"><br>
+			<input type="text" placeholder="Password" id="login-password">
 		</div>
 		<button class="submit-butt" id="login-submit">Login</button>
 	</form>
 	<a href="localhost:3000/signup">
-		<h4 class="alt-link">Sign Up</h4>
+		<h4 id="signuplink">Sign Up</h4>
 	</a>
-</template>
+</div>
 
-<!-- Signup Template -->
-<template id="signup-view" type="text/x-handlebars-template">
-	<h2 class="title-card">Gifs Against Humanity</h2>
-	<form id="signup-form">
+<!-- Signup -->
+<div class="user-view usersignup">
+	<h1 class="title-card">Gifs Against Humanity</h1>
+	<!-- <form id="signup-form"> -->
 		<div class="form-box">
-			<input type="text" placeholder="User Name" id="signup-username">
-			<input type="text" placeholder="Email" id="signup-email">
-			<input type="text" placeholder="Password" id="signup-password">
-			<input type="text" placeholder="Confirm Password" id="signup-confirmp">
+			<input type="text" placeholder="Username" id="signup-username" value=""><br>
+			<input type="text" placeholder="Password" id="signup-password"><br>
+			<input type="text" placeholder="Confirm Password" id="signup-confirmp" value=""><br>
 		</div>
 		<button class="submit-butt" id="signup-submit">Sign Up</button>
-	</form>
+	<!-- </form> -->
 	<a href="localhost:3000/login">
-		<h4 class="alt-link">Login</h4>
+		<h4 class="alt-link">Back to Login</h4>
 	</a>
-</template>
-
-<!-- ==========
-giphy testing
-========== -->
-
-    <!-- <div id="loginpage">
-      <div class="loginform">
-         <input type="text" id="login-input" placeholder="Enter your username and press enter">
-      </div>
-    </div>
-
-      <ul id="messages"></ul>
-
-      <div id="users">
-        <ul id="usernames"></ul>
-      </div>
-
-
-      <div id="form">
-        <input id="message" autocomplete="off" placeholder="Enter message" />
-      </div> -->
-
-      <!-- Giphy test -->
-      <!-- <input id="giphyInput" placeholder="Enter giphy search term" />
-      <button id="createGiphy">Create Giphy</button>
-      <div id="giphy"></div>
-      <button id="startRound">Start Round</button>
-
-
-      <ul id="myHand"></ul> -->
+</div>
 
     <script src="js/script.js"></script>
   </body>

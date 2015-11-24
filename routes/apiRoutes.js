@@ -20,39 +20,23 @@ router.get('/', (req, res) => {
 // the 'numberOfTerms' is how many documents from the
 // database that you want to get
 router.get('/randomTerms/:numberOfTerms', (req, res) => {
-  console.log('get /randomTerms/:numberOfTerms');
-	// Loop to find needed number of gif search-terms
-	var termsArray = [];
-	var neededTerms = req.params.numberOfTerms;
-	var randomArray = [];
-	for (var i = 0; i < neededTerms; i++) {
-		var randomNum = Math.ceil(Math.random()*423);
-		randomArray.push(randomNum);
-	}
-	// randomArray.toString()
-	console.log(randomArray);
-	Answer.find({id: {$or: randomArray}}, (err, output) => {
-		// var whatWeWant = output[0]['text'];
-		// 	termsArray.push(whatWeWant);
-		termsArray.push(output[0]['text']);
-		console.log(output);
-		console.log(output[0]['text']);
-		console.log(termsArray);
-		res.send(termsArray);
-	});
 
+  let neededTerms = req.params.numberOfTerms;
 
-	// function amountTerms(numberOfTerms) {
-	// 	for (var i = 0; i < numberOfTerms; i++) {
-	// 		Answer.find({id: Math.ceil(Math.random()*423)}, (err, output) => {
-	// 		 	termsArray.push(output[0]['text']);
-	// 		});
-	// 	}
-	// }, () => {
-	// 	console.log(termsArray);
-	// 	res.send(termsArray);
-	// }
-	// amountTerms(neededTerms);
+  let termsArray = [];
+  let i = 0;
+
+  Answer.find((err, output) => {
+    while(i < neededTerms) {
+      let whatwewant = output[Math.ceil(Math.random()*423)]['text'];
+      console.log(whatwewant)
+      termsArray.push(whatwewant);
+
+      i += 1;
+    }
+
+    res.send(termsArray);
+  });
 });
 
 
