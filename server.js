@@ -55,6 +55,8 @@ io.on('connection', (socket) => {
     console.log('server.js '+ username);
     let userObj = {};
 
+    userObj.name = username;
+    userObj.id = socket.id;
     // check if user was first
     if (users.length === 0) {
       userObj.isJudge = true;
@@ -62,8 +64,6 @@ io.on('connection', (socket) => {
       userObj.isJudge = false;
     }
 
-    userObj.name = username;
-    userObj.id = socket.id;
     users.push(userObj);
     addedUser = true;
 
@@ -87,8 +87,8 @@ io.on('connection', (socket) => {
   });
 
   socket.on('check for submissions', () => {
-    console.log('server.js : check for submissions');
-    console.log('all players submitted: ' + Game.allPlayersSubmitted());
+    // console.log('server.js : check for submissions');
+    // console.log('all players submitted: ' + Game.allPlayersSubmitted());
     io.emit('check for submissions', Game.allPlayersSubmitted());
   });
 
