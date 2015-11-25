@@ -306,9 +306,7 @@ socket.on('show question', (question) => {
   console.log('Script.js: Showing Hand');
 
   let questionContainer = $('#question');
-  questionContainer.empty();
-
-  questionContainer.append($('<p>' + question + '</p>'));
+  questionContainer.html('').append($('<p>' + question + '</p>'));
   isQuestionShowing = true;
 });
 
