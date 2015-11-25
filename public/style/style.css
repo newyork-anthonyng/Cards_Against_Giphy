@@ -142,9 +142,15 @@ div#cards-in-play {
 
 }
 
-/*User Hand*/
-div#user-cards {
 
+/*User Hand*/
+
+div#user-hand {
+	overflow: scroll;
+}
+
+div#user-cards {
+	display: inline-block;
 }
 
 
