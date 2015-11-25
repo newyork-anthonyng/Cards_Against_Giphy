@@ -5,6 +5,7 @@ game views ===================================================================
 body {
 	margin: 0 auto;
 	overflow-y: scroll;
+	font-family: helvetica, arial, times;
 }
 
 a {
@@ -38,6 +39,7 @@ a {
 	height: 40px;
 	border: 2px solid black;
 	border-radius: 5px;
+	cursor: pointer;
 }
 
 div.container {
@@ -74,7 +76,11 @@ div.gameboard {
 #question {
 	height: 60px;
 	text-align: center;
-	font-size: 20pt;
+	text-align: justify;
+	font-size: 16pt;
+	border-bottom: 2px solid black;
+	color: white;
+	background-color: black;
 }
 
 #cards-in-play {
@@ -131,7 +137,21 @@ Giphy Cards ==================================================================
 	border:solid yellow 5px;
 }
 
-/* Navigation Bar and Buttons*/
+/*Game Board*/
+div#cards-in-play {
+
+}
+
+/*User Hand*/
+div#user-cards {
+
+}
+
+
+/*//////////////////////////////
+// Navigation Bar and Buttons //
+//////////////////////////////*/
+
 .nav-tool {
 	display: inline-block;
 }
@@ -140,7 +160,34 @@ Giphy Cards ==================================================================
 	display: inline-block;
 	margin: 0;
 }
-/**/
+
+#nav-profile {
+	cursor: pointer;
+}
+
+#nav-logout {
+	cursor: pointer;
+}
+
+div#profile-receiver {
+	z-index: 10;
+	text-align: center;
+}
+
+ul#profile-actions {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	font-size: 25px;
+}
+
+.profile-actions-item {
+	cursor: pointer;
+	display: inline-block;
+}
+
+
+
 
 /*==============
 giphy testing
