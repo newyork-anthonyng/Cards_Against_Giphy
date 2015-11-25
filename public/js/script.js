@@ -9,6 +9,7 @@ let token;
 // Client board information
 let isQuestionShowing = false;
 let areCardsShowing = false;
+let didSubmitCard = false;
 
 // hide user signup and game views
 $('.container').show();			// Naturally hidden
@@ -198,9 +199,8 @@ $(function() {
 // ==========================================================================
 
   // user can click and select card
+  // must use document.body because cards are dynamically added to DOM
   $(document.body).on('click', '.card', (event) => {
-    // console.log(event.target);
-
     // remove the ID from any other card
     let priorSelectedCards = $('#selected');
     $('#selected').removeAttr('id');
@@ -211,12 +211,27 @@ $(function() {
     $(currentlySelectedCard).attr('id', 'selected');
   });
 
+  // user submits card
+  $(document.body).keypress((event) => {
+    let enterKeyPressed = (event.keyCode === 13);
+    let cardSelected = $('#selected').length > 0;
+
+    if(enterKeyPressed && cardSelected) {
+      let data = {};
+      data['userId'] = myId;
+      data['myCard'] = $('#selected img').attr('src');
+
+      socket.emit('submit card', data);
+    }
+  });
+
   // set up interval method
   let timerID = window.setInterval(() => {
     if(!areCardsShowing) socket.emit('show hand');
 
     if(!isQuestionShowing) socket.emit('show question');
 
+		if(!didSubmitCard) socket.emit('check for submissions');
   }, 500);
 });
 
@@ -268,6 +283,9 @@ socket.on('send message', (data) => {
 //////////////////////////
 
 socket.on('start round', (users) => {
+	// reset all client variables
+
+
   let currentUser = getCurrentUser(users, myId);
 
   let imageList = $('div#user-cards');
@@ -309,6 +327,30 @@ socket.on('show question', (question) => {
   isQuestionShowing = true;
 });
 
+// data is an object with keys of "userId" and...
+// "myCard", which holds the Giphy imgUrl
+socket.on('submit card', (data) => {
+	console.log('script.js socket.on submit card');
+
+	// check to see if it's current user
+	console.log(data['userId']);
+	console.log(myId);
+	if(data['userId'] != myId) {
+		return false;
+	}
+
+	if(didSubmitCard) {
+		return false;
+	}
+
+	// move the submitted card to the game field
+	let submittedContainer = $('#submitted');
+	submittedContainer.append($('<img src=' + data['myCard'] + '></img>'));
+	didSubmitCard = true;
+	// make all other cards inactive
+
+});
+
 // convenience method
 // pass in all users in the game, and the client's unique ID
 // return the user object for the client
@@ -318,4 +360,10 @@ let getCurrentUser = function(allUsers, currentUserId) {
       return allUsers[i];
     }
   }
+}
+
+let resetClientVariables = function() {
+	isQuestionShowing = false;
+	areCardsShowing = false;
+	didSubmitCard = false;
 }

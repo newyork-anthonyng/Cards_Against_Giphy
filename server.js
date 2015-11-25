@@ -86,6 +86,20 @@ io.on('connection', (socket) => {
     io.emit('show question', Game.getQuestion());
   });
 
+  socket.on('check for submissions', () => {
+    console.log('server.js : check for submissions');
+    console.log('all players submitted: ' + Game.allPlayersSubmitted());
+    io.emit('check for submissions', Game.allPlayersSubmitted());
+  });
+
+  // userId and myCard are getting passed as keys in an object
+  socket.on('submit card', (data) => {
+    console.log('server.js submitting card');
+    Game.submitCard(data['userId'], data['myCard']);
+
+    io.emit('submit card', data);
+  });
+
   socket.on('disconnect', () => {
     console.log('User has disconnected.');
     if(addedUser) {

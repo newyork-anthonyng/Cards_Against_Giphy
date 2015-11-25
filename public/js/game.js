@@ -23,6 +23,7 @@ let Game = (function() {
 
     // start round
     startRound: function(users) {
+      this.resetGame();
       console.log('Game.js : starting round');
 
       // reset players and add in all players
@@ -34,6 +35,7 @@ let Game = (function() {
         // key: images will hold an array of objects, which have keys of...
         // 'id', 'giphy', 'still'
         newPlayer.images = [];
+        newPlayer.submitted = undefined;
         this.dealCards(newPlayer);
 
         // add new player objects into our player array
@@ -77,26 +79,9 @@ let Game = (function() {
           if(!err && res.statusCode == 200) {
             let image = JSON.parse(body);
             user['images'].push(image);
-
-            // Test code to print out user images
-            // console.log('User hand:');
-            // for( let i = 0, j = user['images'].length; i < j; i++) {
-              // console.log(user['images'][i]['giphy']);
-            // }
           }
       });
     },
-
-    // show players hand
-    showHand: function(userName) {
-      for(let i = 0, j = players.length; i < j; i++) {
-        if(players[i]['name'] === userName) {
-          console.log(userName + '\'s hand: ' + players[i]['hand']);
-          return players[i]['hand'];
-        }
-      }
-    },
-
 
     // get question for current round
     createQuestion: function() {
@@ -112,15 +97,64 @@ let Game = (function() {
 
     },
 
-    // next phase
-    nextPhase: function() {
-      if (currentPhase === phases.length) {
-        currentPhase = 0;
-      } else {
-        currentPhase++;
+    // player submitted card
+    // takes a User's ID, and a card giphy url
+    submitCard: function(userId, imgURL) {
+      console.log('Game.js submit card');
+
+      // find player object
+      let currentPlayer = undefined;
+      for(let i = 0, j = players.length; i < j; i++) {
+        if(players[i]['id'] === userId) {
+          currentPlayer = players[i];
+          break;
+        }
       }
+
+      // set their Submitted key equal to the image
+      currentPlayer['submitted'] = imgURL;
+      console.log(currentPlayer['submitted']);
     },
+
+    // check if all players have submitted a card
+    allPlayersSubmitted: function() {
+      // go through all players
+      for(let i = 0, j = players.length; i < j; i++) {
+        if(!players[i]['submitted']) {
+          return false;
+        }
+      }
+      // console.log('all cards: ' + this.getSubmittedCards());
+      return true;
+    },
+
+    // return an array of all submitted cards
+    getSubmittedCards: function() {
+      // check to see if all players are submitted
+      if(!this.allPlayersSubmitted()) {
+        return false;
+      }
+
+      let submittedCards = [];
+
+      // go through all players
+      for(let i = 0, j = players.length; i < j; i++) {
+        submittedCards.push(players[i]['submitted']);
+      }
+
+      // add all of the submitted cards into an array
+      return submittedCards;
+    },
+
+    // reset all game variables
+    resetGame: function() {
+      players         = [];
+      judge           = undefined;
+      currentQuestion = undefined;
+    }
+
   }
+
 })();
 
 module.exports = Game;
