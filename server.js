@@ -69,9 +69,6 @@ io.on('connection', (socket) => {
 
     // displaying users
     io.emit('user joined', users);
-
-    // show judge
-    io.emit('show judge', userObj);
   });
 
   socket.on('send message', (data) => {
@@ -122,9 +119,13 @@ app.get('/showHand', (req, res) => {
 app.get('/startRound', (req, res) => {
   // console.log('get /startRound');
 
-  // Start game round, and return the current user
+  // start game round, and save all the players and judge information
   Game.startRound(users);
-  io.emit('start round', Game.getPlayers());
+  let data = {};
+  data['users'] = Game.getPlayers();
+  data['judge'] = Game.getJudge();
+
+  io.emit('start round', data);
 
   res.send('Starting Round');
 });
