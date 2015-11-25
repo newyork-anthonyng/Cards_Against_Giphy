@@ -231,6 +231,7 @@ $(function() {
 
     if(!isQuestionShowing) socket.emit('show question');
 
+		if(didSubmitCard) socket.emit('check for submissions');
   }, 500);
 });
 
@@ -326,15 +327,17 @@ socket.on('show question', (question) => {
   isQuestionShowing = true;
 });
 
-socket.on('submit card', (data) => {
-  console.log('script.js: submit card');
-  console.log(data);
-});
-
 // data is an object with keys of "userId" and...
 // "myCard", which holds the Giphy imgUrl
 socket.on('submit card', (data) => {
 	console.log('script.js socket.on submit card');
+
+	// check to see if it's current user
+	console.log(data['userId']);
+	console.log(myId);
+	if(data['userId'] != myId) {
+		return false;
+	}
 
 	// move the submitted card to the game field
 	let submittedContainer = $('#submitted');
