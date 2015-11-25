@@ -44,6 +44,16 @@ let Game = (function() {
 
       // create question
       this.createQuestion();
+
+      // set judge
+      for(let i = 0, j = users.length; i < j; i++) {
+        if(users[i]['isJudge']) {
+          console.log('user: ' + users[i]['name'] + ' is the judge.');
+          judge = users[i]['id'];
+          break;
+        }
+      }
+
       return players;
     },
 
@@ -113,7 +123,6 @@ let Game = (function() {
 
       // set their Submitted key equal to the image
       currentPlayer['submitted'] = imgURL;
-      console.log(currentPlayer['submitted']);
     },
 
     // check if all players have submitted a card
