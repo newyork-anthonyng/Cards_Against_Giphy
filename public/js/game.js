@@ -23,6 +23,7 @@ let Game = (function() {
 
     // start round
     startRound: function(users) {
+      this.resetGame();
       console.log('Game.js : starting round');
 
       // reset players and add in all players
@@ -123,6 +124,7 @@ let Game = (function() {
           return false;
         }
       }
+      console.log('all cards: ' + this.getSubmittedCards());
       return true;
     },
 
@@ -143,6 +145,13 @@ let Game = (function() {
       // add all of the submitted cards into an array
       return submittedCards;
     },
+
+    // reset all game variables
+    resetGame: function() {
+      players         = [];
+      judge           = undefined;
+      currentQuestion = undefined;
+    }
 
   }
 

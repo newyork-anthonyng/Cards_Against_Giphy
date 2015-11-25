@@ -283,6 +283,9 @@ socket.on('send message', (data) => {
 //////////////////////////
 
 socket.on('start round', (users) => {
+	// reset all client variables
+
+
   let currentUser = getCurrentUser(users, myId);
 
   let imageList = $('#hand');
@@ -356,4 +359,10 @@ let getCurrentUser = function(allUsers, currentUserId) {
       return allUsers[i];
     }
   }
+}
+
+let resetClientVariables = function() {
+	isQuestionShowing = false;
+	areCardsShowing = false;
+	didSubmitCard = false;	
 }
