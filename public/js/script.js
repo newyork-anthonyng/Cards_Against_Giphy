@@ -227,11 +227,12 @@ $(function() {
 
   // set up interval method
   let timerID = window.setInterval(() => {
+		// update client's views of their
     if(!areCardsShowing) socket.emit('show hand');
 
     if(!isQuestionShowing) socket.emit('show question');
 
-		if(!didSubmitCard) socket.emit('check for submissions');
+		socket.emit('check for submissions');
   }, 500);
 });
 
@@ -344,11 +345,16 @@ socket.on('submit card', (data) => {
 	}
 
 	// move the submitted card to the game field
-	let submittedContainer = $('#submitted');
+	let submittedContainer = $('#cards-in-play');
 	submittedContainer.append($('<img src=' + data['myCard'] + '></img>'));
 	didSubmitCard = true;
 	// make all other cards inactive
 
+});
+
+// "submitted" is boolean that tells you if all player's cards are submitted
+socket.on('check for submissions', (submitted) => {
+	console.log('all players submitted?: ' + submitted);
 });
 
 // convenience method
