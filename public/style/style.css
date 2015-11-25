@@ -89,6 +89,10 @@ div.gameboard {
 
 #user-cards {
 	height: 335px;
+}
+
+#user-hand {
+	/*height: 335px;*/
 	border-top: 2px solid black;
 }
 

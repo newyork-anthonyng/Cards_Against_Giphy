@@ -288,7 +288,7 @@ socket.on('start round', (users) => {
 
   let currentUser = getCurrentUser(users, myId);
 
-  let imageList = $('div#user-cards');
+  let imageList = $('#user-cards');
   imageList.append('<p>' + currentUser['name'] + '</p>');
 });
 
@@ -300,7 +300,7 @@ socket.on('show hand', (users) => {
   }
 
   // append all of our card images into the hand list
-  let handList = $('div#user-cards');
+  let handList = $('#user-cards');
   handList.html('').append($('<li>' + currentUser['name'] + '</li>'));
   for(let i = 0, j = currentUser['images'].length; i < j; i++) {
     let myCard =
