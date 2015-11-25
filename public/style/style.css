@@ -137,6 +137,17 @@ Giphy Cards ==================================================================
 	border:solid yellow 5px;
 }
 
+/*Game Board*/
+div#cards-in-play {
+
+}
+
+/*User Hand*/
+div#user-cards {
+
+}
+
+
 /*//////////////////////////////
 // Navigation Bar and Buttons //
 //////////////////////////////*/

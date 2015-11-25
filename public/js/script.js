@@ -11,9 +11,9 @@ let isQuestionShowing = false;
 let areCardsShowing = false;
 
 // hide user signup and game views
-$('.container').hide();			// Naturally hidden
+$('.container').show();			// Naturally hidden
 $('.usersignup').hide();		// Naturally hidden
-$('.userlogin').show();			// Naturally shown
+$('.userlogin').hide();			// Naturally shown
 $('#side-profile').show();		// Naturally shown
 // $('#side-chat').hide();		// Naturally n/a
 
@@ -270,7 +270,7 @@ socket.on('send message', (data) => {
 socket.on('start round', (users) => {
   let currentUser = getCurrentUser(users, myId);
 
-  let imageList = $('#hand');
+  let imageList = $('div#user-cards');
   imageList.append('<p>' + currentUser['name'] + '</p>');
 });
 
@@ -282,9 +282,8 @@ socket.on('show hand', (users) => {
   }
 
   // append all of our card images into the hand list
-  let handList = $('#hand');
-  handList.empty();
-  handList.append($('<li>' + currentUser['name'] + '</li>'));
+  let handList = $('div#user-cards');
+  handList.html('').append($('<li>' + currentUser['name'] + '</li>'));
   for(let i = 0, j = currentUser['images'].length; i < j; i++) {
     let myCard =
       $('<li><div class="card"><img src=' +
