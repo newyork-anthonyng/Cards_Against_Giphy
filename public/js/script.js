@@ -10,6 +10,7 @@ let token;
 let isQuestionShowing = false;
 let areCardsShowing = false;
 let didSubmitCard = false;
+let isJudge = false;
 
 // hide user signup and game views
 $('.container').show();			// Naturally hidden
@@ -227,11 +228,12 @@ $(function() {
 
   // set up interval method
   let timerID = window.setInterval(() => {
+		// update client's views of their
     if(!areCardsShowing) socket.emit('show hand');
 
     if(!isQuestionShowing) socket.emit('show question');
 
-		if(!didSubmitCard) socket.emit('check for submissions');
+		socket.emit('check for submissions');
   }, 500);
 });
 
@@ -256,18 +258,6 @@ socket.on('user joined', (users) => {
     });
 });
 
-socket.on('show judge', (user) => {
-  let container = $('#cards-in-play');
-  let text = '';
-  if(user.isJudge) {
-    text = 'I\'m a judge';
-  } else {
-    text = 'I\'m a player';
-  }
-
-  container.text(text);
-});
-
 socket.on('send message', (data) => {
   // update chat messages
   console.log(data);
@@ -282,11 +272,17 @@ socket.on('send message', (data) => {
 // Socket Events - Game //
 //////////////////////////
 
-socket.on('start round', (users) => {
+// data is an object that contains "users" and "judge"
+socket.on('start round', (data) => {
 	// reset all client variables
+	resetClientVariables();
 
+  let currentUser = getCurrentUser(data['users'], myId);
 
-  let currentUser = getCurrentUser(users, myId);
+	if(myId === data['judge']) {
+		isJudge = true;
+		console.log(data[''])
+	}
 
   let imageList = $('div#user-cards');
   imageList.append('<p>' + currentUser['name'] + '</p>');
@@ -295,25 +291,29 @@ socket.on('start round', (users) => {
 socket.on('show hand', (users) => {
   // only show hand when there are current hands
   let currentUser = getCurrentUser(users, myId);
-  if (currentUser === undefined) {
-    return false;
-  }
 
-  // append all of our card images into the hand list
   let handList = $('div#user-cards');
-  handList.html('').append($('<li>' + currentUser['name'] + '</li>'));
-  for(let i = 0, j = currentUser['images'].length; i < j; i++) {
-    let myCard =
-      $('<li><div class="card"><img src=' +
-      currentUser['images'][i]['giphy']
-      + '></img></div></li>');
-    handList.append(myCard);
-  }
 
-  // stop updating this when all cards are shown
-  if(currentUser['images'].length === 6) {
-    areCardsShowing = true;
-  }
+  if (currentUser === undefined || isJudge) {
+    handList.html('').append($('<p>You are the judge</p>'));
+  } else {
+
+		// show the card images
+	  handList.html('').append($('<li>' + currentUser['name'] + '</li>'));
+	  for(let i = 0, j = currentUser['images'].length; i < j; i++) {
+	    let myCard =
+	      $('<li><div class="card"><img src=' +
+	      currentUser['images'][i]['giphy']
+	      + '></img></div></li>');
+	    handList.append(myCard);
+	  }
+
+	  // stop updating this when all cards are shown
+	  if(currentUser['images'].length === 6) {
+	    areCardsShowing = true;
+	  }
+	}
+
 });
 
 socket.on('show question', (question) => {
@@ -344,11 +344,14 @@ socket.on('submit card', (data) => {
 	}
 
 	// move the submitted card to the game field
-	let submittedContainer = $('#submitted');
+	let submittedContainer = $('#cards-in-play');
 	submittedContainer.append($('<img src=' + data['myCard'] + '></img>'));
 	didSubmitCard = true;
-	// make all other cards inactive
+});
 
+// "submitted" is boolean that tells you if all player's cards are submitted
+socket.on('check for submissions', (submitted) => {
+	console.log('all players submitted?: ' + submitted);
 });
 
 // convenience method
@@ -366,4 +369,5 @@ let resetClientVariables = function() {
 	isQuestionShowing = false;
 	areCardsShowing = false;
 	didSubmitCard = false;
+	isJudge = false;
 }

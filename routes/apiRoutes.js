@@ -29,7 +29,7 @@ router.get('/randomTerms/:numberOfTerms', (req, res) => {
   Answer.find((err, output) => {
     while(i < neededTerms) {
       let whatWeWant = output[Math.ceil(Math.random()*1264)]['text'];
-      console.log(whatWeWant)
+      // console.log(whatWeWant)
       termsArray.push(whatWeWant);
 
       i += 1;

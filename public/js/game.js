@@ -6,6 +6,7 @@ let Game = (function() {
   // each player will be an object with an id, name, images, and submitted card
   let players         = [];
   let judge           = undefined;
+  let judgeIndex      = undefined;
   let currentQuestion = undefined;
 
   // game phases. We still need to check if this is necessary.
@@ -19,6 +20,11 @@ let Game = (function() {
 
     getQuestion: function() {
       return currentQuestion;
+    },
+
+    // return the UserId of the judge
+    getJudge: function() {
+      return judge;
     },
 
     // start round
@@ -44,6 +50,27 @@ let Game = (function() {
 
       // create question
       this.createQuestion();
+
+      // set up initial judge
+      if(!judge) {
+        for(let i = 0, j = users.length; i < j; i++) {
+          if(users[i]['isJudge']) {
+            console.log('user: ' + users[i]['name'] + ' is the judge.');
+            judge = users[i]['id'];
+            judgeIndex = i;
+            break;
+          }
+        }
+      } else {
+        // make the next player the judge
+        if(judgeIndex === players.length - 1) {
+          judgeIndex = 0;
+        } else {
+          judgeIndex += 1;
+        }
+        judge = players[judgeIndex]['id'];
+      }
+
       return players;
     },
 
@@ -91,7 +118,7 @@ let Game = (function() {
       request('http://localhost:3000/api/createQuestion', (err, res, body) => {
         if(!err && res.statusCode == 200) {
           currentQuestion = body;
-          console.log('Current question is: ' + currentQuestion);
+          // console.log('Current question is: ' + currentQuestion);
         }
       });
 
@@ -113,7 +140,6 @@ let Game = (function() {
 
       // set their Submitted key equal to the image
       currentPlayer['submitted'] = imgURL;
-      console.log(currentPlayer['submitted']);
     },
 
     // check if all players have submitted a card

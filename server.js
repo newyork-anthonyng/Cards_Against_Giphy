@@ -55,6 +55,8 @@ io.on('connection', (socket) => {
     console.log('server.js '+ username);
     let userObj = {};
 
+    userObj.name = username;
+    userObj.id = socket.id;
     // check if user was first
     if (users.length === 0) {
       userObj.isJudge = true;
@@ -62,16 +64,11 @@ io.on('connection', (socket) => {
       userObj.isJudge = false;
     }
 
-    userObj.name = username;
-    userObj.id = socket.id;
     users.push(userObj);
     addedUser = true;
 
     // displaying users
     io.emit('user joined', users);
-
-    // show judge
-    io.emit('show judge', userObj);
   });
 
   socket.on('send message', (data) => {
@@ -87,8 +84,8 @@ io.on('connection', (socket) => {
   });
 
   socket.on('check for submissions', () => {
-    console.log('server.js : check for submissions');
-    console.log('all players submitted: ' + Game.allPlayersSubmitted());
+    // console.log('server.js : check for submissions');
+    // console.log('all players submitted: ' + Game.allPlayersSubmitted());
     io.emit('check for submissions', Game.allPlayersSubmitted());
   });
 
@@ -122,9 +119,13 @@ app.get('/showHand', (req, res) => {
 app.get('/startRound', (req, res) => {
   // console.log('get /startRound');
 
-  // Start game round, and return the current user
+  // start game round, and save all the players and judge information
   Game.startRound(users);
-  io.emit('start round', Game.getPlayers());
+  let data = {};
+  data['users'] = Game.getPlayers();
+  data['judge'] = Game.getJudge();
+
+  io.emit('start round', data);
 
   res.send('Starting Round');
 });
