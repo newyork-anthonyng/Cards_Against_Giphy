@@ -13,9 +13,11 @@
     <!-- Test code -->
     <input id="login-input" type="text"></input>
     <button id="start-round">Start Round</button>
-    <div id="question"></div>
-    <div id="submitted"></div>
-    <ul id="hand"></ul>
+    <!-- <div id="question"></div> -->
+		<!-- see div#question -->
+    <!-- <ul id="hand"></ul> -->
+		<!-- see div#usercards -->
+
 <!-- ===============
 gameboard view
 =============== -->
@@ -33,16 +35,19 @@ gameboard view
 
       <div class="gameboard">
         <div id="question">
-          questions question
+          Question:
         </div>
         <div id="cards-in-play">
           cards in play
         </div>
         <div id="user-cards">
-          user cards
+          Your Hand (user cards)
         </div>
       </div>
 
+		<!-- Profile Display Div -->
+		<div id="profile-receiver">
+		</div>
       <div id="side-chat" class="sidebar">
         <div id="game-status">
           game stats
@@ -93,22 +98,6 @@ Templates
     	</a>
     </div>
 
-	<!-- Profile Display Div -->
-	<div id="side-profile" class="sidebar">
-		<div id="profile-receiver">
-		</div>
-		<ul id="profile-actions">
-			<li class="profile-actions-item" id="profile-edit">
-				Edit
-			</li> |
-			<li class="profile-actions-item" id="profile-delete">
-				Delete
-			</li>
-			<li class="profile-actions-item" id="side-back-button">
-				Back
-			</li>
-		</ul>
-	</div>
 
 	<!-- User Profile Template -->
 	<template id="profile-template">
@@ -126,6 +115,19 @@ Templates
 			<li class="profile-list-item">
 			</li>
 		</ul>
+		<div id="side-profile" class="sidebar">
+			<ul id="profile-actions">
+				<li class="profile-actions-item" id="profile-edit">
+					Edit
+				</li> |
+				<li class="profile-actions-item" id="profile-delete">
+					Delete
+				</li> |
+				<li class="profile-actions-item" id="side-back-button">
+					Back
+				</li>
+			</ul>
+		</div>
 	</template>
 
     <script src="js/script.js"></script>
