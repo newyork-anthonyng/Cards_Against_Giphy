@@ -124,7 +124,7 @@ let Game = (function() {
           return false;
         }
       }
-      console.log('all cards: ' + this.getSubmittedCards());
+      // console.log('all cards: ' + this.getSubmittedCards());
       return true;
     },
 

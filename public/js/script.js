@@ -220,7 +220,6 @@ $(function() {
       data['userId'] = myId;
       data['myCard'] = $('#selected img').attr('src');
 
-      didSubmitCard = true;
       socket.emit('submit card', data);
     }
   });
@@ -231,7 +230,7 @@ $(function() {
 
     if(!isQuestionShowing) socket.emit('show question');
 
-		if(didSubmitCard) socket.emit('check for submissions');
+		if(!didSubmitCard) socket.emit('check for submissions');
   }, 500);
 });
 
@@ -342,10 +341,14 @@ socket.on('submit card', (data) => {
 		return false;
 	}
 
+	if(didSubmitCard) {
+		return false;
+	}
+
 	// move the submitted card to the game field
 	let submittedContainer = $('#submitted');
 	submittedContainer.append($('<img src=' + data['myCard'] + '></img>'));
-
+	didSubmitCard = true;
 	// make all other cards inactive
 
 });
@@ -364,5 +367,5 @@ let getCurrentUser = function(allUsers, currentUserId) {
 let resetClientVariables = function() {
 	isQuestionShowing = false;
 	areCardsShowing = false;
-	didSubmitCard = false;	
+	didSubmitCard = false;
 }
