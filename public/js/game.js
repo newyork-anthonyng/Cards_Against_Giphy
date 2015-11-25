@@ -22,6 +22,11 @@ let Game = (function() {
       return currentQuestion;
     },
 
+    // return the UserId of the judge
+    getJudge: function() {
+      return judge;
+    },
+
     // start round
     startRound: function(users) {
       this.resetGame();
