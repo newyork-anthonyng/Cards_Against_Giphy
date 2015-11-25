@@ -115,6 +115,17 @@ let Game = (function() {
       console.log(currentPlayer['submitted']);
     },
 
+    // check if all players have submitted a card
+    allPlayersSubmitted: function() {
+      // go through all players
+      for(let i = 0, j = players.length; i < j; i++) {
+        if(!players[i]['submitted']) {
+          return false;
+        }
+      }
+      return true;
+    },
+
   }
 })();
 
