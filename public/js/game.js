@@ -126,7 +126,26 @@ let Game = (function() {
       return true;
     },
 
+    // return an array of all submitted cards
+    getSubmittedCards: function() {
+      // check to see if all players are submitted
+      if(!this.allPlayersSubmitted()) {
+        return false;
+      }
+
+      let submittedCards = [];
+
+      // go through all players
+      for(let i = 0, j = players.length; i < j; i++) {
+        submittedCards.push(players[i]['submitted']);
+      }
+
+      // add all of the submitted cards into an array
+      return submittedCards;
+    },
+
   }
+
 })();
 
 module.exports = Game;
