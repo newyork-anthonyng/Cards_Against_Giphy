@@ -124,5 +124,5 @@ module.exports = {
   logout: logout,
   destroy: destroy,
   auth: auth,
-  checkAuth: checkAuth
+  // checkAuth: checkAuth
 }

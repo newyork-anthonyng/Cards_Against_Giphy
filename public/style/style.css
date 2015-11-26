@@ -92,7 +92,7 @@ div.gameboard {
 }
 
 #user-hand {
-	/*height: 335px;*/
+	height: 335px;
 	border-top: 2px solid black;
 }
 
@@ -133,7 +133,7 @@ div.sidebar {
 Giphy Cards ==================================================================
 /*===========================================================================*/
 
-.card {
+img.card-img {
 	border:solid black 1px;
 }
 
@@ -150,11 +150,27 @@ div#cards-in-play {
 /*User Hand*/
 
 div#user-hand {
-	overflow: scroll;
+	overflow: auto;
+	overflow-y: scroll;
+	text-align: center;
+
 }
 
-div#user-cards {
-	display: inline-block;
+ul#user-cards {
+	display: inline;
+	padding: 0;
+	margin: 0;
+}
+
+li.card-li {
+	display: inline;
+	text-align: center;
+
+}
+
+div.card {
+	display: inline;
+
 }
 
 

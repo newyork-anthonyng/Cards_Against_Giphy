@@ -20,7 +20,7 @@ let currentPhase = 'drawing cards';
 $('.container').hide();			// Naturally hidden
 $('.usersignup').hide();		// Naturally hidden
 $('.userlogin').show();			// Naturally shown
-// $('#side-profile').show();		// Naturally shown
+// $('#side-profile').show();	// Naturally shown
 // $('#side-chat').hide();		// Naturally n/a
 
 $(function() {
@@ -247,7 +247,7 @@ $(function() {
 
   // set up interval method
   let timerID = window.setInterval(() => {
-		console.log('current phase: ' + currentPhase);
+//!!	// console.log('current phase: ' + currentPhase);
 
 		// update client's views of their
     if(!areCardsShowing) socket.emit('show hand');
@@ -308,17 +308,17 @@ socket.on('start round', (data) => {
 		console.log(data[''])
 	}
 
-  let imageList = $('#user-cards');
+  let imageList = $('div#user-hand');
   imageList.append('<p>' + currentUser['name'] + '</p>');
 });
 
 socket.on('show hand', (users) => {
 	if(areCardsShowing || isJudge) return false;
 
-	console.log('script.js : showing hand');
+	// console.log('script.js : showing hand');
   // only show hand when there are current hands
   let currentUser = getCurrentUser(users, myId);
-  let handList = $('div#user-cards');
+  let handList = $('ul#user-cards');
   if (currentUser === undefined || isJudge) {
     handList.html('').append($('<p>You are the judge</p>'));
   } else {
@@ -327,7 +327,7 @@ socket.on('show hand', (users) => {
 	  handList.html('').append($('<li>' + currentUser['name'] + '</li>'));
 	  for(let i = 0, j = currentUser['images'].length; i < j; i++) {
 	    let myCard =
-	      $('<li><div class="card"><img src=' +
+	      $('<li class="card-li"><div class="card"><img class="card-img" src=' +
 	      currentUser['images'][i]['giphy']
 	      + '></img></div></li>');
 	    handList.append(myCard);
@@ -397,7 +397,7 @@ socket.on('judging', (submittedCards) => {
 	} else {
 	// set up player's view
 
-	
+
 	}
 });
 
