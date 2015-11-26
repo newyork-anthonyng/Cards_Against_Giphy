@@ -103,6 +103,10 @@ io.on('connection', (socket) => {
     io.emit('submit card', data);
   });
 
+  socket.on('reveal winner', () => {
+    io.emit('reveal winner');
+  });
+
   socket.on('disconnect', () => {
     console.log('User has disconnected.');
     if(addedUser) {

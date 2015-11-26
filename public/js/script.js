@@ -223,7 +223,7 @@ $(function() {
   $(document.body).on('click', '.card', (event) => {
     // remove the ID from any other card
     let priorSelectedCards = $('#selected');
-    $('#selected').removeAttr('id');
+    priorSelectedCards.removeAttr('id');
 
     let currentlySelectedCard = event.target;
 
@@ -231,18 +231,42 @@ $(function() {
     $(currentlySelectedCard).attr('id', 'selected');
   });
 
-  // user submits card
+	$(document.body).on('click', '.judging-card', (event) => {
+		console.log('Judge is selecting a card');
+
+		// remove the ID from any other card
+		let priorSelectedCards = $('#winner');
+		priorSelectedCards.removeAttr('id');
+
+		let currentlySelectedCard = event.target;
+
+		// add ID of "winner" to the clicked card
+		$(currentlySelectedCard).attr('id', 'winner');
+	});
+
+  // user or judge submits card
   $(document.body).keypress((event) => {
     let enterKeyPressed = (event.keyCode === 13);
-    let cardSelected = $('#selected').length > 0;
 
-    if(enterKeyPressed && cardSelected) {
-      let data = {};
-      data['userId'] = myId;
-      data['myCard'] = $('#selected img').attr('src');
+		if(currentPhase === 'checking for submissions') {
+			// check for players selecting cards
+			let cardSelected = $('#selected').length > 0;
+	    if(enterKeyPressed && cardSelected) {
+	      let data = {};
+	      data['userId'] = myId;
+	      data['myCard'] = $('#selected img').attr('src');
 
-      socket.emit('submit card', data);
-    }
+	      socket.emit('submit card', data);
+	    }
+
+		} else if(currentPhase === 'judging') {
+			// check for judge selecting card
+			let winnerSelected = $('#winner').length > 0;
+			if(enterKeyPressed && winnerSelected) {
+				currentPhase = 'reveal winner';
+			}
+		}
+
   });
 
   // set up interval method
@@ -264,6 +288,10 @@ $(function() {
 
 		if(currentPhase === 'judging') {
 			socket.emit('judging');
+		}
+
+		if(currentPhase === 'reveal winner') {
+			socket.emit('reveal winner');
 		}
 
   }, 500);
@@ -404,18 +432,27 @@ socket.on('reveal cards', (submittedCards) => {
 	cardsInPlay.empty();
 
 	for(let i = 0, j = submittedCards.length; i < j; i++) {
-		cardsInPlay.append($('<img src=' + submittedCards[i] + '></img>'));
+		cardsInPlay.append($('<div class="judging-card"><img src='
+													+ submittedCards[i] + '></img></div>'));
 	}
 
 	let cardsInHand = $('#user-cards');
 	cardsInHand.empty();
 
+	// change all of the classes of the cards
+
 	currentPhase = 'judging';
 });
 
 socket.on('judging', () => {
+	if(!isJudge) {
+		return false;
+	}
 
+});
 
+socket.on('reveal winner', () => {
+	console.log('winner is chosen');
 });
 
 // ==========================================================================
@@ -441,7 +478,8 @@ let resetClientVariables = function() {
 
 let nextPhase = function() {
 	console.log('next phase');
-	let phases = ['drawing cards', 'checking for submissions', 'judging'];
+	let phases = ['drawing cards', 'checking for submissions',
+								'reveal cards', 'judging', 'reveal winner'];
 
 	// get index of the current phase
 	// get the next phase
