@@ -259,15 +259,11 @@ $(function() {
 		}
 
 		if(currentPhase === 'judging') {
-			console.log('judging now');
+			socket.emit('judging');
 		}
 
   }, 1000);
 });
-
-
-
-
 
 
 
@@ -342,6 +338,7 @@ socket.on('show hand', (users) => {
 	  // stop updating this when all cards are shown
 	  if(currentUser['images'].length === 6) {
 	    areCardsShowing = true;
+			console.log('line 341 next phase');
 			nextPhase();
 	  }
 	}
@@ -364,8 +361,8 @@ socket.on('submit card', (data) => {
 	console.log('script.js socket.on submit card');
 
 	// check to see if it's current user
-	console.log(data['userId']);
-	console.log(myId);
+	// console.log(data['userId']);
+	// console.log(myId);
 	if(data['userId'] != myId) {
 		return false;
 	}
@@ -383,12 +380,33 @@ socket.on('submit card', (data) => {
 // "submitted" is boolean that tells you if all player's cards are submitted
 socket.on('check for submissions', (submitted) => {
 	if(submitted === true) {
-		console.log('all players have submitted their cards. Moving into judging');
-		nextPhase();
+		// console.log('all players have submitted their cards. Moving into judging');
+		console.log('line 384 next phase');
+		currentPhase = 'judging';
 	}
 });
 
-// convenience method
+// "submittedCards" is an array of imgUrl's
+socket.on('judging', (submittedCards) => {
+	// set up judge's view
+	if(isJudge) {
+		let cardsInPlay = $('#cards-in-play');
+		cardsInPlay.empty();
+
+		for(let i = 0, j = submittedCards.length; i < j; i++) {
+			cardsInPlay.append($('<img src=' + submittedCards[i] + '></img>'));
+		}
+	} else {
+	// set up player's view
+
+	
+	}
+});
+
+// ==========================================================================
+// Convenience Methods ======================================================
+// ==========================================================================
+
 // pass in all users in the game, and the client's unique ID
 // return the user object for the client
 let getCurrentUser = function(allUsers, currentUserId) {
@@ -407,6 +425,7 @@ let resetClientVariables = function() {
 }
 
 let nextPhase = function() {
+	console.log('next phase');
 	let phases = ['drawing cards', 'checking for submissions', 'judging'];
 
 	// get index of the current phase
