@@ -87,8 +87,12 @@ io.on('connection', (socket) => {
     io.emit('check for submissions', Game.allPlayersSubmitted());
   });
 
+  socket.on('reveal cards', () => {
+    io.emit('reveal cards', Game.getSubmittedCards());
+  });
+
   socket.on('judging', () => {
-    io.emit('judging', Game.getSubmittedCards());
+    io.emit('judging');
   });
 
   // userId and myCard are getting passed as keys in an object
@@ -97,6 +101,11 @@ io.on('connection', (socket) => {
     Game.submitCard(data['userId'], data['myCard']);
 
     io.emit('submit card', data);
+  });
+
+  // myCard is getting passed as a key in an object (imgURL)
+  socket.on('reveal winner', (data) => {
+    io.emit('reveal winner', data);
   });
 
   socket.on('disconnect', () => {
