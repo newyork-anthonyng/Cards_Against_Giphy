@@ -84,9 +84,11 @@ io.on('connection', (socket) => {
   });
 
   socket.on('check for submissions', () => {
-    // console.log('server.js : check for submissions');
-    // console.log('all players submitted: ' + Game.allPlayersSubmitted());
     io.emit('check for submissions', Game.allPlayersSubmitted());
+  });
+
+  socket.on('judging', () => {
+    io.emit('judging', Game.getSubmittedCards());
   });
 
   // userId and myCard are getting passed as keys in an object
@@ -117,7 +119,7 @@ app.get('/showHand', (req, res) => {
 
 // Start Round
 app.get('/startRound', (req, res) => {
-  // console.log('get /startRound');
+  console.log('get /startRound');
 
   // start game round, and save all the players and judge information
   Game.startRound(users);

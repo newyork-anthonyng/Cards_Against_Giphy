@@ -144,13 +144,15 @@ let Game = (function() {
 
     // check if all players have submitted a card
     allPlayersSubmitted: function() {
-      // go through all players
       for(let i = 0, j = players.length; i < j; i++) {
-        if(!players[i]['submitted']) {
+        // check if player has submitted and is not the judge
+        let playerSubmitted = players[i]['submitted'];
+        let isJudge         = judge === players[i]['id'];
+
+        if(!playerSubmitted && !isJudge) {
           return false;
         }
       }
-      // console.log('all cards: ' + this.getSubmittedCards());
       return true;
     },
 
