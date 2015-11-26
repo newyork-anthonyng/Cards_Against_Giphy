@@ -72,6 +72,10 @@ $(function() {
       password: password
     }
 
+    myUser = username;
+		myId = socket.id;
+    socket.emit('add user', username);
+
     $.ajax({
       url: "/user/auth",
       method: "POST",
@@ -80,10 +84,6 @@ $(function() {
     }).done((user) => {
       $('.container').show();
       $('.userlogin').hide();
-
-      myUser = username;
-      socket.emit('add user', username);
-      // log the user into the chatroom and game
     });
   });
 
