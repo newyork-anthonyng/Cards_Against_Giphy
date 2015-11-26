@@ -291,7 +291,12 @@ $(function() {
 		}
 
 		if(currentPhase === 'reveal winner') {
-			socket.emit('reveal winner');
+			// declare winner
+			let data = {};
+			data['myCard'] = $('#winner').attr('src');
+			console.log('my card: ' + data['myCard']);
+
+			socket.emit('reveal winner', data);
 		}
 
   }, 500);
@@ -451,8 +456,17 @@ socket.on('judging', () => {
 
 });
 
-socket.on('reveal winner', () => {
-	console.log('winner is chosen');
+// data contains key, myCard, which contains imgURL
+socket.on('reveal winner', (data) => {
+	// empty all other cards from the game screen
+	let cardsInPlay = $('#cards-in-play');
+	cardsInPlay.empty();
+
+	// show the winning card on everyone's screen
+	let winnerCard = $('<div><img src=' + data['myCard'] + '></img></div>');
+	cardsInPlay.append(winnerCard);
+
+	currentPhase = 'end round';
 });
 
 // ==========================================================================

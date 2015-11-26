@@ -103,8 +103,9 @@ io.on('connection', (socket) => {
     io.emit('submit card', data);
   });
 
-  socket.on('reveal winner', () => {
-    io.emit('reveal winner');
+  // myCard is getting passed as a key in an object (imgURL)
+  socket.on('reveal winner', (data) => {
+    io.emit('reveal winner', data);
   });
 
   socket.on('disconnect', () => {

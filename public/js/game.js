@@ -176,6 +176,11 @@ let Game = (function() {
       return submittedCards;
     },
 
+    // declare winner
+    declareWinner: function(userId) {
+      
+    },
+
     // reset all game variables
     resetGame: function() {
       players         = [];
