@@ -262,7 +262,7 @@ $(function() {
 			socket.emit('judging');
 		}
 
-  }, 1000);
+  }, 500);
 });
 
 
@@ -389,18 +389,15 @@ socket.on('check for submissions', (submitted) => {
 // "submittedCards" is an array of imgUrl's
 socket.on('judging', (submittedCards) => {
 	// set up judge's view
-	if(isJudge) {
-		let cardsInPlay = $('#cards-in-play');
-		cardsInPlay.empty();
+	let cardsInPlay = $('#cards-in-play');
+	cardsInPlay.empty();
 
-		for(let i = 0, j = submittedCards.length; i < j; i++) {
-			cardsInPlay.append($('<img src=' + submittedCards[i] + '></img>'));
-		}
-	} else {
-	// set up player's view
-
-	
+	for(let i = 0, j = submittedCards.length; i < j; i++) {
+		cardsInPlay.append($('<img src=' + submittedCards[i] + '></img>'));
 	}
+
+	let cardsInHand = $('#user-cards');
+	cardsInHand.empty();
 });
 
 // ==========================================================================
