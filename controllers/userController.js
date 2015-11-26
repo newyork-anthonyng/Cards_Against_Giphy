@@ -18,18 +18,13 @@ function create(req, res){
 }
 
 function retrieve(req, res){
-  let userParams = req.body;
-  // find user
-  User.findOne({username: userParams.username}, (err, user) => {
-
-    console.log(users.token)
-    // return that user
+  User.findOne({username: req.params.username}, (err, user) => {
+    // returns entire user object
     res.send(user);
   });
 }
 
 function update(req, res){
-
   let userParams = req.body;
   // find by username
   let query = {username: userParams.username};
@@ -45,17 +40,23 @@ function update(req, res){
 }
 
 function logout(req, res){
-  let userParams = req.body;
-  // Authorization: Bearer userParams.token
-  console.log(userParams);
+
+  let token = req.auth;
+  console.log(req.auth);
+  // if(message === token.message) return next();
+
+  // let userParams = req.body;
+  // console.log(userParams);
+
+
   // User.findOne({token: userParams.token}, (err, user) => {
   //   console.log(user.token);
-  //   res.send(user);
+  //   user.token = null;
+  //   console.log(user.token);
   // });
 }
 
 function destroy(req, res){
-
   let userParams = req.body;
   // find by username
   let query = {username: userParams.username};
@@ -71,7 +72,7 @@ function destroy(req, res){
 
 function auth(req, res){
 
-  var userParams = req.body;
+  let userParams = req.body;
   // Validation for undefined email or password
   if (userParams.username == undefined || userParams.password == undefined)
   res.status(401).send({message: "incorrect credentials"});
@@ -83,6 +84,12 @@ function auth(req, res){
       if (isMatch) {
         // token is made and set to expire in 5 hours / not related to logout
         res.status(200).send({message: "valid credentials", token: jwt.sign(user, secret, {expiresIn: '5h'})});
+
+        // cert = fs.readFileSync('public.pem');
+        // jwt.verify(token, cert, function(err, decoded) {
+        //   console.log(decoded.foo)
+        // });
+
       } else {
         res.status(401).send({message: "invalid credentials"});
       };
@@ -90,11 +97,32 @@ function auth(req, res){
   });
 }
 
+// function checkAuth(message) {
+//   return function(req, res, next) {
+//     //
+//     // check if any of the scopes defined in the token,
+//     // is one of the scopes declared on check_scopes
+//     //
+//     let token = req.auth;
+//     console.log(token);
+//     if(message === token.message) return next();
+//
+//     // for (var i =0; i<token.message.length; i++){
+//     //   for (var j=0; j<message.length; j++){
+//     //       if(message[j] === token.message[i]) return next();
+//     //   }
+//     // }
+//
+//     return res.send(401, 'insufficient scopes')
+//   }
+// }
+
 module.exports = {
   create: create,
   retrieve: retrieve,
   update: update,
   logout: logout,
   destroy: destroy,
-  auth: auth
+  auth: auth,
+  checkAuth: checkAuth
 }

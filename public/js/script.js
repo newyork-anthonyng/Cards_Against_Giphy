@@ -13,10 +13,10 @@ let didSubmitCard = false;
 let isJudge = false;
 
 // hide user signup and game views
-$('.container').show();			// Naturally hidden
+$('.container').hide();			// Naturally hidden
 $('.usersignup').hide();		// Naturally hidden
-$('.userlogin').hide();			// Naturally shown
-$('#side-profile').show();		// Naturally shown
+$('.userlogin').show();			// Naturally shown
+// $('#side-profile').show();		// Naturally shown
 // $('#side-chat').hide();		// Naturally n/a
 
 $(function() {
@@ -52,7 +52,7 @@ $(function() {
       url: "/user/signup",
       method: "POST",
       data: userData
-    }).done(function(){
+    }).done(() => {
         $('.usersignup').hide();
         $('.userlogin').show();
     });
@@ -76,39 +76,14 @@ $(function() {
       url: "/user/auth",
       method: "POST",
       data: userData
-    }).done(function(user){
-      // ajax setup token default header
-      token = user.token;
-      console.log(token);
+
+    }).done((user) => {
       $('.container').show();
       $('.userlogin').hide();
 
       myUser = username;
       socket.emit('add user', username);
       // log the user into the chatroom and game
-    });
-  });
-
-  $('#nav-logout').click((event) => {
-    console.log('hitting here');
-    // Authorization: Bearer token
-
-    let userData = {
-      token: token
-    }
-
-    console.log(userData);
-
-    $.ajax({
-      url: "/user/logout",
-      method: "POST",
-      data: userData
-      // Authorization: Bearer token
-    }).done(function(){
-      // ajax setup token default header
-      // user.token = null;
-      $('.container').hide();
-      $('.userlogin').show();
     });
   });
 
@@ -159,10 +134,14 @@ $(function() {
 	// Show User Profile
 	$('#nav-profile').click((event) => {
 		event.preventDefault();
+		console.log(myUser);
 
 		$.ajax({
-			url: '/user'
+			url: "/user/" + myUser,
+			method: "GET",
+
 		}).done((user) => {
+			// entire user object returned
 			let $list = $('#profile-receiver');
 			let compiledTemplate = renderTemplate_userProfile(user);
 			$list.html('').append(compiledTemplate);
@@ -182,7 +161,43 @@ $(function() {
 	// User Actions //
 	//////////////////
 
+	// user update (username, password)
+	$('#update-submit').click((event) => {
+		let username = $("#update-username").val();
+		let password = $("#update-password").val();
+		let userData = {
+			username: username,
+			password: password
+		}
 
+		$.ajax({
+			url: "/user",
+			method: "PUT",
+			data: userData
+
+		}).done(() => {
+			$('.container').show();
+			$('.userlogin').hide();
+		});
+	});
+
+	//User Delete Account
+	$('#nav-profile').click((event) => {
+
+		let userData = {
+			username: myUser
+		};
+
+		$.ajax({
+			url: "/user",
+			method: "DELETE",
+			data: userData
+
+		}).done(() => {
+			$('.container').hide();
+			$('.userlogin').show();
+		});
+	});
 
 	// User Logout
 	$('#nav-logout').click((event) => {
@@ -190,8 +205,12 @@ $(function() {
 
 		$.ajax({
 			url: '/user/logout'
-		}).done
-	})
+		}).done(function(){
+			$('.container').hide();
+			$('.usersignup').hide();
+			$('.userlogin').show();
+		});
+	});
 
 
 
