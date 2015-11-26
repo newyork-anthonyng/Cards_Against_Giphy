@@ -14,8 +14,7 @@ let isJudge = false;
 
 // variable sets what game phase we are in
 // judging, checkingForSubmissions?
-let phases = ['drawing cards', 'checking for submissions', 'judging'];
-let currentPhase = 'checking for submissions';
+let currentPhase = 'drawing cards';
 
 // hide user signup and game views
 $('.container').hide();			// Naturally hidden
@@ -248,6 +247,8 @@ $(function() {
 
   // set up interval method
   let timerID = window.setInterval(() => {
+		console.log('current phase: ' + currentPhase);
+
 		// update client's views of their
     if(!areCardsShowing) socket.emit('show hand');
 
@@ -256,6 +257,11 @@ $(function() {
 		if(currentPhase === 'checking for submissions') {
 			socket.emit('check for submissions');
 		}
+
+		if(currentPhase === 'judging') {
+			console.log('judging now');
+		}
+
   }, 1000);
 });
 
@@ -336,6 +342,7 @@ socket.on('show hand', (users) => {
 	  // stop updating this when all cards are shown
 	  if(currentUser['images'].length === 6) {
 	    areCardsShowing = true;
+			nextPhase();
 	  }
 	}
 
@@ -377,8 +384,7 @@ socket.on('submit card', (data) => {
 socket.on('check for submissions', (submitted) => {
 	if(submitted === true) {
 		console.log('all players have submitted their cards. Moving into judging');
-		currentPhase = 'judging';
-		console.log('current phase: ' + currentPhase);
+		nextPhase();
 	}
 });
 
@@ -401,5 +407,10 @@ let resetClientVariables = function() {
 }
 
 let nextPhase = function() {
+	let phases = ['drawing cards', 'checking for submissions', 'judging'];
 
+	// get index of the current phase
+	// get the next phase
+	let myIndex = phases.indexOf(currentPhase);
+	currentPhase = phases[myIndex + 1];
 }
