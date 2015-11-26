@@ -167,7 +167,9 @@ let Game = (function() {
 
       // go through all players
       for(let i = 0, j = players.length; i < j; i++) {
-        submittedCards.push(players[i]['submitted']);
+        if(players[i]['submitted']) {
+          submittedCards.push(players[i]['submitted']);
+        }
       }
 
       // add all of the submitted cards into an array

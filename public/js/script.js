@@ -258,6 +258,10 @@ $(function() {
 			socket.emit('check for submissions');
 		}
 
+		if(currentPhase === 'reveal cards') {
+			socket.emit('reveal cards');
+		}
+
 		if(currentPhase === 'judging') {
 			socket.emit('judging');
 		}
@@ -382,12 +386,12 @@ socket.on('check for submissions', (submitted) => {
 	if(submitted === true) {
 		// console.log('all players have submitted their cards. Moving into judging');
 		console.log('line 384 next phase');
-		currentPhase = 'judging';
+		currentPhase = 'reveal cards';
 	}
 });
 
 // "submittedCards" is an array of imgUrl's
-socket.on('judging', (submittedCards) => {
+socket.on('reveal cards', (submittedCards) => {
 	// set up judge's view
 	let cardsInPlay = $('#cards-in-play');
 	cardsInPlay.empty();
@@ -398,6 +402,13 @@ socket.on('judging', (submittedCards) => {
 
 	let cardsInHand = $('#user-cards');
 	cardsInHand.empty();
+
+	currentPhase = 'judging';
+});
+
+socket.on('judging', () => {
+
+
 });
 
 // ==========================================================================

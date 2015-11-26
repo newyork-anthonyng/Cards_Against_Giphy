@@ -87,8 +87,12 @@ io.on('connection', (socket) => {
     io.emit('check for submissions', Game.allPlayersSubmitted());
   });
 
+  socket.on('reveal cards', () => {
+    io.emit('reveal cards', Game.getSubmittedCards());
+  });
+
   socket.on('judging', () => {
-    io.emit('judging', Game.getSubmittedCards());
+    io.emit('judging');
   });
 
   // userId and myCard are getting passed as keys in an object
