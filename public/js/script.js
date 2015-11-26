@@ -317,7 +317,14 @@ socket.on('start round', (data) => {
 });
 
 socket.on('show hand', (users) => {
-	if(areCardsShowing || isJudge) return false;
+	if(areCardsShowing) return false;
+
+	// set a different view for judges
+	if(isJudge) {
+		let gameBoard = $('.gameboard');
+		gameBoard.css('background-color', 'yellow');
+		return false;
+	}
 
 	console.log('script.js : showing hand');
   // only show hand when there are current hands
