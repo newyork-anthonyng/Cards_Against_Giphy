@@ -308,6 +308,9 @@ socket.on('start round', (data) => {
 });
 
 socket.on('show hand', (users) => {
+	if(areCardsShowing || isJudge) return false;
+
+	console.log('script.js : showing hand');
   // only show hand when there are current hands
   let currentUser = getCurrentUser(users, myId);
 
