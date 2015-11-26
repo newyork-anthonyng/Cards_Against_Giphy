@@ -12,6 +12,11 @@ let areCardsShowing = false;
 let didSubmitCard = false;
 let isJudge = false;
 
+// variable sets what game phase we are in
+// judging, checkingForSubmissions?
+let phases = ['drawing cards', 'checking for submissions', 'judging'];
+let currentPhase = 'checking for submissions';
+
 // hide user signup and game views
 $('.container').hide();			// Naturally hidden
 $('.usersignup').hide();		// Naturally hidden
@@ -21,16 +26,12 @@ $('.userlogin').show();			// Naturally shown
 
 $(function() {
 
-
 	// Setup for Handlebars (May Refactor Later)
 	let renderTemplate_userProfile = Handlebars.compile($('template#profile-template').html());
-
-
 
   //////////////////
   // User Sign Up //
   //////////////////
-
 
   // user signup
   $('#signuplink').click((event) => {
@@ -252,8 +253,10 @@ $(function() {
 
     if(!isQuestionShowing) socket.emit('show question');
 
-		socket.emit('check for submissions');
-  }, 500);
+		if(currentPhase === 'checking for submissions') {
+			socket.emit('check for submissions');
+		}
+  }, 1000);
 });
 
 
@@ -342,7 +345,6 @@ socket.on('show question', (question) => {
   if(!question) {
     return false;
   }
-  console.log('Script.js: Showing Hand');
 
   let questionContainer = $('#question');
   questionContainer.html('').append($('<p>' + question + '</p>'));
@@ -373,7 +375,11 @@ socket.on('submit card', (data) => {
 
 // "submitted" is boolean that tells you if all player's cards are submitted
 socket.on('check for submissions', (submitted) => {
-	console.log('all players submitted?: ' + submitted);
+	if(submitted === true) {
+		console.log('all players have submitted their cards. Moving into judging');
+		currentPhase = 'judging';
+		console.log('current phase: ' + currentPhase);
+	}
 });
 
 // convenience method
@@ -392,4 +398,8 @@ let resetClientVariables = function() {
 	areCardsShowing = false;
 	didSubmitCard = false;
 	isJudge = false;
+}
+
+let nextPhase = function() {
+
 }
