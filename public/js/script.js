@@ -12,6 +12,10 @@ let areCardsShowing = false;
 let didSubmitCard = false;
 let isJudge = false;
 
+// variable sets what game phase we are in
+// judging, checkingForSubmissions?
+let currentPhase = 'drawing cards';
+
 // hide user signup and game views
 $('.container').hide();			// Naturally hidden
 $('.usersignup').hide();		// Naturally hidden
@@ -21,16 +25,12 @@ $('.userlogin').show();			// Naturally shown
 
 $(function() {
 
-
 	// Setup for Handlebars (May Refactor Later)
 	let renderTemplate_userProfile = Handlebars.compile($('template#profile-template').html());
-
-
 
   //////////////////
   // User Sign Up //
   //////////////////
-
 
   // user signup
   $('#signuplink').click((event) => {
@@ -72,6 +72,10 @@ $(function() {
       password: password
     }
 
+    myUser = username;
+		myId = socket.id;
+    socket.emit('add user', username);
+
     $.ajax({
       url: "/user/auth",
       method: "POST",
@@ -80,10 +84,6 @@ $(function() {
     }).done((user) => {
       $('.container').show();
       $('.userlogin').hide();
-
-      myUser = username;
-      socket.emit('add user', username);
-      // log the user into the chatroom and game
     });
   });
 
@@ -247,18 +247,23 @@ $(function() {
 
   // set up interval method
   let timerID = window.setInterval(() => {
+		console.log('current phase: ' + currentPhase);
+
 		// update client's views of their
     if(!areCardsShowing) socket.emit('show hand');
 
     if(!isQuestionShowing) socket.emit('show question');
 
-		socket.emit('check for submissions');
-  }, 500);
+		if(currentPhase === 'checking for submissions') {
+			socket.emit('check for submissions');
+		}
+
+		if(currentPhase === 'judging') {
+			socket.emit('judging');
+		}
+
+  }, 1000);
 });
-
-
-
-
 
 
 
@@ -308,6 +313,9 @@ socket.on('start round', (data) => {
 });
 
 socket.on('show hand', (users) => {
+	if(areCardsShowing || isJudge) return false;
+
+	console.log('script.js : showing hand');
   // only show hand when there are current hands
   let currentUser = getCurrentUser(users, myId);
   let handList = $('div#user-cards');
@@ -328,6 +336,8 @@ socket.on('show hand', (users) => {
 	  // stop updating this when all cards are shown
 	  if(currentUser['images'].length === 6) {
 	    areCardsShowing = true;
+			console.log('line 341 next phase');
+			nextPhase();
 	  }
 	}
 
@@ -337,7 +347,6 @@ socket.on('show question', (question) => {
   if(!question) {
     return false;
   }
-  console.log('Script.js: Showing Hand');
 
   let questionContainer = $('#question');
   questionContainer.html('').append($('<p>' + question + '</p>'));
@@ -350,8 +359,8 @@ socket.on('submit card', (data) => {
 	console.log('script.js socket.on submit card');
 
 	// check to see if it's current user
-	console.log(data['userId']);
-	console.log(myId);
+	// console.log(data['userId']);
+	// console.log(myId);
 	if(data['userId'] != myId) {
 		return false;
 	}
@@ -368,10 +377,34 @@ socket.on('submit card', (data) => {
 
 // "submitted" is boolean that tells you if all player's cards are submitted
 socket.on('check for submissions', (submitted) => {
-	console.log('all players submitted?: ' + submitted);
+	if(submitted === true) {
+		// console.log('all players have submitted their cards. Moving into judging');
+		console.log('line 384 next phase');
+		currentPhase = 'judging';
+	}
 });
 
-// convenience method
+// "submittedCards" is an array of imgUrl's
+socket.on('judging', (submittedCards) => {
+	// set up judge's view
+	if(isJudge) {
+		let cardsInPlay = $('#cards-in-play');
+		cardsInPlay.empty();
+
+		for(let i = 0, j = submittedCards.length; i < j; i++) {
+			cardsInPlay.append($('<img src=' + submittedCards[i] + '></img>'));
+		}
+	} else {
+	// set up player's view
+
+	
+	}
+});
+
+// ==========================================================================
+// Convenience Methods ======================================================
+// ==========================================================================
+
 // pass in all users in the game, and the client's unique ID
 // return the user object for the client
 let getCurrentUser = function(allUsers, currentUserId) {
@@ -387,4 +420,14 @@ let resetClientVariables = function() {
 	areCardsShowing = false;
 	didSubmitCard = false;
 	isJudge = false;
+}
+
+let nextPhase = function() {
+	console.log('next phase');
+	let phases = ['drawing cards', 'checking for submissions', 'judging'];
+
+	// get index of the current phase
+	// get the next phase
+	let myIndex = phases.indexOf(currentPhase);
+	currentPhase = phases[myIndex + 1];
 }
