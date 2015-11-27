@@ -16,6 +16,13 @@ let isJudge = false;
 // judging, checkingForSubmissions?
 let currentPhase = 'drawing cards';
 
+function verifyToken(xhr) {
+	if (localStorage.getItem('userToken')) {
+		xhr.setRequestHeader('Authorization',
+					'Bearer ' + localStorage.getItem('userToken'));
+	}
+}
+
 // hide user signup and game views
 $('.container').hide();			// Naturally hidden
 $('.usersignup').hide();		// Naturally hidden
@@ -82,6 +89,7 @@ $(function() {
       data: userData
 
     }).done((user) => {
+			localStorage.setItem('userToken', user.token);
       $('.container').show();
       $('.userlogin').hide();
     });
@@ -137,9 +145,9 @@ $(function() {
 		console.log(myUser);
 
 		$.ajax({
+			'beforeSend': verifyToken,
 			url: "/user/" + myUser,
-			method: "GET",
-
+			method: "GET"
 		}).done((user) => {
 			// entire user object returned
 			let $list = $('#profile-receiver');
@@ -171,10 +179,10 @@ $(function() {
 		}
 
 		$.ajax({
+			'beforeSend': verifyToken,
 			url: "/user",
 			method: "PUT",
 			data: userData
-
 		}).done(() => {
 			$('.container').show();
 			$('.userlogin').hide();
@@ -182,13 +190,14 @@ $(function() {
 	});
 
 	//User Delete Account
-	$('#nav-profile').click((event) => {
+	$('#profile-delete').click((event) => {
 
 		let userData = {
 			username: myUser
 		};
 
 		$.ajax({
+			'beforeSend': verifyToken,
 			url: "/user",
 			method: "DELETE",
 			data: userData
@@ -202,10 +211,11 @@ $(function() {
 	// User Logout
 	$('#nav-logout').click((event) => {
 		event.preventDefault();
-
 		$.ajax({
+			'beforeSend': verifyToken,
 			url: '/user/logout'
 		}).done(function(){
+			localStorage.removeItem('userToken');
 			$('.container').hide();
 			$('.usersignup').hide();
 			$('.userlogin').show();
@@ -279,7 +289,7 @@ $(function() {
 
   // set up interval method
   let timerID = window.setInterval(() => {
-		console.log('current phase: ' + currentPhase);
+		// console.log('current phase: ' + currentPhase);
 
 		// update client's views of their
     if(!areCardsShowing) socket.emit('show hand');
@@ -367,7 +377,7 @@ socket.on('show hand', (users) => {
 		return false;
 	}
 
-	console.log('script.js : showing hand');
+	// console.log('script.js : showing hand');
   // only show hand when there are current hands
   let currentUser = getCurrentUser(users, myId);
 
