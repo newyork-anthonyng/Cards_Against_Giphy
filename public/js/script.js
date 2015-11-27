@@ -183,7 +183,7 @@ $(function() {
 
 		$.ajax({
 			'beforeSend': verifyToken,
-			url: "/user",
+			url: "/user/" + myUser,
 			method: "PUT",
 			data: userData
 		}).done(() => {
@@ -226,6 +226,23 @@ $(function() {
 	});
 
 
+	// add wins to user
+
+	$('#nav-profile').click((event) => {
+		event.preventDefault();
+		console.log(myUser);
+
+		$.ajax({
+			'beforeSend': verifyToken,
+			url: "/user/" + myUser,
+			method: "GET"
+		}).done((user) => {
+			// entire user object returned
+			let $list = $('.profile-receiver');
+			let compiledTemplate = renderTemplate_userProfile(user);
+			$list.empty().append(compiledTemplate);
+		})
+	})
 
 // ==========================================================================
 // Giphy Cards ==============================================================
