@@ -25,7 +25,7 @@ function retrieve(req, res){
 function update(req, res){
   let userParams = req.body;
   // find by username
-  let query = {username: userParams.username};
+  let query = {username: req.params.username};
   // fields to update
   let update = {username: userParams.username, password: userParams.password};
   let options = {new: true};
@@ -35,6 +35,20 @@ function update(req, res){
     res.send(user);
   });
 
+}
+
+function addWins(req, res){
+  let userParams = req.body;
+  // find by username
+  let query = {username: req.params.username};
+  // fields to update
+  let update = {wins: userParams.username};
+  let options = {new: true};
+  // find and update user
+  User.findOneAndUpdate(query, update, options, (err, user) => {
+    if (err) res.status(401).send({message: err.errmsg});
+    res.send(user);
+  });
 }
 
 function destroy(req, res){
@@ -74,6 +88,7 @@ module.exports = {
   create: create,
   retrieve: retrieve,
   update: update,
+  addWins: addWins,
   destroy: destroy,
   auth: auth
 }
