@@ -373,18 +373,20 @@ socket.on('show hand', (users) => {
 	// console.log('script.js : showing hand');
   // only show hand when there are current hands
   let currentUser = getCurrentUser(users, myId);
-  let handList = $('ul#user-cards');
+  let handList = $('#user-cards');
   if (currentUser === undefined || isJudge) {
     handList.html('').append($('<p>You are the judge</p>'));
+	console.log(currentUser);
+	console.log(isJudge);
   } else {
 
 		// show the card images
-	  handList.html('').append($('<li>' + currentUser['name'] + '</li>'));
+	  handList.html('').append($('<p>' + currentUser['name'] + '</p>'));
 	  for(let i = 0, j = currentUser['images'].length; i < j; i++) {
 	    let myCard =
-	      $('<li class="card-li"><div class="card"><img class="card-img" src=' +
+	      $('<div class="card"><img class="card-img" src=' +
 	      currentUser['images'][i]['giphy']
-	      + '></img></div></li>');
+	      + '></img></div>');
 	    handList.append(myCard);
 	  }
 
@@ -443,11 +445,10 @@ socket.on('check for submissions', (submitted) => {
 socket.on('reveal cards', (submittedCards) => {
 	// set up judge's view
 	let cardsInPlay = $('#cards-in-play');
-	cardsInPlay.empty();
+	cardsInPlay.html('');
 
 	for(let i = 0, j = submittedCards.length; i < j; i++) {
-		cardsInPlay.append($('<div class="judging-card"><img src='
-													+ submittedCards[i] + '></img></div>'));
+		cardsInPlay.append($('<div class="judging-card"><img src=' + submittedCards[i] + '></img></div>'));
 	}
 
 	let cardsInHand = $('#user-cards');
@@ -487,6 +488,7 @@ socket.on('reveal winner', (data) => {
 let getCurrentUser = function(allUsers, currentUserId) {
   for(let i = 0, j = allUsers.length; i < j; i++) {
     if(allUsers[i]['id'] === currentUserId) {
+	  console.log(allUsers);
       return allUsers[i];
     }
   }
