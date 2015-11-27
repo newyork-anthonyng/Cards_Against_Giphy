@@ -17,13 +17,13 @@ gameboard view
     <div class="container">
       <div id="menu">
         <ul id="nav-bar">
-			<li class="nav-tool" id="nav-profile">
-				PROFILE
-			</li> |
-			<li class="nav-tool" id="nav-logout">
-				LOGOUT
-			</li>
-		</ul>
+			    <li class="nav-tool" id="nav-profile">
+				    PROFILE
+			    </li> |
+			    <li class="nav-tool" id="nav-logout">
+				    LOGOUT
+			    </li>
+		    </ul>
       </div>
 
       <div class="gameboard">
@@ -41,11 +41,8 @@ gameboard view
         </div>
       </div>
 
-		<!-- Profile Display Div -->
-		<div id="profile-receiver">
-		</div>
-      <div id="side-chat" class="sidebar">
-        <div id="game-status">
+      <div class="sidebar" id="side-chat" >
+        <div class="profile-receiver" id="game-status">
           game stats
         </div>
 
@@ -57,6 +54,8 @@ gameboard view
         </div>
 
       </div>
+
+
     </div>
 
 <!-- ==========
@@ -64,7 +63,7 @@ Templates
 ========== -->
 
     <!-- Login -->
-    <div class="user-view userlogin">
+    <div class="user-view user-login">
     	<h1 class="title-card">Gifs Against Humanity</h1>
     	<!-- <form id="login-form"> -->
     		<div class="form-box">
@@ -79,13 +78,12 @@ Templates
     </div>
 
     <!-- Signup -->
-    <div class="user-view usersignup">
+    <div class="user-view user-signup">
     	<h1 class="title-card">Gifs Against Humanity</h1>
     	<!-- <form id="signup-form"> -->
     		<div class="form-box">
     			<input type="text" placeholder="Username" id="signup-username" value=""><br>
     			<input type="password" placeholder="Password" id="signup-password"><br>
-    			<input type="password" placeholder="Confirm Password" id="signup-confirmp" value=""><br>
     		</div>
     		<button class="submit-butt" id="signup-submit">Sign Up</button>
     	<!-- </form> -->
@@ -95,36 +93,22 @@ Templates
     </div>
 
 
-	<!-- User Profile Template -->
-	<template id="profile-template">
-		<ul id="profile-list">
-			{{player}}
-			<li class="profile-list-item">
-				<h3>My Profile</h3>
-			</li>
-			<li class="profile-list-item">
-				Player Name: {{username}}
-			</li>
-			<li class="profile-list-item">
-				Total Wins: {{wins}}
-			</li>
-			<li class="profile-list-item">
-			</li>
-		</ul>
-		<div id="side-profile" class="sidebar">
-			<ul id="profile-actions">
-				<li class="profile-actions-item" id="profile-edit">
-					Edit
-				</li> |
-				<li class="profile-actions-item" id="profile-delete">
-					Delete Account
-				</li> |
-				<li class="profile-actions-item" id="side-back-button">
-					Back
-				</li>
-			</ul>
-		</div>
-	</template>
+  	<!-- User Profile Template -->
+  	<template class="sidebar" id="profile-template">
+  		<h3>{{username}}'s Profile</h3>
+  		<h3>Total Wins: {{wins}}</h3>
+  		<ul id="profile-actions">
+  				<li class="profile-actions-item" id="profile-edit">
+  					Edit
+  				</li> |
+  				<li class="profile-actions-item" id="profile-delete">
+  					Delete Account
+  				</li> |
+  				<li class="profile-actions-item" id="side-back-button">
+  					Back
+  				</li>
+  		</ul>
+  	</template>
 
     <script src="js/script.js"></script>
   </body>
