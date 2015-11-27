@@ -16,7 +16,6 @@ router.route('/user')
     secret: secret,
     userProperty: 'auth'
   }))
-  .put(user.update)
   .delete(user.destroy);
 
 router.route('/user/:username')
@@ -24,7 +23,10 @@ router.route('/user/:username')
     secret: secret,
     userProperty: 'auth'
   }))
-  .get(user.retrieve);
+  // get single user
+  .get(user.retrieve)
+  // user update
+  .put(user.update);
 
 
 module.exports = router;
