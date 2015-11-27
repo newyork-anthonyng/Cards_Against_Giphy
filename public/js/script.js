@@ -223,7 +223,7 @@ $(function() {
   $(document.body).on('click', '.card', (event) => {
     // remove the ID from any other card
     let priorSelectedCards = $('#selected');
-    $('#selected').removeAttr('id');
+    priorSelectedCards.removeAttr('id');
 
     let currentlySelectedCard = event.target;
 
@@ -231,18 +231,42 @@ $(function() {
     $(currentlySelectedCard).attr('id', 'selected');
   });
 
-  // user submits card
+	$(document.body).on('click', '.judging-card', (event) => {
+		console.log('Judge is selecting a card');
+
+		// remove the ID from any other card
+		let priorSelectedCards = $('#winner');
+		priorSelectedCards.removeAttr('id');
+
+		let currentlySelectedCard = event.target;
+
+		// add ID of "winner" to the clicked card
+		$(currentlySelectedCard).attr('id', 'winner');
+	});
+
+  // user or judge submits card
   $(document.body).keypress((event) => {
     let enterKeyPressed = (event.keyCode === 13);
-    let cardSelected = $('#selected').length > 0;
 
-    if(enterKeyPressed && cardSelected) {
-      let data = {};
-      data['userId'] = myId;
-      data['myCard'] = $('#selected img').attr('src');
+		if(currentPhase === 'checking for submissions') {
+			// check for players selecting cards
+			let cardSelected = $('#selected').length > 0;
+	    if(enterKeyPressed && cardSelected) {
+	      let data = {};
+	      data['userId'] = myId;
+	      data['myCard'] = $('#selected img').attr('src');
 
-      socket.emit('submit card', data);
-    }
+	      socket.emit('submit card', data);
+	    }
+
+		} else if(currentPhase === 'judging') {
+			// check for judge selecting card
+			let winnerSelected = $('#winner').length > 0;
+			if(enterKeyPressed && winnerSelected) {
+				currentPhase = 'reveal winner';
+			}
+		}
+
   });
 
   // set up interval method
@@ -258,11 +282,24 @@ $(function() {
 			socket.emit('check for submissions');
 		}
 
+		if(currentPhase === 'reveal cards') {
+			socket.emit('reveal cards');
+		}
+
 		if(currentPhase === 'judging') {
 			socket.emit('judging');
 		}
 
-  }, 1000);
+		if(currentPhase === 'reveal winner') {
+			// declare winner
+			let data = {};
+			data['myCard'] = $('#winner').attr('src');
+			console.log('my card: ' + data['myCard']);
+
+			socket.emit('reveal winner', data);
+		}
+
+  }, 500);
 });
 
 
@@ -313,7 +350,14 @@ socket.on('start round', (data) => {
 });
 
 socket.on('show hand', (users) => {
-	if(areCardsShowing || isJudge) return false;
+	if(areCardsShowing) return false;
+
+	// set a different view for judges
+	if(isJudge) {
+		let gameBoard = $('.gameboard');
+		gameBoard.css('background-color', 'yellow');
+		return false;
+	}
 
 	// console.log('script.js : showing hand');
   // only show hand when there are current hands
@@ -380,25 +424,47 @@ socket.on('check for submissions', (submitted) => {
 	if(submitted === true) {
 		// console.log('all players have submitted their cards. Moving into judging');
 		console.log('line 384 next phase');
-		currentPhase = 'judging';
+		currentPhase = 'reveal cards';
 	}
 });
 
 // "submittedCards" is an array of imgUrl's
-socket.on('judging', (submittedCards) => {
+socket.on('reveal cards', (submittedCards) => {
 	// set up judge's view
-	if(isJudge) {
-		let cardsInPlay = $('#cards-in-play');
-		cardsInPlay.empty();
+	let cardsInPlay = $('#cards-in-play');
+	cardsInPlay.empty();
 
-		for(let i = 0, j = submittedCards.length; i < j; i++) {
-			cardsInPlay.append($('<img src=' + submittedCards[i] + '></img>'));
-		}
-	} else {
-	// set up player's view
-
-
+	for(let i = 0, j = submittedCards.length; i < j; i++) {
+		cardsInPlay.append($('<div class="judging-card"><img src='
+													+ submittedCards[i] + '></img></div>'));
 	}
+
+	let cardsInHand = $('#user-cards');
+	cardsInHand.empty();
+
+	// change all of the classes of the cards
+
+	currentPhase = 'judging';
+});
+
+socket.on('judging', () => {
+	if(!isJudge) {
+		return false;
+	}
+
+});
+
+// data contains key, myCard, which contains imgURL
+socket.on('reveal winner', (data) => {
+	// empty all other cards from the game screen
+	let cardsInPlay = $('#cards-in-play');
+	cardsInPlay.empty();
+
+	// show the winning card on everyone's screen
+	let winnerCard = $('<div><img src=' + data['myCard'] + '></img></div>');
+	cardsInPlay.append(winnerCard);
+
+	currentPhase = 'end round';
 });
 
 // ==========================================================================
@@ -424,7 +490,8 @@ let resetClientVariables = function() {
 
 let nextPhase = function() {
 	console.log('next phase');
-	let phases = ['drawing cards', 'checking for submissions', 'judging'];
+	let phases = ['drawing cards', 'checking for submissions',
+								'reveal cards', 'judging', 'reveal winner'];
 
 	// get index of the current phase
 	// get the next phase

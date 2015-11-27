@@ -141,6 +141,10 @@ img.card-img {
 	border:solid yellow 5px;
 }
 
+#winner {
+	border:solid black 5px;
+}
+
 /*Game Board*/
 div#cards-in-play {
 
