@@ -232,6 +232,10 @@ $(function() {
   });
 
 	$(document.body).on('click', '.judging-card', (event) => {
+		if(!isJudge) {
+			return false;
+		}
+
 		console.log('Judge is selecting a card');
 
 		// remove the ID from any other card
@@ -260,6 +264,10 @@ $(function() {
 	    }
 
 		} else if(currentPhase === 'judging') {
+			if(!isJudge) {
+				return false;
+			}
+			
 			// check for judge selecting card
 			let winnerSelected = $('#winner').length > 0;
 			if(enterKeyPressed && winnerSelected) {
