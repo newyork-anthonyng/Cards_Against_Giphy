@@ -25,10 +25,8 @@ function verifyToken(xhr) {
 
 // hide user signup and game views
 $('.container').hide();			// Naturally hidden
-$('.usersignup').hide();		// Naturally hidden
-$('.userlogin').show();			// Naturally shown
-// $('#side-profile').show();		// Naturally shown
-// $('#side-chat').hide();		// Naturally n/a
+$('.user-signup').hide();		// Naturally hidden
+$('.user-login').show();			// Naturally shown
 
 $(function() {
 
@@ -41,8 +39,9 @@ $(function() {
 
   // user signup
   $('#signuplink').click((event) => {
-    $('.userlogin').hide();
-    $('.usersignup').show();
+		event.preventDefault();
+    $('.user-login').hide();
+    $('.user-signup').show();
   });
 
   $('#signup-submit').click((event) => {
@@ -60,18 +59,21 @@ $(function() {
       method: "POST",
       data: userData
     }).done(() => {
-        $('.usersignup').hide();
-        $('.userlogin').show();
+        $('.user-signup').hide();
+        $('.user-login').show();
     });
   });
 
   $('#loginlink').click((event) => {
-    $('.usersignup').hide();
-    $('.userlogin').show();
+		event.preventDefault();
+    $('.user-signup').hide();
+    $('.user-login').show();
   });
 
   // login user using token
   $('#login-submit').click((event) => {
+		event.preventDefault();
+
     let username = $("#login-username").val();
     let password = $("#login-password").val();
     let userData = {
@@ -91,12 +93,13 @@ $(function() {
     }).done((user) => {
 			localStorage.setItem('userToken', user.token);
       $('.container').show();
-      $('.userlogin').hide();
+      $('.user-login').hide();
     });
   });
 
   // Login entered
   $('#login-input').keypress((event) => {
+		event.preventDefault();
     if(event.keyCode === 13) {
       let username = $('#login-input').val();
       // set variables on client side
@@ -105,12 +108,12 @@ $(function() {
       socket.emit('add user', username);
       $('#login-input').val('');
       $('#login-view').hide();
-      // $('#form').show();
     }
   });
 
   // Message entered
   $('#message').keypress(function(event) {
+		event.preventDefault();
     if(event.keyCode === 13) {
       let message = $('#message').val();
       socket.emit('send message', {name: myUser, message: message});
@@ -150,18 +153,18 @@ $(function() {
 			method: "GET"
 		}).done((user) => {
 			// entire user object returned
-			let $list = $('#profile-receiver');
+			let $list = $('.profile-receiver');
 			let compiledTemplate = renderTemplate_userProfile(user);
-			$list.html('').append(compiledTemplate);
-			$('#side-chat').hide();
-			$('#side-profile').show();
+			$list.empty().append(compiledTemplate);
 		})
 	})
 
 	// Hide User Profile
 	$('#side-back-button').click((event) => {
-		$('#side-profile').hide();
-		$('#side-chat').show();
+		event.preventDefault();
+
+		$('.profile-receiver').empty();
+		$('#game-status').show();
 	})
 
 
@@ -180,12 +183,12 @@ $(function() {
 
 		$.ajax({
 			'beforeSend': verifyToken,
-			url: "/user",
+			url: "/user/" + myUser,
 			method: "PUT",
 			data: userData
 		}).done(() => {
 			$('.container').show();
-			$('.userlogin').hide();
+			$('.user-login').hide();
 		});
 	});
 
@@ -204,7 +207,7 @@ $(function() {
 
 		}).done(() => {
 			$('.container').hide();
-			$('.userlogin').show();
+			$('.user-login').show();
 		});
 	});
 
@@ -217,11 +220,46 @@ $(function() {
 		}).done(function(){
 			localStorage.removeItem('userToken');
 			$('.container').hide();
-			$('.usersignup').hide();
-			$('.userlogin').show();
+			$('.user-signup').hide();
+			$('.user-login').show();
 		});
 	});
 
+	$('#nav-profile').click((event) => {
+		event.preventDefault();
+		console.log(myUser);
+
+		$.ajax({
+			'beforeSend': verifyToken,
+			url: "/user/" + myUser,
+			method: "GET"
+		}).done((user) => {
+			// entire user object returned
+			let $list = $('.profile-receiver');
+			let compiledTemplate = renderTemplate_userProfile(user);
+			$list.empty().append(compiledTemplate);
+		})
+	})
+
+
+
+	// add wins to user
+	.click((event) => {
+
+		let userData = {
+			wins: wins
+		};
+
+		$.ajax({
+			'beforeSend' : verifyToken,
+			url: "/user/addWins/" + myUser,
+			method: "PUT",
+			data: userData
+			
+		}).done(() => {
+
+		})
+	})
 
 
 // ==========================================================================
@@ -328,11 +366,11 @@ $(function() {
 
 socket.on('user joined', (users) => {
     // update list of users online
-    let usersList = $('#game-status');
+    let usersList = $('#messages');
     usersList.empty();
     users.forEach((user) => {
       let userElement = $('<li>');
-      userElement.text(user.name);
+      userElement.text(user.name + ' joined the room');
       usersList.append(userElement);
     });
 });

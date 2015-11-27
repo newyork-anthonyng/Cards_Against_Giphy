@@ -44,7 +44,6 @@ a {
 
 div.container {
 	border: 2px solid black;
-	border-bottom: 0;
 	position: absolute;
 	left: 50%;
 	top: 50%;
@@ -69,8 +68,8 @@ div.gameboard {
 	position: relative;
 	float: left;
 	width: 910px;
-	height: 567px;
-	border-bottom: 2px solid black;
+	height: 571px;
+	border-right: 2px solid black;
 }
 
 #question {
@@ -98,8 +97,11 @@ div.sidebar {
 	padding: 10px;
 	width: 268px;
 	height: 547px;
-	border-left: 2px solid black;
-	border-bottom: 2px solid black;
+}
+
+.profile-receiver {
+	overflow: hidden;
+	text-align: center;
 }
 
 #game-status {
@@ -110,6 +112,10 @@ div.sidebar {
 #messages {
 	height: 300px;
 	border: 2px solid black;
+	overflow-y: scroll;
+	padding: 5px;
+	list-style: none;
+	text-align: justify;
 }
 
 #message {
@@ -173,16 +179,20 @@ div#user-cards {
 	cursor: pointer;
 }
 
-div#profile-receiver {
-	z-index: 10;
-	text-align: center;
-}
+/*//////////////////////////////
+// 					Profile 					//
+//////////////////////////////*/
 
-ul#profile-actions {
-	display: inline-block;
+/*template.sidebar {
+	text-align: center;
+	margin: 0 auto;
+}*/
+
+#profile-actions {
+	display: inline;
 	margin: 0;
 	padding: 0;
-	font-size: 25px;
+	font-size: 15px;
 }
 
 .profile-actions-item {
