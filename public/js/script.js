@@ -327,7 +327,7 @@ socket.on('user joined', (users) => {
     usersList.empty();
     users.forEach((user) => {
       let userElement = $('<li>');
-      userElement.text(user.name + 'joined the room');
+      userElement.text(user.name + ' joined the room');
       usersList.append(userElement);
     });
 });
