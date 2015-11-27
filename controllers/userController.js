@@ -40,16 +40,15 @@ function update(req, res){
 function addWins(req, res){
   let userParams = req.body;
   // find by username
-  let query = {username: userParams.username};
-  // update wins
-  let update = {wins: userParams.wins};
+  let query = {username: req.params.username};
+  // fields to update
+  let update = {wins: userParams.username};
   let options = {new: true};
   // find and update user
   User.findOneAndUpdate(query, update, options, (err, user) => {
     if (err) res.status(401).send({message: err.errmsg});
     res.send(user);
   });
-
 }
 
 function destroy(req, res){

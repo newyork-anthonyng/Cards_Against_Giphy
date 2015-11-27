@@ -18,6 +18,14 @@ router.route('/user')
   }))
   .delete(user.destroy);
 
+router.route('/user/addWins/:username')
+  .all(expressJwt({
+    secret: secret,
+    userProperty: 'auth'
+  }))
+  // user update
+  .put(user.addWins);
+
 router.route('/user/:username')
   .all(expressJwt({
     secret: secret,

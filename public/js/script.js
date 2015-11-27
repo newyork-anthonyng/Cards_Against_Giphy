@@ -225,9 +225,6 @@ $(function() {
 		});
 	});
 
-
-	// add wins to user
-
 	$('#nav-profile').click((event) => {
 		event.preventDefault();
 		console.log(myUser);
@@ -243,6 +240,27 @@ $(function() {
 			$list.empty().append(compiledTemplate);
 		})
 	})
+
+
+
+	// add wins to user
+	.click((event) => {
+
+		let userData = {
+			wins: wins
+		};
+
+		$.ajax({
+			'beforeSend' : verifyToken,
+			url: "/user/addWins/" + myUser,
+			method: "PUT",
+			data: userData
+			
+		}).done(() => {
+
+		})
+	})
+
 
 // ==========================================================================
 // Giphy Cards ==============================================================
