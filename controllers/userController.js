@@ -9,18 +9,16 @@ function create(req, res){
   let userObject = new User(req.body);
 
   userObject.save((err, user) => {
-    if(err){
-      res.status(401).send({message: err.errmsg});
-    } else {
+    if(err) res.status(401).send({message: err.errmsg});
       res.status(200).send(user);
-    }
   });
 }
 
 function retrieve(req, res){
   User.findOne({username: req.params.username}, (err, user) => {
+    if(err) res.status(401).send({message: err.errmsg});
     // returns entire user object
-    res.send(user);
+    res.status(200).send(user);
   });
 }
 
@@ -33,27 +31,10 @@ function update(req, res){
   let options = {new: true};
   // find and update user
   User.findOneAndUpdate(query, update, options, (err, user) => {
-    if (err) throw err;
+    if (err) res.status(401).send({message: err.errmsg});
     res.send(user);
   });
 
-}
-
-function logout(req, res){
-
-  let token = req.auth;
-  console.log(req.auth);
-  // if(message === token.message) return next();
-
-  // let userParams = req.body;
-  // console.log(userParams);
-
-
-  // User.findOne({token: userParams.token}, (err, user) => {
-  //   console.log(user.token);
-  //   user.token = null;
-  //   console.log(user.token);
-  // });
 }
 
 function destroy(req, res){
@@ -62,11 +43,8 @@ function destroy(req, res){
   let query = {username: userParams.username};
   // find and remove
   User.findOneAndRemove(query, (err, user) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.send({"record" : "deleted"});
-    }
+    if (err) throw err;
+    res.send({"record" : "deleted"});
   })
 }
 
@@ -85,11 +63,6 @@ function auth(req, res){
         // token is made and set to expire in 5 hours / not related to logout
         res.status(200).send({message: "valid credentials", token: jwt.sign(user, secret, {expiresIn: '5h'})});
 
-        // cert = fs.readFileSync('public.pem');
-        // jwt.verify(token, cert, function(err, decoded) {
-        //   console.log(decoded.foo)
-        // });
-
       } else {
         res.status(401).send({message: "invalid credentials"});
       };
@@ -97,32 +70,10 @@ function auth(req, res){
   });
 }
 
-// function checkAuth(message) {
-//   return function(req, res, next) {
-//     //
-//     // check if any of the scopes defined in the token,
-//     // is one of the scopes declared on check_scopes
-//     //
-//     let token = req.auth;
-//     console.log(token);
-//     if(message === token.message) return next();
-//
-//     // for (var i =0; i<token.message.length; i++){
-//     //   for (var j=0; j<message.length; j++){
-//     //       if(message[j] === token.message[i]) return next();
-//     //   }
-//     // }
-//
-//     return res.send(401, 'insufficient scopes')
-//   }
-// }
-
 module.exports = {
   create: create,
   retrieve: retrieve,
   update: update,
-  logout: logout,
   destroy: destroy,
-  auth: auth,
-  checkAuth: checkAuth
+  auth: auth
 }
