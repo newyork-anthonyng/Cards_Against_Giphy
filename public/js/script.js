@@ -12,8 +12,10 @@ let areCardsShowing = false;
 let didSubmitCard = false;
 let isJudge = false;
 
+// after the winner is revealed, set a timer for when the next round starts
+let nextRoundTimer;
+
 // variable sets what game phase we are in
-// judging, checkingForSubmissions?
 let currentPhase = 'drawing cards';
 
 function verifyToken(xhr) {
@@ -255,7 +257,7 @@ $(function() {
 			url: "/user/addWins/" + myUser,
 			method: "PUT",
 			data: userData
-			
+
 		}).done(() => {
 
 		})
@@ -315,7 +317,7 @@ $(function() {
 			if(!isJudge) {
 				return false;
 			}
-			
+
 			// check for judge selecting card
 			let winnerSelected = $('#winner').length > 0;
 			if(enterKeyPressed && winnerSelected) {
@@ -327,7 +329,7 @@ $(function() {
 
   // set up interval method
   let timerID = window.setInterval(() => {
-		// console.log('current phase: ' + currentPhase);
+		console.log('current phase: ' + currentPhase);
 
 		// update client's views of their
     if(!areCardsShowing) socket.emit('show hand');
@@ -353,7 +355,17 @@ $(function() {
 			console.log('my card: ' + data['myCard']);
 
 			socket.emit('reveal winner', data);
+
+			// if timer isn't created, make one
+			if (!nextRoundTimer) {
+				nextRoundTimer = window.setTimeout(function() {
+					currentPhase = 'start round';
+					socket.emit('start round');
+				}, 2000);
+			}
 		}
+
+
 
   }, 500);
 });
@@ -403,16 +415,22 @@ socket.on('start round', (data) => {
 
   let imageList = $('div#user-cards');
   imageList.append('<p>' + currentUser['name'] + '</p>');
+
+	currentPhase = 'show hand';
 });
 
+// users is an array of all of the players
 socket.on('show hand', (users) => {
 	if(areCardsShowing) return false;
 
 	// set a different view for judges
+	let gameBoard = $('.gameboard');
+
 	if(isJudge) {
-		let gameBoard = $('.gameboard');
 		gameBoard.css('background-color', 'yellow');
 		return false;
+	} else {
+		gameBoard.css('background-color', 'white');
 	}
 
 	// console.log('script.js : showing hand');
@@ -544,6 +562,8 @@ let resetClientVariables = function() {
 	areCardsShowing = false;
 	didSubmitCard = false;
 	isJudge = false;
+
+	nextRoundTimer = false;
 }
 
 let nextPhase = function() {
