@@ -14,6 +14,7 @@ let isJudge = false;
 
 // after the winner is revealed, set a timer for when the next round starts
 let nextRoundTimer;
+let winnerInformation;
 
 // variable sets what game phase we are in
 let currentPhase = 'drawing cards';
@@ -35,9 +36,9 @@ $(function() {
 	// Setup for Handlebars (May Refactor Later)
 	let renderTemplate_userProfile = Handlebars.compile($('template#profile-template').html());
 
-  //////////////////
-  // User Sign Up //
-  //////////////////
+// ////////////////////////////////////////////////////////////////////////////
+// User Sign Up ///////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////
 
   // user signup
   $('#signuplink').click((event) => {
@@ -53,8 +54,6 @@ $(function() {
       username: username,
       password: password
     }
-
-    // if(password === password)
 
     $.ajax({
       url: "/user/signup",
@@ -77,8 +76,8 @@ $(function() {
 		login();
   });
 
+	// allow user to press "enter" to login
 	$('#login-password').keypress(function(event) {
-		// allow user to press "enter" to login
 		if(event.keyCode === 13) {
 			login();
 		}
@@ -87,18 +86,14 @@ $(function() {
   // Message entered
   $('#message').keypress(function(event) {
     if(event.keyCode === 13) {
-      let message = $('#message').val();
-      socket.emit('send message', {name: myUser, message: message});
-      $('#message').val('');
+      enterMessage();
     }
   });
 
   $('#msg-submit').click((event) => {
     event.preventDefault();
 
-    let message = $('#message').val();
-    socket.emit('send message', {name: myUser, message: message});
-    $('#message').val('');
+		enterMessage();
   });
 
   $('#start-round').click((event) => {
@@ -109,10 +104,9 @@ $(function() {
     });
   });
 
-	//////////////////
-	// User Profile //
-	//////////////////
-
+// ////////////////////////////////////////////////////////////////////////////
+// User Profile ///////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////
 
 	// Show User Profile
 	$('#nav-profile').click((event) => {
@@ -140,9 +134,9 @@ $(function() {
 	})
 
 
-	//////////////////
-	// User Actions //
-	//////////////////
+// ////////////////////////////////////////////////////////////////////////////
+// User Actions ///////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////
 
 	// user update (username, password)
 	$('#update-submit').click((event) => {
@@ -213,8 +207,6 @@ $(function() {
 		})
 	})
 
-
-
 	// add wins to user
 	.click((event) => {
 
@@ -278,7 +270,7 @@ $(function() {
 	    if(enterKeyPressed && cardSelected) {
 	      let data = {};
 	      data['userId'] = myId;
-	      data['myCard'] = $('#selected img').attr('src');
+	      data['myCard'] = $('#selected').attr('src');
 
 	      socket.emit('submit card', data);
 	    }
@@ -291,6 +283,7 @@ $(function() {
 			// check for judge selecting card
 			let winnerSelected = $('#winner').length > 0;
 			if(enterKeyPressed && winnerSelected) {
+
 				currentPhase = 'reveal winner';
 			}
 		}
@@ -322,7 +315,6 @@ $(function() {
 			// declare winner
 			let data = {};
 			data['myCard'] = $('#winner').attr('src');
-			console.log('my card: ' + data['myCard']);
 
 			socket.emit('reveal winner', data);
 
@@ -331,9 +323,31 @@ $(function() {
 				nextRoundTimer = window.setTimeout(function() {
 					currentPhase = 'start round';
 
+					// on the judge's client side, award points
+					if(isJudge) {
+						let winner = winnerInformation['name'];
+						alert(winner + ' has the funniest card.');
+
+						// increase the score of player
+						let userData = {
+							wins: winner
+						};
+
+						$.ajax({
+							'beforeSend' : verifyToken,
+							url: "/user/addWins/" + winner,
+							method: "PUT",
+							data: userData
+
+						});
+					}
+
+					// start next round
 					$.ajax({
 						url: 'http://localhost:3000/startRound'
 					});
+
+
 				}, 2000);
 			}
 		}
@@ -342,8 +356,6 @@ $(function() {
 
   }, 500);
 });
-
-
 
 ///////////////////////////////
 // Socket Events - Chat Room //
@@ -382,8 +394,8 @@ socket.on('start round', (data) => {
   let currentUser = getCurrentUser(data['users'], myId);
 
 	if(myId === data['judge']) {
+		console.log('judge is found and declared!!! line 397 of script.js');
 		isJudge = true;
-		console.log(data[''])
 	}
 
   let imageList = $('div#user-cards');
@@ -449,11 +461,7 @@ socket.on('show question', (question) => {
 // data is an object with keys of "userId" and...
 // "myCard", which holds the Giphy imgUrl
 socket.on('submit card', (data) => {
-	console.log('script.js socket.on submit card');
-
 	// check to see if it's current user
-	// console.log(data['userId']);
-	// console.log(myId);
 	if(data['userId'] != myId) {
 		return false;
 	}
@@ -461,6 +469,8 @@ socket.on('submit card', (data) => {
 	if(didSubmitCard) {
 		return false;
 	}
+
+	console.log('script.js socket.on submit card');
 
 	// move the submitted card to the game field
 	let submittedContainer = $('#cards-in-play');
@@ -471,13 +481,12 @@ socket.on('submit card', (data) => {
 // "submitted" is boolean that tells you if all player's cards are submitted
 socket.on('check for submissions', (submitted) => {
 	if(submitted === true) {
-		// console.log('all players have submitted their cards. Moving into judging');
-		// console.log('line 384 next phase');
 		currentPhase = 'reveal cards';
 	}
 });
 
-// "submittedCards" is an array of imgUrl's
+// "submittedCards" is an array of objects...
+// with keys of 'userId', 'name' and 'imgURL'
 socket.on('reveal cards', (submittedCards) => {
 	// set up judge's view
 	let cardsInPlay = $('#cards-in-play');
@@ -485,13 +494,11 @@ socket.on('reveal cards', (submittedCards) => {
 
 	for(let i = 0, j = submittedCards.length; i < j; i++) {
 		cardsInPlay.append($('<div class="judging-card"><img src='
-													+ submittedCards[i] + '></img></div>'));
+													+ submittedCards[i]['imgURL'] + '></img></div>'));
 	}
 
 	let cardsInHand = $('#user-cards');
 	cardsInHand.empty();
-
-	// change all of the classes of the cards
 
 	currentPhase = 'judging';
 });
@@ -505,13 +512,16 @@ socket.on('judging', () => {
 
 // data contains key, myCard, which contains imgURL
 socket.on('reveal winner', (data) => {
+	winnerInformation = data;
+
 	// empty all other cards from the game screen
 	let cardsInPlay = $('#cards-in-play');
 	cardsInPlay.empty();
 
 	// show the winning card on everyone's screen
-	let winnerCard = $('<div><img src=' + data['myCard'] + '></img></div>');
+	let winnerCard = $('<div><img src=' + data['imgURL'] + '></img></div>');
 	cardsInPlay.append(winnerCard);
+	cardsInPlay.append('<p>' + data['name'] + ' won this round.</p>');
 
 	currentPhase = 'end round';
 });
@@ -542,17 +552,6 @@ let resetClientVariables = function() {
 	$('#user-cards').empty();
 }
 
-let nextPhase = function() {
-	console.log('next phase');
-	let phases = ['drawing cards', 'checking for submissions',
-								'reveal cards', 'judging', 'reveal winner'];
-
-	// get index of the current phase
-	// get the next phase
-	let myIndex = phases.indexOf(currentPhase);
-	currentPhase = phases[myIndex + 1];
-}
-
 let login = function() {
 	event.preventDefault();
 
@@ -577,4 +576,10 @@ let login = function() {
 		$('.container').show();
 		$('.user-login').hide();
 	});
+}
+
+let enterMessage = function() {
+	let message = $('#message').val();
+	socket.emit('send message', {name: myUser, message: message});
+	$('#message').val('');
 }
