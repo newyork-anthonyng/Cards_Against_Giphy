@@ -14,6 +14,7 @@ let isJudge = false;
 
 // after the winner is revealed, set a timer for when the next round starts
 let nextRoundTimer;
+let winnerInformation;
 
 // variable sets what game phase we are in
 let currentPhase = 'drawing cards';
@@ -282,6 +283,7 @@ $(function() {
 			// check for judge selecting card
 			let winnerSelected = $('#winner').length > 0;
 			if(enterKeyPressed && winnerSelected) {
+
 				currentPhase = 'reveal winner';
 			}
 		}
@@ -313,7 +315,6 @@ $(function() {
 			// declare winner
 			let data = {};
 			data['myCard'] = $('#winner').attr('src');
-			console.log('my card: ' + data['myCard']);
 
 			socket.emit('reveal winner', data);
 
@@ -322,9 +323,31 @@ $(function() {
 				nextRoundTimer = window.setTimeout(function() {
 					currentPhase = 'start round';
 
+					// on the judge's client side, award points
+					if(isJudge) {
+						let winner = winnerInformation['name'];
+						alert(winner + ' has the funniest card.');
+
+						// increase the score of player
+						let userData = {
+							wins: winner
+						};
+
+						$.ajax({
+							'beforeSend' : verifyToken,
+							url: "/user/addWins/" + winner,
+							method: "PUT",
+							data: userData
+
+						});
+					}
+
+					// start next round
 					$.ajax({
 						url: 'http://localhost:3000/startRound'
 					});
+
+
 				}, 2000);
 			}
 		}
@@ -333,8 +356,6 @@ $(function() {
 
   }, 500);
 });
-
-
 
 ///////////////////////////////
 // Socket Events - Chat Room //
@@ -373,8 +394,8 @@ socket.on('start round', (data) => {
   let currentUser = getCurrentUser(data['users'], myId);
 
 	if(myId === data['judge']) {
+		console.log('judge is found and declared!!! line 397 of script.js');
 		isJudge = true;
-		console.log(data[''])
 	}
 
   let imageList = $('div#user-cards');
@@ -440,11 +461,7 @@ socket.on('show question', (question) => {
 // data is an object with keys of "userId" and...
 // "myCard", which holds the Giphy imgUrl
 socket.on('submit card', (data) => {
-	console.log('script.js socket.on submit card');
-
 	// check to see if it's current user
-	// console.log(data['userId']);
-	// console.log(myId);
 	if(data['userId'] != myId) {
 		return false;
 	}
@@ -452,6 +469,8 @@ socket.on('submit card', (data) => {
 	if(didSubmitCard) {
 		return false;
 	}
+
+	console.log('script.js socket.on submit card');
 
 	// move the submitted card to the game field
 	let submittedContainer = $('#cards-in-play');
@@ -462,13 +481,12 @@ socket.on('submit card', (data) => {
 // "submitted" is boolean that tells you if all player's cards are submitted
 socket.on('check for submissions', (submitted) => {
 	if(submitted === true) {
-		// console.log('all players have submitted their cards. Moving into judging');
-		// console.log('line 384 next phase');
 		currentPhase = 'reveal cards';
 	}
 });
 
-// "submittedCards" is an array of imgUrl's
+// "submittedCards" is an array of objects...
+// with keys of 'userId', 'name' and 'imgURL'
 socket.on('reveal cards', (submittedCards) => {
 	// set up judge's view
 	let cardsInPlay = $('#cards-in-play');
@@ -476,13 +494,11 @@ socket.on('reveal cards', (submittedCards) => {
 
 	for(let i = 0, j = submittedCards.length; i < j; i++) {
 		cardsInPlay.append($('<div class="judging-card"><img src='
-													+ submittedCards[i] + '></img></div>'));
+													+ submittedCards[i]['imgURL'] + '></img></div>'));
 	}
 
 	let cardsInHand = $('#user-cards');
 	cardsInHand.empty();
-
-	// change all of the classes of the cards
 
 	currentPhase = 'judging';
 });
@@ -496,13 +512,16 @@ socket.on('judging', () => {
 
 // data contains key, myCard, which contains imgURL
 socket.on('reveal winner', (data) => {
+	winnerInformation = data;
+
 	// empty all other cards from the game screen
 	let cardsInPlay = $('#cards-in-play');
 	cardsInPlay.empty();
 
 	// show the winning card on everyone's screen
-	let winnerCard = $('<div><img src=' + data['myCard'] + '></img></div>');
+	let winnerCard = $('<div><img src=' + data['imgURL'] + '></img></div>');
 	cardsInPlay.append(winnerCard);
+	cardsInPlay.append('<p>' + data['name'] + ' won this round.</p>');
 
 	currentPhase = 'end round';
 });
@@ -531,17 +550,6 @@ let resetClientVariables = function() {
 	// reset the gameboard
 	$('#cards-in-play').empty();
 	$('#user-cards').empty();
-}
-
-let nextPhase = function() {
-	console.log('next phase');
-	let phases = ['drawing cards', 'checking for submissions',
-								'reveal cards', 'judging', 'reveal winner'];
-
-	// get index of the current phase
-	// get the next phase
-	let myIndex = phases.indexOf(currentPhase);
-	currentPhase = phases[myIndex + 1];
 }
 
 let login = function() {
