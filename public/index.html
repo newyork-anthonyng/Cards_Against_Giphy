@@ -74,8 +74,10 @@
       </div>
 
       <div class="sidebar" id="side-chat" >
-        <div class="profile-receiver" id="game-status">
-          game stats
+		<div class="profile-receiver" id="game-status">
+			game stats
+		</div>
+        <div class="profile-receiver" id="profile-status">
         </div>
 
         <div class="chat">
@@ -96,7 +98,7 @@
     ========== -->
 
   	<!-- User Profile Template -->
-  	<template class="sidebar" id="profile-template">
+  	<template class="sidebar-top" id="profile-template">
   		<h3>{{username}}'s Profile</h3>
   		<h3>Total Wins: {{this.wins}}</h3>
   		<ul id="profile-actions">

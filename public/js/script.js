@@ -29,18 +29,19 @@ function verifyToken(xhr) {
 // hide user signup and game views
 $('.container').hide();			// Naturally hidden
 $('.user-signup').hide();		// Naturally hidden
-$('.user-login').show();			// Naturally shown
+$('.user-login').show();		// Naturally shown
 // $('#side-profile').show();	// Naturally shown
 // $('#side-chat').hide();		// Naturally n/a
+$('#profile-status').hide();	// Naturally hidden
 
 $(function() {
 
 	// Setup for Handlebars (May Refactor Later)
 	let renderTemplate_userProfile = Handlebars.compile($('template#profile-template').html());
 
-// ////////////////////////////////////////////////////////////////////////////
-// User Sign Up ///////////////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////////////////////////
+//////////////////
+// User Sign Up //
+//////////////////
 
   // user signup
   $('#signuplink').click((event) => {
@@ -106,9 +107,9 @@ $(function() {
     });
   });
 
-// ////////////////////////////////////////////////////////////////////////////
-// User Profile ///////////////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////////////////////////
+/////////////////
+//User Profile //
+/////////////////
 
 	// Show User Profile
 	$('#nav-profile').click((event) => {
@@ -121,24 +122,26 @@ $(function() {
 			method: "GET"
 		}).done((user) => {
 			// entire user object returned
-			let $list = $('.profile-receiver');
+			let $list = $('#profile-status');
 			let compiledTemplate = renderTemplate_userProfile(user);
 			$list.empty().append(compiledTemplate);
 		})
 	})
 
 	// Hide User Profile
-	$('#side-back-button').click((event) => {
-		event.preventDefault();
+	$(document.body).on('click', '#side-back-button',  function() {
+		console.log('HIT PROFILE HIDE');
+		let profileView = $('#profile-status');
+		profileView.html('');
+		profileView.empty();
+		profileView.hide();
+		$('#game-status').show();
+	});
 
-		$('.profile-receiver').html('');
-		$('#game-status').hide();
-	})
 
-
-// ////////////////////////////////////////////////////////////////////////////
-// User Actions ///////////////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////////////////////////
+/////////////////
+//User Actions //
+/////////////////
 
 	// user update (username, password)
 	$('#update-submit').click((event) => {
@@ -203,9 +206,11 @@ $(function() {
 			method: "GET"
 		}).done((user) => {
 			// entire user object returned
-			let $list = $('.profile-receiver');
+			$('#game-status').hide();
+			let $list = $('#profile-status');
 			let compiledTemplate = renderTemplate_userProfile(user);
 			$list.empty().append(compiledTemplate);
+			$('#profile-status').show();
 		})
 	})
 

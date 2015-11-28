@@ -124,12 +124,14 @@ div.sidebar {
 .profile-receiver {
 	overflow: hidden;
 	text-align: center;
-}
-
-#game-status {
 	height: 150px;
 	border-bottom: 2px dotted black;
 }
+
+/*#game-status {
+	height: 150px;
+	border-bottom: 2px dotted black;
+}*/
 
 #messages {
 	height: 300px;
@@ -201,35 +203,8 @@ div#cards-in-play {
 
 }
 
-<<<<<<< HEAD
-
-/*User Hand*/
-
-div#user-hand {
-	overflow: auto;
-	overflow-y: scroll;
-	text-align: center;
-
-}
-
-#user-cards {
-	display: inline;
-	padding: 0;
-	margin: 0;
-}
-
-li.card-li {
-	display: inline;
-	text-align: center;
-
-}
-
-div.card {
-	display: inline;
-=======
 User Hand
 div#user-cards {
->>>>>>> 2fcdfcfdbf1134a47a34a3971fc291ceeafd9831
 
 }*/
 
@@ -238,7 +213,7 @@ div#user-cards {
 // Navigation Bar and Buttons //
 //////////////////////////////*/
 
-.nav-tool {
+li.nav-tool {
 	display: inline-block;
 }
 
@@ -255,9 +230,9 @@ div#user-cards {
 	cursor: pointer;
 }
 
-/*//////////////////////////////
-// 					Profile 					//
-//////////////////////////////*/
+/*///////////
+// Profile //
+/////////////*/
 
 /*template.sidebar {
 	text-align: center;
