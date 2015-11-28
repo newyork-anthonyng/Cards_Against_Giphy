@@ -75,11 +75,16 @@ div.gameboard {
 #question {
 	height: 60px;
 	text-align: center;
-	text-align: justify;
 	font-size: 16pt;
 	border-bottom: 2px solid black;
 	color: white;
 	background-color: black;
+	padding: 2px;
+}
+
+#question p {
+	margin: 0px;
+	line-height: 60px;
 }
 
 #cards-in-play {
