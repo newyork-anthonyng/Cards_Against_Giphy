@@ -54,9 +54,3 @@
     - judge clicks on a Giphy Card that they want to win
 - judge clicks on the card that they like, and submits
 4. Winner is revealed
-
-## Game States
-roundStart
-playerChooses
-judging
-winnerRevealed

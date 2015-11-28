@@ -12,8 +12,10 @@ let areCardsShowing = false;
 let didSubmitCard = false;
 let isJudge = false;
 
+// after the winner is revealed, set a timer for when the next round starts
+let nextRoundTimer;
+
 // variable sets what game phase we are in
-// judging, checkingForSubmissions?
 let currentPhase = 'drawing cards';
 
 function verifyToken(xhr) {
@@ -72,44 +74,15 @@ $(function() {
 
   // login user using token
   $('#login-submit').click((event) => {
-		event.preventDefault();
-
-    let username = $("#login-username").val();
-    let password = $("#login-password").val();
-    let userData = {
-      username: username,
-      password: password
-    }
-
-    myUser = username;
-		myId = socket.id;
-    socket.emit('add user', username);
-
-    $.ajax({
-      url: "/user/auth",
-      method: "POST",
-      data: userData
-
-    }).done((user) => {
-			localStorage.setItem('userToken', user.token);
-      $('.container').show();
-      $('.user-login').hide();
-    });
+		login();
   });
 
-  // Login entered
-  $('#login-input').keypress((event) => {
-		event.preventDefault();
-    if(event.keyCode === 13) {
-      let username = $('#login-input').val();
-      // set variables on client side
-      myUser = username;
-      myId = socket.id;
-      socket.emit('add user', username);
-      $('#login-input').val('');
-      $('#login-view').hide();
-    }
-  });
+	$('#login-password').keypress(function(event) {
+		// allow user to press "enter" to login
+		if(event.keyCode === 13) {
+			login();
+		}
+	});
 
   // Message entered
   $('#message').keypress(function(event) {
@@ -279,6 +252,10 @@ $(function() {
   });
 
 	$(document.body).on('click', '.judging-card', (event) => {
+		if(!isJudge) {
+			return false;
+		}
+
 		console.log('Judge is selecting a card');
 
 		// remove the ID from any other card
@@ -307,6 +284,10 @@ $(function() {
 	    }
 
 		} else if(currentPhase === 'judging') {
+			if(!isJudge) {
+				return false;
+			}
+
 			// check for judge selecting card
 			let winnerSelected = $('#winner').length > 0;
 			if(enterKeyPressed && winnerSelected) {
@@ -318,7 +299,7 @@ $(function() {
 
   // set up interval method
   let timerID = window.setInterval(() => {
-		// console.log('current phase: ' + currentPhase);
+		console.log('current phase: ' + currentPhase);
 
 		// update client's views of their
     if(!areCardsShowing) socket.emit('show hand');
@@ -344,7 +325,20 @@ $(function() {
 			console.log('my card: ' + data['myCard']);
 
 			socket.emit('reveal winner', data);
+
+			// if timer isn't created, make one
+			if (!nextRoundTimer) {
+				nextRoundTimer = window.setTimeout(function() {
+					currentPhase = 'start round';
+
+					$.ajax({
+						url: 'http://localhost:3000/startRound'
+					});
+				}, 2000);
+			}
 		}
+
+
 
   }, 500);
 });
@@ -394,16 +388,22 @@ socket.on('start round', (data) => {
 
   let imageList = $('div#user-cards');
   imageList.append('<p>' + currentUser['name'] + '</p>');
+
+	currentPhase = 'show hand';
 });
 
+// users is an array of all of the players
 socket.on('show hand', (users) => {
 	if(areCardsShowing) return false;
 
 	// set a different view for judges
+	let gameBoard = $('.gameboard');
+
 	if(isJudge) {
-		let gameBoard = $('.gameboard');
 		gameBoard.css('background-color', 'yellow');
 		return false;
+	} else {
+		gameBoard.css('background-color', 'white');
 	}
 
 	// console.log('script.js : showing hand');
@@ -430,7 +430,7 @@ socket.on('show hand', (users) => {
 	  if(currentUser['images'].length === 6) {
 	    areCardsShowing = true;
 			console.log('line 341 next phase');
-			nextPhase();
+			currentPhase = 'checking for submissions';
 	  }
 	}
 
@@ -472,7 +472,7 @@ socket.on('submit card', (data) => {
 socket.on('check for submissions', (submitted) => {
 	if(submitted === true) {
 		// console.log('all players have submitted their cards. Moving into judging');
-		console.log('line 384 next phase');
+		// console.log('line 384 next phase');
 		currentPhase = 'reveal cards';
 	}
 });
@@ -535,6 +535,11 @@ let resetClientVariables = function() {
 	areCardsShowing = false;
 	didSubmitCard = false;
 	isJudge = false;
+	nextRoundTimer = false;
+
+	// reset the gameboard
+	$('#cards-in-play').empty();
+	$('#user-cards').empty();
 }
 
 let nextPhase = function() {
@@ -546,4 +551,30 @@ let nextPhase = function() {
 	// get the next phase
 	let myIndex = phases.indexOf(currentPhase);
 	currentPhase = phases[myIndex + 1];
+}
+
+let login = function() {
+	event.preventDefault();
+
+	let username = $("#login-username").val();
+	let password = $("#login-password").val();
+	let userData = {
+		username: username,
+		password: password
+	}
+
+	myUser = username;
+	myId = socket.id;
+	socket.emit('add user', username);
+
+	$.ajax({
+		url: "/user/auth",
+		method: "POST",
+		data: userData
+
+	}).done((user) => {
+		localStorage.setItem('userToken', user.token);
+		$('.container').show();
+		$('.user-login').hide();
+	});
 }

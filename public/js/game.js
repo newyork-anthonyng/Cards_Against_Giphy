@@ -63,6 +63,7 @@ let Game = (function() {
         }
       } else {
         // make the next player the judge
+        console.log('inside of game start round.');
         if(judgeIndex === players.length - 1) {
           judgeIndex = 0;
         } else {
@@ -178,13 +179,12 @@ let Game = (function() {
 
     // declare winner
     declareWinner: function(userId) {
-      
+
     },
 
     // reset all game variables
     resetGame: function() {
       players         = [];
-      judge           = undefined;
       currentQuestion = undefined;
     }
 
