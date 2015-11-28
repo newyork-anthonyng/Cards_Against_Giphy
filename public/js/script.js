@@ -74,30 +74,15 @@ $(function() {
 
   // login user using token
   $('#login-submit').click((event) => {
-		event.preventDefault();
-
-    let username = $("#login-username").val();
-    let password = $("#login-password").val();
-    let userData = {
-      username: username,
-      password: password
-    }
-
-    myUser = username;
-		myId = socket.id;
-    socket.emit('add user', username);
-
-    $.ajax({
-      url: "/user/auth",
-      method: "POST",
-      data: userData
-
-    }).done((user) => {
-			localStorage.setItem('userToken', user.token);
-      $('.container').show();
-      $('.user-login').hide();
-    });
+		login();
   });
+
+	$('#login-password').keypress(function(event) {
+		// allow user to press "enter" to login
+		if(event.keyCode === 13) {
+			login();
+		}
+	});
 
   // Message entered
   $('#message').keypress(function(event) {
@@ -567,4 +552,30 @@ let nextPhase = function() {
 	// get the next phase
 	let myIndex = phases.indexOf(currentPhase);
 	currentPhase = phases[myIndex + 1];
+}
+
+let login = function() {
+	event.preventDefault();
+
+	let username = $("#login-username").val();
+	let password = $("#login-password").val();
+	let userData = {
+		username: username,
+		password: password
+	}
+
+	myUser = username;
+	myId = socket.id;
+	socket.emit('add user', username);
+
+	$.ajax({
+		url: "/user/auth",
+		method: "POST",
+		data: userData
+
+	}).done((user) => {
+		localStorage.setItem('userToken', user.token);
+		$('.container').show();
+		$('.user-login').hide();
+	});
 }
