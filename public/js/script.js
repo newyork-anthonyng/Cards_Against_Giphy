@@ -99,20 +99,6 @@ $(function() {
     });
   });
 
-  // Login entered
-  $('#login-input').keypress((event) => {
-		event.preventDefault();
-    if(event.keyCode === 13) {
-      let username = $('#login-input').val();
-      // set variables on client side
-      myUser = username;
-      myId = socket.id;
-      socket.emit('add user', username);
-      $('#login-input').val('');
-      $('#login-view').hide();
-    }
-  });
-
   // Message entered
   $('#message').keypress(function(event) {
 		event.preventDefault();
