@@ -113,7 +113,6 @@ $(function() {
 
   // Message entered
   $('#message').keypress(function(event) {
-		event.preventDefault();
     if(event.keyCode === 13) {
       let message = $('#message').val();
       socket.emit('send message', {name: myUser, message: message});
@@ -255,7 +254,7 @@ $(function() {
 			url: "/user/addWins/" + myUser,
 			method: "PUT",
 			data: userData
-			
+
 		}).done(() => {
 
 		})
