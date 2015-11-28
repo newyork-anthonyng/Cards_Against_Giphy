@@ -6,6 +6,8 @@ body {
 	margin: 0 auto;
 	overflow-y: scroll;
 	font-family: helvetica, arial, times;
+	background-color: #ffffff;
+	background-image: url(http://www.transparenttextures.com/patterns/climpek.png);
 }
 
 a {
@@ -52,6 +54,7 @@ div.container {
 	width: 1200px;
 	height: 600px;
 	margin: 0px;
+	overflow: hidden;
 }
 
 #menu {
@@ -59,7 +62,7 @@ div.container {
 	padding: 5px;
 	font-size: 15px;
 	text-align: right;
-	background-color: lightgrey;
+	background-color: #DBDBDB;
 	padding-bottom: 5px;
 	border-bottom: 2px solid black;
 }
@@ -70,6 +73,7 @@ div.gameboard {
 	width: 910px;
 	height: 571px;
 	border-right: 2px solid black;
+	overflow: hidden;
 }
 
 #question {
@@ -94,7 +98,6 @@ div.gameboard {
 	background: -webkit-linear-gradient(-45deg,  rgba(42,253,156,1) 0%,rgba(35,205,252,1) 25%,rgba(152,64,251,1) 50%,rgba(252,103,105,1) 75%,rgba(255,254,159,1) 100%); /* Chrome10-25,Safari5.1-6 */
 	background: linear-gradient(135deg,  rgba(42,253,156,1) 0%,rgba(35,205,252,1) 25%,rgba(152,64,251,1) 50%,rgba(252,103,105,1) 75%,rgba(255,254,159,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2afd9c', endColorstr='#fffe9f',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-
 }
 
 #user-cards {
@@ -104,6 +107,9 @@ div.gameboard {
 #user-hand {
 	height: 335px;
 	border-top: 2px solid black;
+	overflow: hidden;
+	margin: 0 auto;
+	text-align: center;
 }
 
 div.sidebar {
@@ -112,6 +118,7 @@ div.sidebar {
 	padding: 10px;
 	width: 268px;
 	height: 547px;
+	background-color: #FFFFFF;
 }
 
 .profile-receiver {
@@ -268,95 +275,3 @@ div#user-cards {
 	cursor: pointer;
 	display: inline-block;
 }
-
-/*//////////////////////////////
-// 				Card Render					//
-//////////////////////////////*/
-
-
-/*==============
-giphy testing
-==============*/
-/*
-* {
-	margin: 0; padding: 0; box-sizing: border-box;
-}
-
-body {
-  font: 13px Helvetica, Arial;
-}
-
-#users {
-	position: absolute;
-	left: 0;
-	border: solid 1px black;
-	float: right;
-	width: 15%;
-	height: 100%;
-}
-
-#form {
-	background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%;
-}
-
-#form input {
-	border: 0; padding: 20px; width: 90%; margin-right: .5%;
-}
-
-#form button {
-	width: 9%; background: rgb(130, 224, 255); border: none; padding: 20px;
-}
-
-#message {
-	font-size: 25px;
-}
-
-#messages {
-	position: absolute;
-	width: 85%;
-	right: 0;
-	list-style-type: none; margin: 0; padding: 0;
-}
-
-#messages li {
-	padding: 5px 10px;
-	font-size: 30px;
-}
-
-#messages li:nth-child(odd) {
-	background: #eee;
-}
-
-#usernames {
-	text-align: center;
-	font-size: 30px;
-}
-
-#usernames li {
-	color: cornflowerblue;
-	padding-bottom: 15px;
-	padding-top: 15px;
-}
-
-#loginpage {
-	background-color: rgba(0,0,0,0.99);
-	width: 100%;
-	top: 0px;
-	bottom: 0px;
-	position: absolute;
-}
-
-.loginform {
-	text-align: center;
-	position: absolute;
-	top: 40%;
-	left: 25%;
-  right: 25%;
-}
-
-#login-input {
-	width: 100%;
-	height: 60px;
-	font-size: 25px;
-	text-align: center;
-}*/

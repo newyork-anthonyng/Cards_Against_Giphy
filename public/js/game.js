@@ -55,7 +55,6 @@ let Game = (function() {
       if(!judge) {
         for(let i = 0, j = users.length; i < j; i++) {
           if(users[i]['isJudge']) {
-            console.log('user: ' + users[i]['name'] + ' is the judge.');
             judge = users[i]['id'];
             judgeIndex = i;
             break;
@@ -63,7 +62,6 @@ let Game = (function() {
         }
       } else {
         // make the next player the judge
-        console.log('inside of game start round.');
         if(judgeIndex === players.length - 1) {
           judgeIndex = 0;
         } else {
@@ -77,8 +75,6 @@ let Game = (function() {
 
     // deal cards (random terms) to user
     dealCards: function(user) {
-      console.log('Game.js : dealing cards');
-
       // use request module to hit route and populate our hand
       request('http://localhost:3000/api/randomTerms/6', (err, res, body) => {
         if(!err && res.statusCode == 200) {
@@ -113,8 +109,6 @@ let Game = (function() {
 
     // get question for current round
     createQuestion: function() {
-      console.log('Game.js : getting question');
-
       // use request module to hit route and get a question
       request('http://localhost:3000/api/createQuestion', (err, res, body) => {
         if(!err && res.statusCode == 200) {
@@ -128,8 +122,6 @@ let Game = (function() {
     // player submitted card
     // takes a User's ID, and a card giphy url
     submitCard: function(userId, imgURL) {
-      console.log('Game.js submit card');
-
       // find player object
       let currentPlayer = undefined;
       for(let i = 0, j = players.length; i < j; i++) {
@@ -169,7 +161,11 @@ let Game = (function() {
       // go through all players
       for(let i = 0, j = players.length; i < j; i++) {
         if(players[i]['submitted']) {
-          submittedCards.push(players[i]['submitted']);
+          let myPlayer = {};
+          myPlayer['userId'] = players[i]['id'];
+          myPlayer['imgURL'] = players[i]['submitted'];
+          myPlayer['name']   = players[i]['name'];
+          submittedCards.push(myPlayer);
         }
       }
 
@@ -177,15 +173,22 @@ let Game = (function() {
       return submittedCards;
     },
 
-    // declare winner
-    declareWinner: function(userId) {
-
-    },
-
     // reset all game variables
     resetGame: function() {
       players         = [];
       currentQuestion = undefined;
+    },
+
+    // get passed an imgURL
+    // return the username of the Player who submitted that card
+    getCardsOwner: function(imgURL) {
+      let mySubmittedCards = this.getSubmittedCards();
+
+      for(let i = 0, j = mySubmittedCards.length; i < j; i++) {
+        if(imgURL === mySubmittedCards[i]['imgURL']) {
+          return mySubmittedCards[i]['name'];
+        }
+      }
     }
 
   }

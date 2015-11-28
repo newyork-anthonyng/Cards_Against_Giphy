@@ -105,7 +105,11 @@ io.on('connection', (socket) => {
 
   // myCard is getting passed as a key in an object (imgURL)
   socket.on('reveal winner', (data) => {
-    io.emit('reveal winner', data);
+    let winnerObject = {};
+    winnerObject['imgURL'] = data['myCard'];
+    winnerObject['name'] = Game.getCardsOwner(winnerObject['imgURL']);
+
+    io.emit('reveal winner', winnerObject);
   });
 
   socket.on('disconnect', () => {
@@ -121,7 +125,7 @@ io.on('connection', (socket) => {
   });
 });
 
-// // Show user's hand
+// Show user's hand
 app.get('/showHand', (req, res) => {
   res.send('Showing Hand');
 });
