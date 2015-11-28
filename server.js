@@ -52,8 +52,11 @@ io.on('connection', (socket) => {
   console.log('User has connected.');
 
   socket.on('add user', (username) => {
+    console.log('server.js '+ username);
     let userObj = {};
 
+    userObj.name = username;
+    userObj.id = socket.id;
     // check if user was first
     if (users.length === 0) {
       userObj.isJudge = true;
@@ -61,24 +64,48 @@ io.on('connection', (socket) => {
       userObj.isJudge = false;
     }
 
-    userObj.name = username;
-    userObj.id = socket.id;
     users.push(userObj);
     addedUser = true;
 
     // displaying users
     io.emit('user joined', users);
-
-    // show judge
-    io.emit('show judge', userObj);
   });
 
   socket.on('send message', (data) => {
     io.emit('send message', data);
   });
 
-  socket.on('start round', (data) => {
-    io.emit('start round', data);
+  socket.on('show hand', (data) => {
+    io.emit('show hand', Game.getPlayers());
+  });
+
+  socket.on('show question', () => {
+    io.emit('show question', Game.getQuestion());
+  });
+
+  socket.on('check for submissions', () => {
+    io.emit('check for submissions', Game.allPlayersSubmitted());
+  });
+
+  socket.on('reveal cards', () => {
+    io.emit('reveal cards', Game.getSubmittedCards());
+  });
+
+  socket.on('judging', () => {
+    io.emit('judging');
+  });
+
+  // userId and myCard are getting passed as keys in an object
+  socket.on('submit card', (data) => {
+    console.log('server.js submitting card');
+    Game.submitCard(data['userId'], data['myCard']);
+
+    io.emit('submit card', data);
+  });
+
+  // myCard is getting passed as a key in an object (imgURL)
+  socket.on('reveal winner', (data) => {
+    io.emit('reveal winner', data);
   });
 
   socket.on('disconnect', () => {
@@ -94,57 +121,25 @@ io.on('connection', (socket) => {
   });
 });
 
-// Show user's hand
-app.get('/showHand/:userName', (req, res) => {
-  let userName = req.params.userName;
-  let myHand = Game.showHand(userName);
-
-  let searchTerm = myHand[0];
-  let searchURL = 'http://api.giphy.com/v1/gifs/search?q='
-                  + searchTerm + '&limit=1&api_key=dc6zaTOxFJmzC';
-
-  request(searchURL, (err, response, body) => {
-    let info = JSON.parse(body);
-    let giphyObject = {};
-    let handImage;
-
-    // giphyArray will hold onto the ID, GIF, and still image
-    giphyObject['id'] = info['data'][0]['id'];
-    giphyObject['giphy'] = info['data'][0]['images']['fixed_height']['url'];
-    giphyObject['still'] = info['data'][0]['images']['fixed_height_still']['url'];
-
-    handImage = giphyObject['giphy'];
-
-    console.log('Server.js show hand: ' + myHand);
-    io.emit('show hand', handImage);
-
-    res.send(giphyObject);
-  });
-
+// // Show user's hand
+app.get('/showHand', (req, res) => {
+  res.send('Showing Hand');
 });
-
-// Take an array of search terms
-// Give an array of image_url
-app.post('/createCardsURL', (req, res) => {
-  let searchTerms = req.body.test;
-
-
-})
 
 // Start Round
 app.get('/startRound', (req, res) => {
-  let playersArray = Game.startRound(users);
   console.log('get /startRound');
 
-  for (var i = 0; i < playersArray.length; i++) {
-    let termsArray = answer(6);
-    playersArray[i]['hand'] = termsArray;
-  }
-  console.log('Server.js get /startRound :' + playersArray);
-  console.log(playersArray);
-  io.emit('start round', playersArray);
-});
+  // start game round, and save all the players and judge information
+  Game.startRound(users);
+  let data = {};
+  data['users'] = Game.getPlayers();
+  data['judge'] = Game.getJudge();
 
+  io.emit('start round', data);
+
+  res.send('Starting Round');
+});
 
 // set up server
 server.listen(app.get('port'), () => {
