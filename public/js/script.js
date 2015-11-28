@@ -35,9 +35,9 @@ $(function() {
 	// Setup for Handlebars (May Refactor Later)
 	let renderTemplate_userProfile = Handlebars.compile($('template#profile-template').html());
 
-  //////////////////
-  // User Sign Up //
-  //////////////////
+// ////////////////////////////////////////////////////////////////////////////
+// User Sign Up ///////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////
 
   // user signup
   $('#signuplink').click((event) => {
@@ -53,8 +53,6 @@ $(function() {
       username: username,
       password: password
     }
-
-    // if(password === password)
 
     $.ajax({
       url: "/user/signup",
@@ -77,8 +75,8 @@ $(function() {
 		login();
   });
 
+	// allow user to press "enter" to login
 	$('#login-password').keypress(function(event) {
-		// allow user to press "enter" to login
 		if(event.keyCode === 13) {
 			login();
 		}
@@ -87,18 +85,14 @@ $(function() {
   // Message entered
   $('#message').keypress(function(event) {
     if(event.keyCode === 13) {
-      let message = $('#message').val();
-      socket.emit('send message', {name: myUser, message: message});
-      $('#message').val('');
+      enterMessage();
     }
   });
 
   $('#msg-submit').click((event) => {
     event.preventDefault();
 
-    let message = $('#message').val();
-    socket.emit('send message', {name: myUser, message: message});
-    $('#message').val('');
+		enterMessage();
   });
 
   $('#start-round').click((event) => {
@@ -109,10 +103,9 @@ $(function() {
     });
   });
 
-	//////////////////
-	// User Profile //
-	//////////////////
-
+// ////////////////////////////////////////////////////////////////////////////
+// User Profile ///////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////
 
 	// Show User Profile
 	$('#nav-profile').click((event) => {
@@ -140,9 +133,9 @@ $(function() {
 	})
 
 
-	//////////////////
-	// User Actions //
-	//////////////////
+// ////////////////////////////////////////////////////////////////////////////
+// User Actions ///////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////
 
 	// user update (username, password)
 	$('#update-submit').click((event) => {
@@ -212,8 +205,6 @@ $(function() {
 			$list.empty().append(compiledTemplate);
 		})
 	})
-
-
 
 	// add wins to user
 	.click((event) => {
@@ -577,4 +568,10 @@ let login = function() {
 		$('.container').show();
 		$('.user-login').hide();
 	});
+}
+
+let enterMessage = function() {
+	let message = $('#message').val();
+	socket.emit('send message', {name: myUser, message: message});
+	$('#message').val('');
 }
