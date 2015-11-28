@@ -270,7 +270,7 @@ $(function() {
 	    if(enterKeyPressed && cardSelected) {
 	      let data = {};
 	      data['userId'] = myId;
-	      data['myCard'] = $('#selected img').attr('src');
+	      data['myCard'] = $('#selected').attr('src');
 
 	      socket.emit('submit card', data);
 	    }
