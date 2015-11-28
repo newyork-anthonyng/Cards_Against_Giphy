@@ -25,8 +25,8 @@ function verifyToken(xhr) {
 
 // hide user signup and game views
 $('.container').hide();			// Naturally hidden
-$('.usersignup').hide();		// Naturally hidden
-$('.userlogin').show();			// Naturally shown
+$('.user-signup').hide();		// Naturally hidden
+$('.user-login').show();			// Naturally shown
 // $('#side-profile').show();	// Naturally shown
 // $('#side-chat').hide();		// Naturally n/a
 
@@ -165,8 +165,8 @@ $(function() {
 	$('#side-back-button').click((event) => {
 		event.preventDefault();
 
-		$('.profile-receiver').empty();
-		$('#game-status').show();
+		$('.profile-receiver').html('');
+		$('#game-status').hide();
 	})
 
 
