@@ -6,6 +6,8 @@ body {
 	margin: 0 auto;
 	overflow-y: scroll;
 	font-family: helvetica, arial, times;
+	background-color: #ffffff;
+	background-image: url(http://www.transparenttextures.com/patterns/climpek.png);
 }
 
 a {
@@ -52,6 +54,7 @@ div.container {
 	width: 1200px;
 	height: 600px;
 	margin: 0px;
+	overflow: hidden;
 }
 
 #menu {
@@ -59,7 +62,7 @@ div.container {
 	padding: 5px;
 	font-size: 15px;
 	text-align: right;
-	background-color: lightgrey;
+	background-color: #DBDBDB;
 	padding-bottom: 5px;
 	border-bottom: 2px solid black;
 }
@@ -70,6 +73,7 @@ div.gameboard {
 	width: 910px;
 	height: 571px;
 	border-right: 2px solid black;
+	overflow: hidden;
 }
 
 #question {
@@ -94,12 +98,14 @@ div.gameboard {
 	background: -webkit-linear-gradient(-45deg,  rgba(42,253,156,1) 0%,rgba(35,205,252,1) 25%,rgba(152,64,251,1) 50%,rgba(252,103,105,1) 75%,rgba(255,254,159,1) 100%); /* Chrome10-25,Safari5.1-6 */
 	background: linear-gradient(135deg,  rgba(42,253,156,1) 0%,rgba(35,205,252,1) 25%,rgba(152,64,251,1) 50%,rgba(252,103,105,1) 75%,rgba(255,254,159,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2afd9c', endColorstr='#fffe9f',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-
 }
 
 #user-cards {
 	height: 335px;
 	border-top: 2px solid black;
+	overflow: hidden;
+	margin: 0 auto;
+	text-align: center;
 }
 
 div.sidebar {
@@ -108,6 +114,7 @@ div.sidebar {
 	padding: 10px;
 	width: 268px;
 	height: 547px;
+	background-color: #FFFFFF;
 }
 
 .profile-receiver {

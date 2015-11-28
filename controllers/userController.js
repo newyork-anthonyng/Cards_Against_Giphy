@@ -2,7 +2,8 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-const secret = "iahsofh"; // this needs to be moved out of the app!
+const secret = "iahsofh";
+// const secret = process.env.SECRET;
 
 function create(req, res){
 
@@ -71,7 +72,7 @@ function auth(req, res){
 
   User.findOne({ username: userParams.username }, (err, user) => {
     user.authenticate(userParams.password, (err, isMatch) => {
-      if (err) throw err;
+      if (err) console.log(err);
       // check if passwords match and token generation
       if (isMatch) {
         // token is made and set to expire in 5 hours / not related to logout
