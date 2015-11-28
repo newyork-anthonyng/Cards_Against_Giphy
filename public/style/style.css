@@ -75,15 +75,26 @@ div.gameboard {
 #question {
 	height: 60px;
 	text-align: center;
-	text-align: justify;
 	font-size: 16pt;
 	border-bottom: 2px solid black;
 	color: white;
 	background-color: black;
+	padding: 2px;
+}
+
+#question p {
+	margin: 0px;
 }
 
 #cards-in-play {
 	height: 170px;
+		/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#2afd9c+0,23cdfc+25,9840fb+50,fc6769+75,fffe9f+100 */
+	background: rgb(42,253,156); /* Old browsers */
+	background: -moz-linear-gradient(-45deg,  rgba(42,253,156,1) 0%, rgba(35,205,252,1) 25%, rgba(152,64,251,1) 50%, rgba(252,103,105,1) 75%, rgba(255,254,159,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(-45deg,  rgba(42,253,156,1) 0%,rgba(35,205,252,1) 25%,rgba(152,64,251,1) 50%,rgba(252,103,105,1) 75%,rgba(255,254,159,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(135deg,  rgba(42,253,156,1) 0%,rgba(35,205,252,1) 25%,rgba(152,64,251,1) 50%,rgba(252,103,105,1) 75%,rgba(255,254,159,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2afd9c', endColorstr='#fffe9f',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
 }
 
 #user-cards {
@@ -115,17 +126,19 @@ div.sidebar {
 	overflow-y: scroll;
 	padding: 5px;
 	list-style: none;
+	word-wrap: break-word;
 	text-align: justify;
 }
 
 #message {
-	height: 50px;
+	height: 43px;
 	width: 200px;
 	border: 2px solid black;
 }
 
 .chat button {
 	margin-left: 10px;
+	vertical-align: top;
 	width: 50px;
 	height: 50px;
 	border: 2px solid black;
@@ -135,27 +148,52 @@ div.sidebar {
 Giphy Cards ==================================================================
 /*===========================================================================*/
 
-.card {
-	border:solid black 1px;
+#user-cards ul {
+	text-align: center;
+}
+
+#user-cards li {
+	display: inline-block;
+	width: auto;
+	height: 130px;
+	overflow: hidden;
+	margin: 2px;
+	padding: 10px;
+	border-radius: 10px;
+	line-height: 140px;
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#2afd9c+0,23cdfc+25,9840fb+50,fc6769+75,fffe9f+100 */
+	background: rgb(42,253,156); /* Old browsers */
+	background: -moz-linear-gradient(-45deg,  rgba(42,253,156,1) 0%, rgba(35,205,252,1) 25%, rgba(152,64,251,1) 50%, rgba(252,103,105,1) 75%, rgba(255,254,159,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(-45deg,  rgba(42,253,156,1) 0%,rgba(35,205,252,1) 25%,rgba(152,64,251,1) 50%,rgba(252,103,105,1) 75%,rgba(255,254,159,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(135deg,  rgba(42,253,156,1) 0%,rgba(35,205,252,1) 25%,rgba(152,64,251,1) 50%,rgba(252,103,105,1) 75%,rgba(255,254,159,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2afd9c', endColorstr='#fffe9f',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
+}
+
+.card img {
+	border-radius: 10px;
+	width: auto;
+	max-width: 290px;
+	height: 130px;
 }
 
 #selected {
-	border:solid yellow 5px;
+	opacity: 0.4;
 }
 
-#winner {
+/*#winner {
 	border:solid black 5px;
 }
 
-/*Game Board*/
+Game Board
 div#cards-in-play {
 
 }
 
-/*User Hand*/
+User Hand
 div#user-cards {
 
-}
+}*/
 
 
 /*//////////////////////////////
@@ -200,7 +238,9 @@ div#user-cards {
 	display: inline-block;
 }
 
-
+/*//////////////////////////////
+// 				Card Render					//
+//////////////////////////////*/
 
 
 /*==============
