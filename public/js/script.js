@@ -360,7 +360,10 @@ $(function() {
 			if (!nextRoundTimer) {
 				nextRoundTimer = window.setTimeout(function() {
 					currentPhase = 'start round';
-					socket.emit('start round');
+
+					$.ajax({
+						url: 'http://localhost:3000/startRound'
+					});
 				}, 2000);
 			}
 		}
@@ -457,7 +460,7 @@ socket.on('show hand', (users) => {
 	  if(currentUser['images'].length === 6) {
 	    areCardsShowing = true;
 			console.log('line 341 next phase');
-			nextPhase();
+			currentPhase = 'checking for submissions';
 	  }
 	}
 
@@ -499,7 +502,7 @@ socket.on('submit card', (data) => {
 socket.on('check for submissions', (submitted) => {
 	if(submitted === true) {
 		// console.log('all players have submitted their cards. Moving into judging');
-		console.log('line 384 next phase');
+		// console.log('line 384 next phase');
 		currentPhase = 'reveal cards';
 	}
 });
@@ -562,8 +565,11 @@ let resetClientVariables = function() {
 	areCardsShowing = false;
 	didSubmitCard = false;
 	isJudge = false;
-
 	nextRoundTimer = false;
+
+	// reset the gameboard
+	$('#cards-in-play').empty();
+	$('#user-cards').empty();
 }
 
 let nextPhase = function() {
