@@ -8,11 +8,10 @@ const express     = require('express');
 const router      = express.Router();
 const request     = require('request');
 const bodyParser  = require('body-parser');
-let Question	  = require('../models/question');
-let Answer		  = require('../models/answer');
+let Question	    = require('../models/question');
+let Answer		    = require('../models/answer');
 
 router.get('/', (req, res) => {
-  // console.log('hit / route inside of apiRoute.js');
   res.send('Hello World');
 });
 
@@ -20,7 +19,6 @@ router.get('/', (req, res) => {
 // the 'numberOfTerms' is how many documents from the
 // database that you want to get
 router.get('/randomTerms/:numberOfTerms', (req, res) => {
-
   let neededTerms = req.params.numberOfTerms;
 
   let termsArray = [];
@@ -42,7 +40,6 @@ router.get('/randomTerms/:numberOfTerms', (req, res) => {
 // hit the Giphy API and grab a random giphy based on search term
 // returns an object containing the giphy ID, the actual Giphy, and still image
 router.get('/createCards/:searchTerm', (req, res) => {
-  // console.log('get /createCards');
 
   let searchTerm = req.params.searchTerm;
   let searchURL = 'http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=' +

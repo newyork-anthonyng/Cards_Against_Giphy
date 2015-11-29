@@ -30,8 +30,6 @@ function verifyToken(xhr) {
 $('.container').hide();			// Naturally hidden
 $('.user-signup').hide();		// Naturally hidden
 $('.user-login').show();		// Naturally shown
-// $('#side-profile').show();	// Naturally shown
-// $('#side-chat').hide();		// Naturally n/a
 $('#profile-status').hide();	// Naturally hidden
 
 $(function() {
@@ -40,11 +38,10 @@ $(function() {
 	let renderTemplate_userProfile = Handlebars.compile($('template#profile-template').html());
 	let renderTemplate_updateProfile = Handlebars.compile($('template#profile-update').html());
 
-//////////////////
-// User Sign Up //
-//////////////////
+/////////////////////////////////////////////////
+// User Sign Up /////////////////////////////////
+/////////////////////////////////////////////////
 
-  // user signup
   $('#signuplink').click((event) => {
 		event.preventDefault();
     $('.user-login').hide();
@@ -52,23 +49,14 @@ $(function() {
   });
 
   $('#signup-submit').click((event) => {
-    let username = $("#signup-username").val();
-    let password = $("#signup-password").val();
-    let userData = {
-      username: username,
-      password: password,
-      wins: 0
-    }
-
-    $.ajax({
-      url: "/user/signup",
-      method: "POST",
-      data: userData
-    }).done(() => {
-        $('.user-signup').hide();
-        $('.user-login').show();
-    });
+		signup();
   });
+
+	$('#signup-password').keypress(function(event) {
+		if(event.keyCode === 13) {
+			signup();
+		}
+	});
 
   $('#loginlink').click((event) => {
 		event.preventDefault();
@@ -109,9 +97,9 @@ $(function() {
     });
   });
 
-/////////////////
-//User Profile //
-/////////////////
+/////////////////////////////////////////////////
+//User Profile //////////////////////////////////
+/////////////////////////////////////////////////
 
 	// Show User Profile
 	$('#nav-profile').click((event) => {
@@ -141,10 +129,9 @@ $(function() {
 	});
 
 
-/////////////////
-//User Actions //
-/////////////////
-
+/////////////////////////////////////////////////
+//User Actions //////////////////////////////////
+/////////////////////////////////////////////////
 
 	$(document.body).on('click', '#profile-edit',  function() {
 		event.preventDefault();
@@ -160,7 +147,6 @@ $(function() {
 			$list.empty().append(compiledTemplate);
 		})
 	})
-
 
 	// user update (username, password)
 	$(document.body).on('click', '#update-submit',  function() {
@@ -185,8 +171,7 @@ $(function() {
 		});
 	});
 
-
-	//User Delete Account
+	// User Delete Account
 	$(document.body).on('click', '#profile-delete',  function() {
 
 		let userData = {
@@ -237,28 +222,9 @@ $(function() {
 		})
 	})
 
-	// add wins to user
-	.click((event) => {
-
-		let userData = {
-			wins: wins
-		};
-
-		$.ajax({
-			'beforeSend' : verifyToken,
-			url: "/user/addWins/" + myUser,
-			method: "PUT",
-			data: userData
-
-		}).done(() => {
-
-		})
-	})
-
-
-/////////////////
-// Giphy Cards //
-/////////////////
+/////////////////////////////////////////////////
+// Giphy Cards //////////////////////////////////
+/////////////////////////////////////////////////
 
   // user can click and select card
   // must use document.body because cards are dynamically added to DOM
@@ -271,14 +237,26 @@ $(function() {
 
     // add ID of selected to the clicked card
     $(currentlySelectedCard).attr('id', 'selected');
+
+		if($(event.target).attr('class') === 'card-img') {
+			if(window.confirm('Submit this card?')) {
+
+				if(currentPhase === 'checking for submissions') {
+					let data = {};
+					data['userId'] = myId;
+					data['myCard'] = $('#selected').attr('src');
+
+					socket.emit('submit card', data);
+				}
+			}
+		}
+
   });
 
 	$(document.body).on('click', '.judging-card', (event) => {
 		if(!isJudge) {
 			return false;
 		}
-
-		console.log('Judge is selecting a card');
 
 		// remove the ID from any other card
 		let priorSelectedCards = $('#winner');
@@ -288,42 +266,17 @@ $(function() {
 
 		// add ID of "winner" to the clicked card
 		$(currentlySelectedCard).attr('id', 'winner');
-	});
-
-  // user or judge submits card
-  $(document.body).keypress((event) => {
-    let enterKeyPressed = (event.keyCode === 13);
-
-		if(currentPhase === 'checking for submissions') {
-			// check for players selecting cards
-			let cardSelected = $('#selected').length > 0;
-	    if(enterKeyPressed && cardSelected) {
-	      let data = {};
-	      data['userId'] = myId;
-	      data['myCard'] = $('#selected').attr('src');
-
-	      socket.emit('submit card', data);
-	    }
-
-		} else if(currentPhase === 'judging') {
-			if(!isJudge) {
-				return false;
-			}
-
-			// check for judge selecting card
-			let winnerSelected = $('#winner').length > 0;
-			if(enterKeyPressed && winnerSelected) {
-
-				currentPhase = 'reveal winner';
+		if($(event.target).attr('id') === 'winner') {
+			if(window.confirm('Choose this card as winner?')) {
+				if(currentPhase === 'judging') {
+					currentPhase = 'reveal winner';
+				}
 			}
 		}
-
-  });
+	});
 
   // set up interval method
   let timerID = window.setInterval(() => {
-		console.log('current phase: ' + currentPhase);
-		// update client's views of their
     if(!areCardsShowing) socket.emit('show hand');
 
     if(!isQuestionShowing) socket.emit('show question');
@@ -355,7 +308,6 @@ $(function() {
 					// on the judge's client side, award points
 					if(isJudge) {
 						let winner = winnerInformation['name'];
-						alert(winner + ' has the funniest card.');
 
 						// increase the score of player
 						let userData = {
@@ -376,19 +328,15 @@ $(function() {
 						url: 'http://localhost:3000/startRound'
 					});
 
-
 				}, 2000);
 			}
 		}
-
-
-
   }, 500);
 });
 
-///////////////////////////////
-// Socket Events - Chat Room //
-///////////////////////////////
+/////////////////////////////////////////////////
+// Socket Events - Chat Room ////////////////////
+/////////////////////////////////////////////////
 
 socket.on('user joined', (users) => {
     // update list of users online
@@ -411,24 +359,19 @@ socket.on('send message', (data) => {
 
 });
 
-//////////////////////////
-// Socket Events - Game //
-//////////////////////////
+/////////////////////////////////////////////////
+// Socket Events - Game /////////////////////////
+/////////////////////////////////////////////////
 
 // data is an object that contains "users" and "judge"
 socket.on('start round', (data) => {
-	// reset all client variables
 	resetClientVariables();
 
   let currentUser = getCurrentUser(data['users'], myId);
 
 	if(myId === data['judge']) {
-		console.log('judge is found and declared!!! line 397 of script.js');
 		isJudge = true;
 	}
-
-  let imageList = $('div#user-hand');
-  imageList.append('<p>' + currentUser['name'] + '</p>');
 
 	currentPhase = 'show hand';
 });
@@ -446,19 +389,18 @@ socket.on('show hand', (users) => {
 	} else {
 		gameBoard.css('background-color', 'white');
 	}
-	// console.log('script.js : showing hand');
+
 
   // only show hand when there are current hands
   let currentUser = getCurrentUser(users, myId);
   let handList = $('#user-cards');
   if (currentUser === undefined || isJudge) {
     handList.html('').append($('<p>Welcome to the start of the game</p>'));
-	console.log(currentUser);
-	console.log(isJudge);
+	// console.log(currentUser);
+	// console.log(isJudge);
   } else {
 
 		// show the card images
-	  handList.html('').append($('<p>' + currentUser['name'] + '</p>'));
 	  for(let i = 0, j = currentUser['images'].length; i < j; i++) {
 	    let myCard =
 	      $('<div class="card"><img class="card-img" src=' +
@@ -470,11 +412,9 @@ socket.on('show hand', (users) => {
 	  // stop updating this when all cards are shown
 	  if(currentUser['images'].length === 6) {
 	    areCardsShowing = true;
-			console.log('line 341 next phase');
 			currentPhase = 'checking for submissions';
 	  }
 	}
-
 });
 
 socket.on('show question', (question) => {
@@ -498,8 +438,6 @@ socket.on('submit card', (data) => {
 	if(didSubmitCard) {
 		return false;
 	}
-
-	console.log('script.js socket.on submit card');
 
 	// move the submitted card to the game field
 	let submittedContainer = $('#cards-in-play');
@@ -557,16 +495,15 @@ socket.on('reveal winner', (data) => {
 	currentPhase = 'end round';
 });
 
-/////////////////////////
-// Convenience Methods //
-/////////////////////////
+/////////////////////////////////////////////////
+// Convenience Methods //////////////////////////
+/////////////////////////////////////////////////
 
 // pass in all users in the game, and the client's unique ID
 // return the user object for the client
 let getCurrentUser = function(allUsers, currentUserId) {
   for(let i = 0, j = allUsers.length; i < j; i++) {
     if(allUsers[i]['id'] === currentUserId) {
-	  console.log(allUsers);
       return allUsers[i];
     }
   }
@@ -607,6 +544,25 @@ let login = function() {
 		localStorage.setItem('userToken', user.token);
 		$('.container').show();
 		$('.user-login').hide();
+	});
+}
+
+let signup = function() {
+	let username = $("#signup-username").val();
+	let password = $("#signup-password").val();
+	let userData = {
+		username: username,
+		password: password,
+		wins: 0
+	}
+
+	$.ajax({
+		url: "/user/signup",
+		method: "POST",
+		data: userData
+	}).done(() => {
+			$('.user-signup').hide();
+			$('.user-login').show();
 	});
 }
 
