@@ -162,7 +162,7 @@ Giphy Cards =====================================
 	display: inline-block;
 }
 
-#user-cards img {
+#user-cards div {
 	display: inline-block;
 	width: auto;
 	height: 130px;
