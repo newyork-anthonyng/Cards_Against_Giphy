@@ -503,7 +503,7 @@ socket.on('submit card', (data) => {
 
 	// move the submitted card to the game field
 	let submittedContainer = $('#cards-in-play');
-	submittedContainer.append($('<img src=' + data['myCard'] + '></img>'));
+	submittedContainer.append($('<img id="user-selected" src=' + data['myCard'] + '></img>'));
 	didSubmitCard = true;
 });
 
@@ -519,11 +519,13 @@ socket.on('check for submissions', (submitted) => {
 socket.on('reveal cards', (submittedCards) => {
 	// set up judge's view
 	let cardsInPlay = $('#cards-in-play');
-	cardsInPlay.html('');
+	cardsInPlay.empty().append('<ul class="cards-in-play-list"></ul>');
+
+	let cardsInPlayList = $('.cards-in-play-list');
 
 	for(let i = 0, j = submittedCards.length; i < j; i++) {
-		cardsInPlay.append($('<div class="judging-card"><img src='
-					+ submittedCards[i]['imgURL'] + '></img></div>'));
+		cardsInPlayList.append($('<li class="judging-card"><img src='
+													+ submittedCards[i]['imgURL'] + '></img></li>'));
 	}
 
 	let cardsInHand = $('#user-cards');
@@ -548,9 +550,9 @@ socket.on('reveal winner', (data) => {
 	cardsInPlay.empty();
 
 	// show the winning card on everyone's screen
-	let winnerCard = $('<div><img src=' + data['imgURL'] + '></img></div>');
+	let winnerCard = $('<img id="winning-card" src=' + data['imgURL'] + '></img><br>');
 	cardsInPlay.append(winnerCard);
-	cardsInPlay.append('<p>' + data['name'] + ' won this round.</p>');
+	cardsInPlay.append('<h3>' + data['name'] + ' won this round.</h3>');
 
 	currentPhase = 'end round';
 });
