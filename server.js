@@ -17,7 +17,6 @@ const Game        = require('./public/js/game');
 
 // Models
 let Question	  = require('./models/question');
-let answer		  = require('./controllers/answerController');
 
 // set up port that our server will be using
 app.set('port', 3000);
