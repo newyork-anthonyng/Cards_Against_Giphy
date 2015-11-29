@@ -38,6 +38,7 @@ $(function() {
 
 	// Setup for Handlebars (May Refactor Later)
 	let renderTemplate_userProfile = Handlebars.compile($('template#profile-template').html());
+	let renderTemplate_updateProfile = Handlebars.compile($('template#profile-update').html());
 
 //////////////////
 // User Sign Up //
@@ -143,8 +144,25 @@ $(function() {
 //User Actions //
 /////////////////
 
+
+	$(document.body).on('click', '#profile-edit',  function() {
+		event.preventDefault();
+
+		$.ajax({
+			'beforeSend': verifyToken,
+			url: "/user/" + myUser,
+			method: "GET"
+		}).done((user) => {
+			// entire user object returned
+			let $list = $('#profile-status');
+			let compiledTemplate = renderTemplate_updateProfile(user);
+			$list.empty().append(compiledTemplate);
+		})
+	})
+
+
 	// user update (username, password)
-	$('#update-submit').click((event) => {
+	$(document.body).on('click', '#update-submit',  function() {
 		let username = $("#update-username").val();
 		let password = $("#update-password").val();
 		let userData = {
@@ -158,13 +176,17 @@ $(function() {
 			method: "PUT",
 			data: userData
 		}).done(() => {
-			$('.container').show();
-			$('.user-login').hide();
+			let profileView = $('#profile-status');
+			profileView.html('');
+			profileView.empty();
+			profileView.hide();
+			$('#game-status').show();
 		});
 	});
 
+
 	//User Delete Account
-	$('#profile-delete').click((event) => {
+	$(document.body).on('click', '#profile-delete',  function() {
 
 		let userData = {
 			username: myUser
@@ -233,9 +255,9 @@ $(function() {
 	})
 
 
-// ==========================================================================
-// Giphy Cards ==============================================================
-// ==========================================================================
+/////////////////
+// Giphy Cards //
+/////////////////
 
   // user can click and select card
   // must use document.body because cards are dynamically added to DOM
@@ -532,9 +554,9 @@ socket.on('reveal winner', (data) => {
 	currentPhase = 'end round';
 });
 
-// ==========================================================================
-// Convenience Methods ======================================================
-// ==========================================================================
+/////////////////////////
+// Convenience Methods //
+/////////////////////////
 
 // pass in all users in the game, and the client's unique ID
 // return the user object for the client

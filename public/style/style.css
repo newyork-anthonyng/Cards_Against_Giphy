@@ -161,27 +161,10 @@ div.sidebar {
 Giphy Cards ==================================================================
 /*===========================================================================*/
 
-#user-cards ul {
+#user-cards {
 	text-align: center;
 }
 
-#user-cards li {
-	display: inline-block;
-	width: auto;
-	height: 130px;
-	overflow: hidden;
-	margin: 2px;
-	padding: 10px;
-	border-radius: 10px;
-	line-height: 140px;
-	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#2afd9c+0,23cdfc+25,9840fb+50,fc6769+75,fffe9f+100 */
-	background: rgb(42,253,156); /* Old browsers */
-	background: -moz-linear-gradient(-45deg,  rgba(42,253,156,1) 0%, rgba(35,205,252,1) 25%, rgba(152,64,251,1) 50%, rgba(252,103,105,1) 75%, rgba(255,254,159,1) 100%); /* FF3.6-15 */
-	background: -webkit-linear-gradient(-45deg,  rgba(42,253,156,1) 0%,rgba(35,205,252,1) 25%,rgba(152,64,251,1) 50%,rgba(252,103,105,1) 75%,rgba(255,254,159,1) 100%); /* Chrome10-25,Safari5.1-6 */
-	background: linear-gradient(135deg,  rgba(42,253,156,1) 0%,rgba(35,205,252,1) 25%,rgba(152,64,251,1) 50%,rgba(252,103,105,1) 75%,rgba(255,254,159,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2afd9c', endColorstr='#fffe9f',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-
-}
 
 .card img {
 	border-radius: 10px;
