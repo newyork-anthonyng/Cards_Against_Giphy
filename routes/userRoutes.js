@@ -1,9 +1,10 @@
 'use strict';
-const express = require('express');
-const router = express.Router();
-const user = require('../controllers/userController');
-const expressJwt = require('express-jwt');
-const secret = "iahsofh";
+
+const express     = require('express');
+const router      = express.Router();
+const user        = require('../controllers/userController');
+const expressJwt  = require('express-jwt');
+const secret      = "iahsofh";
 // const secret = process.env.SECRET;
 
 router.route('/user/auth')
@@ -36,6 +37,5 @@ router.route('/user/:username')
   .get(user.retrieve)
   // user update
   .put(user.update);
-
 
 module.exports = router;
