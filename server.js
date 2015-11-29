@@ -18,8 +18,12 @@ const Game        = require('./public/js/game');
 // Models
 let Question	  = require('./models/question');
 
+// set up port that our heroku server will be using (HEROKU)
+// app.listen(process.env.PORT || 3000 )
+
 // set up port that our server will be using
-app.set('port', 3000);
+	// This is different from app.listent(3000?)
+app.set('port', process.env.PORT || 3000);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -28,14 +32,24 @@ app.use('/api', apiRoutes);
 
 app.use(express.static('public'));
 
-// connect to MongoDB
-mongoose.connect('mongodb://localhost/giphy', (err) => {
+// Connect to MongoLab_URI (HEROKU)
+var mongoUri =  process.env.MONGOLAB_URI || 'mongodb://localhost/giphy';
+mongoose.connect(mongoUri, (err) => {
   if(err) {
-    console.log('Mongo connection error.', err);
+    console.log('MongoLab connection error.', err);
   } else {
-    console.log('Mongo connection successful');
+    console.log('MongoLab connection successful');
   }
 });
+
+// connect to MongoDB
+// mongoose.connect('mongodb://localhost/giphy', (err) => {
+//   if(err) {
+//     console.log('Mongo connection error.', err);
+//   } else {
+//     console.log('Mongo connection successful');
+//   }
+// });
 
 // ===========================================================================
 // Emit events ===============================================================
