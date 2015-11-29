@@ -19,11 +19,11 @@ const Game        = require('./public/js/game');
 let Question	  = require('./models/question');
 
 // set up port that our heroku server will be using (HEROKU)
-app.listen(process.env.PORT || 3000 )
+// app.listen(process.env.PORT || 3000 )
 
 // set up port that our server will be using
 	// This is different from app.listent(3000?)
-// app.set('port', 3000);
+app.set('port', process.env.PORT || 3000);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -33,7 +33,7 @@ app.use('/api', apiRoutes);
 app.use(express.static('public'));
 
 // Connect to MongoLab_URI (HEROKU)
-var mongoUri =  process.env.MONGOLAB_URI || 'mongodb://localhost/tokensandauth';
+var mongoUri =  process.env.MONGOLAB_URI || 'mongodb://localhost/giphy';
 mongoose.connect(mongoUri, (err) => {
   if(err) {
     console.log('MongoLab connection error.', err);
