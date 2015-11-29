@@ -7,18 +7,16 @@ const io          = require('socket.io')(server);
 const request     = require('request');
 const bodyParser  = require('body-parser');
 const mongoose    = require('mongoose');
-const users        = require('./public/js/global');
+const users       = require('./public/js/global');
 
 let addedUser = false;
 
 const userRoutes  = require('./routes/userRoutes');
-const gameRoutes  = require('./routes/gameRoutes.js');
 const apiRoutes   = require('./routes/apiRoutes');
 const Game        = require('./public/js/game');
 
-// Temporary Link to Models
+// Models
 let Question	  = require('./models/question');
-let answer		  = require('./controllers/answerController');
 
 // set up port that our server will be using
 app.set('port', 3000);
@@ -26,7 +24,6 @@ app.set('port', 3000);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', userRoutes);
-app.use('/game', gameRoutes);
 app.use('/api', apiRoutes);
 
 app.use(express.static('public'));
@@ -42,9 +39,9 @@ mongoose.connect('mongodb://localhost/giphy', (err) => {
 
 // ===========================================================================
 // Emit events ===============================================================
-// user joined, send message, disconnect
+// user joined, send message, disconnect =====================================
 // ===========================================================================
-// Socket pattern: IO will emit events from server.js
+// Socket pattern: IO will emit events from server.js ========================
 // In script.js, we will receive these events and manipulate the DOM as needed
 // ===========================================================================
 
@@ -57,7 +54,7 @@ io.on('connection', (socket) => {
 
     userObj.name = username;
     userObj.id = socket.id;
-    // check if user was first
+    // check if user was first, and set them as judge
     if (users.length === 0) {
       userObj.isJudge = true;
     } else {
@@ -97,7 +94,6 @@ io.on('connection', (socket) => {
 
   // userId and myCard are getting passed as keys in an object
   socket.on('submit card', (data) => {
-    console.log('server.js submitting card');
     Game.submitCard(data['userId'], data['myCard']);
 
     io.emit('submit card', data);

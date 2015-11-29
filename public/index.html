@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="/style/style.css">
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
+	  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
     <title>Gifs Against Humanity</title>
   </head>
   <body>
@@ -14,14 +14,14 @@
     <div class="user-view user-login">
     	<h1 class="title-card">Gifs Against Humanity</h1>
     	<!-- <form id="login-form"> -->
-    		<div class="form-box">
-    			<input type="text" placeholder="Username" id="login-username"><br>
-    			<input type="password" placeholder="Password" id="login-password">
-    		</div>
-    		<button class="submit-butt" id="login-submit">Login</button>
+  		<div class="form-box">
+  			<input type="text" placeholder="Username" id="login-username"><br>
+  			<input type="password" placeholder="Password" id="login-password">
+  		</div>
+  		<button class="submit-butt" id="login-submit">Login</button>
     	<!-- </form> -->
     	<a href="localhost:3000/signup">
-    		<h4 id="signuplink">Sign Up</h4>
+        <h4 id="signuplink">Sign Up</h4>
     	</a>
     </div>
 
@@ -29,11 +29,12 @@
     <div class="user-view user-signup">
     	<h1 class="title-card">Gifs Against Humanity</h1>
     	<!-- <form id="signup-form"> -->
-    		<div class="form-box">
-    			<input type="text" placeholder="Username" id="signup-username" value=""><br>
-    			<input type="password" placeholder="Password" id="signup-password"><br>
-    		</div>
-    		<button class="submit-butt" id="signup-submit">Sign Up</button>
+  		<div class="form-box">
+  			<input type="text" placeholder="Username" id="signup-username" value=""><br>
+  			<input type="password" placeholder="Password" id="signup-password"><br>
+  		</div>
+
+  		<button class="submit-butt" id="signup-submit">Sign Up</button>
     	<!-- </form> -->
     	<a href="localhost:3000/login">
     		<h4 id="loginlink">Back to Login</h4>
@@ -74,11 +75,11 @@
       </div>
 
       <div class="sidebar" id="side-chat" >
-		<div class="profile-receiver" id="game-status">
-			game stats
-		</div>
-        <div class="profile-receiver" id="profile-status">
-        </div>
+    		<div class="profile-receiver" id="game-status">
+    			game stats
+    		</div>
+
+        <div class="profile-receiver" id="profile-status"></div>
 
         <div class="chat">
           <ul id="messages">
@@ -86,12 +87,8 @@
           </ul>
           <textarea id="message" placeholder="enter comment here"></textarea><button id="msg-submit">Send</button>
         </div>
-
       </div>
-
-
     </div>
-
 
     <!-- ==========
     Templates
