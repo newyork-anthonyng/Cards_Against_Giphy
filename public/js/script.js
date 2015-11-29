@@ -355,7 +355,6 @@ $(function() {
 					// on the judge's client side, award points
 					if(isJudge) {
 						let winner = winnerInformation['name'];
-						alert(winner + ' has the funniest card.');
 
 						// increase the score of player
 						let userData = {
@@ -427,9 +426,6 @@ socket.on('start round', (data) => {
 		isJudge = true;
 	}
 
-  let imageList = $('div#user-hand');
-  imageList.append('<p>' + currentUser['name'] + '</p>');
-
 	currentPhase = 'show hand';
 });
 
@@ -458,7 +454,7 @@ socket.on('show hand', (users) => {
   } else {
 
 		// show the card images
-	  handList.html('').append($('<p>' + currentUser['name'] + '</p>'));
+	  // handList.html('').append($('<p>' + currentUser['name'] + '</p>'));
 	  for(let i = 0, j = currentUser['images'].length; i < j; i++) {
 	    let myCard =
 	      $('<div class="card"><img class="card-img" src=' +
