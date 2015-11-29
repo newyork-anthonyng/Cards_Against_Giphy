@@ -446,13 +446,13 @@ socket.on('show hand', (users) => {
 	} else {
 		gameBoard.css('background-color', 'white');
 	}
-
 	// console.log('script.js : showing hand');
+
   // only show hand when there are current hands
   let currentUser = getCurrentUser(users, myId);
   let handList = $('#user-cards');
   if (currentUser === undefined || isJudge) {
-    handList.html('').append($('<p>You are the judge</p>'));
+    handList.html('').append($('<p>Welcome to the start of the game</p>'));
 	console.log(currentUser);
 	console.log(isJudge);
   } else {
