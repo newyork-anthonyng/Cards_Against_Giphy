@@ -56,7 +56,8 @@ $(function() {
     let password = $("#signup-password").val();
     let userData = {
       username: username,
-      password: password
+      password: password,
+      wins: 0
     }
 
     $.ajax({
