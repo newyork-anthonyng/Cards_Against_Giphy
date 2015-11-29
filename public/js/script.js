@@ -52,23 +52,14 @@ $(function() {
   });
 
   $('#signup-submit').click((event) => {
-    let username = $("#signup-username").val();
-    let password = $("#signup-password").val();
-    let userData = {
-      username: username,
-      password: password,
-      wins: 0
-    }
-
-    $.ajax({
-      url: "/user/signup",
-      method: "POST",
-      data: userData
-    }).done(() => {
-        $('.user-signup').hide();
-        $('.user-login').show();
-    });
+		signup();
   });
+
+	$('#signup-password').keypress(function(event) {
+		if(event.keyCode === 13) {
+			signup();
+		}
+	});
 
   $('#loginlink').click((event) => {
 		event.preventDefault();
@@ -603,6 +594,25 @@ let login = function() {
 		localStorage.setItem('userToken', user.token);
 		$('.container').show();
 		$('.user-login').hide();
+	});
+}
+
+let signup = function() {
+	let username = $("#signup-username").val();
+	let password = $("#signup-password").val();
+	let userData = {
+		username: username,
+		password: password,
+		wins: 0
+	}
+
+	$.ajax({
+		url: "/user/signup",
+		method: "POST",
+		data: userData
+	}).done(() => {
+			$('.user-signup').hide();
+			$('.user-login').show();
 	});
 }
 
