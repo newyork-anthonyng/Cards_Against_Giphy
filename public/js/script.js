@@ -148,7 +148,6 @@ $(function() {
 		})
 	})
 
-
 	// user update (username, password)
 	$(document.body).on('click', '#update-submit',  function() {
 		let username = $("#update-username").val();
@@ -238,6 +237,20 @@ $(function() {
 
     // add ID of selected to the clicked card
     $(currentlySelectedCard).attr('id', 'selected');
+
+		if($(event.target).attr('class') === 'card-img') {
+			if(window.confirm('Submit this card?')) {
+
+				if(currentPhase === 'checking for submissions') {
+					let data = {};
+					data['userId'] = myId;
+					data['myCard'] = $('#selected').attr('src');
+
+					socket.emit('submit card', data);
+				}
+			}
+		}
+
   });
 
 	$(document.body).on('click', '.judging-card', (event) => {
@@ -253,36 +266,14 @@ $(function() {
 
 		// add ID of "winner" to the clicked card
 		$(currentlySelectedCard).attr('id', 'winner');
-	});
-
-  // user or judge submits card
-  $(document.body).keypress((event) => {
-    let enterKeyPressed = (event.keyCode === 13);
-
-		if(currentPhase === 'checking for submissions') {
-			// check for players selecting cards
-			let cardSelected = $('#selected').length > 0;
-	    if(enterKeyPressed && cardSelected) {
-	      let data = {};
-	      data['userId'] = myId;
-	      data['myCard'] = $('#selected').attr('src');
-
-	      socket.emit('submit card', data);
-	    }
-
-		} else if(currentPhase === 'judging') {
-			if(!isJudge) {
-				return false;
-			}
-
-			// check for judge selecting card
-			let winnerSelected = $('#winner').length > 0;
-			if(enterKeyPressed && winnerSelected) {
-				currentPhase = 'reveal winner';
+		if($(event.target).attr('id') === 'winner') {
+			if(window.confirm('Choose this card as winner?')) {
+				if(currentPhase === 'judging') {
+					currentPhase = 'reveal winner';
+				}
 			}
 		}
-
-  });
+	});
 
   // set up interval method
   let timerID = window.setInterval(() => {
