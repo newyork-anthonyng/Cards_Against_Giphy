@@ -48,13 +48,13 @@ div.container {
 	border: 2px solid black;
 	position: absolute;
 	left: 50%;
-	top: 50%;
-	transform: translateX(-50%) translateY(-50%);
+	transform: translateX(-50%);
 	display: inline-block;
 	width: 1200px;
-	height: 600px;
-	margin: 0px;
+	margin-top: 50px;
+	margin-bottom: 50px;
 	overflow: hidden;
+	background-color: #FFFFFF;
 }
 
 #menu {
@@ -71,8 +71,6 @@ div.gameboard {
 	position: relative;
 	float: left;
 	width: 910px;
-	height: 571px;
-	border-right: 2px solid black;
 	overflow: hidden;
 }
 
@@ -91,7 +89,10 @@ div.gameboard {
 }
 
 #cards-in-play {
-	height: 170px;
+	text-align: center;
+	border-bottom: 2px solid #000000;
+	margin: 0 auto;
+	padding: 10px;
 		/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#2afd9c+0,23cdfc+25,9840fb+50,fc6769+75,fffe9f+100 */
 	background: rgb(42,253,156); /* Old browsers */
 	background: -moz-linear-gradient(-45deg,  rgba(42,253,156,1) 0%, rgba(35,205,252,1) 25%, rgba(152,64,251,1) 50%, rgba(252,103,105,1) 75%, rgba(255,254,159,1) 100%); /* FF3.6-15 */
@@ -101,10 +102,9 @@ div.gameboard {
 }
 
 #user-cards {
-	height: 335px;
-	border-top: 2px solid black;
 	overflow: hidden;
 	margin: 0 auto;
+	padding: 0px;
 	text-align: center;
 }
 
@@ -113,8 +113,8 @@ div.sidebar {
 	float: right;
 	padding: 10px;
 	width: 268px;
-	height: 547px;
 	background-color: #FFFFFF;
+	border-left: 2px solid black;
 }
 
 .profile-receiver {
@@ -164,7 +164,7 @@ Giphy Cards ==================================================================
 	width: auto;
 	height: 130px;
 	overflow: hidden;
-	margin: 2px;
+	margin: 10px;
 	padding: 10px;
 	border-radius: 10px;
 	line-height: 140px;
@@ -177,15 +177,54 @@ Giphy Cards ==================================================================
 
 }
 
-.card img {
+#user-cards img {
 	border-radius: 10px;
-	width: auto;
 	max-width: 290px;
 	height: 130px;
 }
 
 #selected {
 	opacity: 0.4;
+}
+
+img#winner {
+	opacity: 0.4;
+}
+
+#cards-in-play ul {
+	margin: 0 auto;
+	padding: 0px;
+}
+
+#cards-in-play h3 {
+	margin: 0 auto;
+	padding: 0px;
+}
+
+#cards-in-play li {
+	display: inline-block;
+	overflow: auto;
+	margin: 10px;
+}
+
+.cards-in-play-list img {
+	height: 130px;
+	max-width: 200px;
+	border-radius: 10px;
+	border: 2px solid #000000;
+}
+
+#user-selected {
+	border-radius: 10px;
+	border: 2px solid #000000;
+	width: auto;
+	height: 130px;
+}
+
+#winning-card {
+	height: 130px;
+	width: auto;
+	border-radius: 10px;
 }
 
 /*#winner {
