@@ -65,14 +65,19 @@
         <div id="cards-in-play">
           cards in play
         </div>
-        <div id="user-cards">
+        <div id="user-hand">
           Your Hand (user cards)
+		  <div id="user-cards">
+
+		  </div>
         </div>
       </div>
 
       <div class="sidebar" id="side-chat" >
-        <div class="profile-receiver" id="game-status">
-          game stats
+		<div class="profile-receiver" id="game-status">
+			game stats
+		</div>
+        <div class="profile-receiver" id="profile-status">
         </div>
 
         <div class="chat">
@@ -92,22 +97,33 @@
     Templates
     ========== -->
 
-  	<!-- User Profile Template -->
-  	<template class="sidebar" id="profile-template">
+  	<!-- User Profile -->
+  	<template class="sidebar-top" id="profile-template">
   		<h3>{{username}}'s Profile</h3>
   		<h3>Total Wins: {{this.wins}}</h3>
   		<ul id="profile-actions">
-  				<li class="profile-actions-item" id="profile-edit">
-  					Edit
-  				</li> |
-  				<li class="profile-actions-item" id="profile-delete">
-  					Delete Account
-  				</li> |
-  				<li class="profile-actions-item" id="side-back-button">
-  					Back
-  				</li>
+			<li class="profile-actions-item" id="profile-edit">
+				Edit
+			</li> |
+			<li class="profile-actions-item" id="profile-delete">
+				Delete Account
+			</li> |
+			<li class="profile-actions-item" id="side-back-button">
+				Back
+			</li>
   		</ul>
   	</template>
+
+	<!-- Update User Profile -->
+	<template class="sidebar-top" id="profile-update">
+		<h4>New User Name:</h4>
+				<input type="text" placeholder="{{username}}" id="update-username" value=""><br>
+				<input type="password" placeholder="New Password" id="update-password"><br>
+	    		<button class="submit-butt" id="update-submit">Update</button>
+			<li class="profile-actions-item" id="side-back-button">
+				Back
+			</li>
+	</template>
 
     <script src="js/script.js"></script>
   </body>

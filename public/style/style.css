@@ -120,12 +120,14 @@ div.sidebar {
 .profile-receiver {
 	overflow: hidden;
 	text-align: center;
-}
-
-#game-status {
 	height: 150px;
 	border-bottom: 2px dotted black;
 }
+
+/*#game-status {
+	height: 150px;
+	border-bottom: 2px dotted black;
+}*/
 
 #messages {
 	height: 300px;
@@ -155,7 +157,7 @@ div.sidebar {
 Giphy Cards ==================================================================
 /*===========================================================================*/
 
-#user-cards ul {
+#user-cards {
 	text-align: center;
 }
 
@@ -246,7 +248,7 @@ div#user-cards {
 // Navigation Bar and Buttons //
 //////////////////////////////*/
 
-.nav-tool {
+li.nav-tool {
 	display: inline-block;
 }
 
@@ -263,9 +265,9 @@ div#user-cards {
 	cursor: pointer;
 }
 
-/*//////////////////////////////
-// 					Profile 					//
-//////////////////////////////*/
+/*///////////
+// Profile //
+/////////////*/
 
 /*template.sidebar {
 	text-align: center;

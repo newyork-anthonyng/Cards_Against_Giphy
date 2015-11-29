@@ -29,16 +29,20 @@ function verifyToken(xhr) {
 // hide user signup and game views
 $('.container').hide();			// Naturally hidden
 $('.user-signup').hide();		// Naturally hidden
-$('.user-login').show();			// Naturally shown
+$('.user-login').show();		// Naturally shown
+// $('#side-profile').show();	// Naturally shown
+// $('#side-chat').hide();		// Naturally n/a
+$('#profile-status').hide();	// Naturally hidden
 
 $(function() {
 
 	// Setup for Handlebars (May Refactor Later)
 	let renderTemplate_userProfile = Handlebars.compile($('template#profile-template').html());
+	let renderTemplate_updateProfile = Handlebars.compile($('template#profile-update').html());
 
-// ////////////////////////////////////////////////////////////////////////////
-// User Sign Up ///////////////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////////////////////////
+//////////////////
+// User Sign Up //
+//////////////////
 
   // user signup
   $('#signuplink').click((event) => {
@@ -105,9 +109,9 @@ $(function() {
     });
   });
 
-// ////////////////////////////////////////////////////////////////////////////
-// User Profile ///////////////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////////////////////////
+/////////////////
+//User Profile //
+/////////////////
 
 	// Show User Profile
 	$('#nav-profile').click((event) => {
@@ -120,27 +124,46 @@ $(function() {
 			method: "GET"
 		}).done((user) => {
 			// entire user object returned
-			let $list = $('.profile-receiver');
+			let $list = $('#profile-status');
 			let compiledTemplate = renderTemplate_userProfile(user);
 			$list.empty().append(compiledTemplate);
 		})
 	})
 
 	// Hide User Profile
-	$('#side-back-button').click((event) => {
+	$(document.body).on('click', '#side-back-button',  function() {
+		console.log('HIT PROFILE HIDE');
+		let profileView = $('#profile-status');
+		profileView.html('');
+		profileView.empty();
+		profileView.hide();
+		$('#game-status').show();
+	});
+
+
+/////////////////
+//User Actions //
+/////////////////
+
+
+	$(document.body).on('click', '#profile-edit',  function() {
 		event.preventDefault();
 
-		$('.profile-receiver').empty();
-		$('#game-status').show();
+		$.ajax({
+			'beforeSend': verifyToken,
+			url: "/user/" + myUser,
+			method: "GET"
+		}).done((user) => {
+			// entire user object returned
+			let $list = $('#profile-status');
+			let compiledTemplate = renderTemplate_updateProfile(user);
+			$list.empty().append(compiledTemplate);
+		})
 	})
 
 
-// ////////////////////////////////////////////////////////////////////////////
-// User Actions ///////////////////////////////////////////////////////////////
-// ////////////////////////////////////////////////////////////////////////////
-
 	// user update (username, password)
-	$('#update-submit').click((event) => {
+	$(document.body).on('click', '#update-submit',  function() {
 		let username = $("#update-username").val();
 		let password = $("#update-password").val();
 		let userData = {
@@ -154,13 +177,17 @@ $(function() {
 			method: "PUT",
 			data: userData
 		}).done(() => {
-			$('.container').show();
-			$('.user-login').hide();
+			let profileView = $('#profile-status');
+			profileView.html('');
+			profileView.empty();
+			profileView.hide();
+			$('#game-status').show();
 		});
 	});
 
+
 	//User Delete Account
-	$('#profile-delete').click((event) => {
+	$(document.body).on('click', '#profile-delete',  function() {
 
 		let userData = {
 			username: myUser
@@ -202,9 +229,11 @@ $(function() {
 			method: "GET"
 		}).done((user) => {
 			// entire user object returned
-			let $list = $('.profile-receiver');
+			$('#game-status').hide();
+			let $list = $('#profile-status');
 			let compiledTemplate = renderTemplate_userProfile(user);
 			$list.empty().append(compiledTemplate);
+			$('#profile-status').show();
 		})
 	})
 
@@ -227,9 +256,9 @@ $(function() {
 	})
 
 
-// ==========================================================================
-// Giphy Cards ==============================================================
-// ==========================================================================
+/////////////////
+// Giphy Cards //
+/////////////////
 
   // user can click and select card
   // must use document.body because cards are dynamically added to DOM
@@ -294,7 +323,6 @@ $(function() {
   // set up interval method
   let timerID = window.setInterval(() => {
 		console.log('current phase: ' + currentPhase);
-
 		// update client's views of their
     if(!areCardsShowing) socket.emit('show hand');
 
@@ -399,7 +427,7 @@ socket.on('start round', (data) => {
 		isJudge = true;
 	}
 
-  let imageList = $('div#user-cards');
+  let imageList = $('div#user-hand');
   imageList.append('<p>' + currentUser['name'] + '</p>');
 
 	currentPhase = 'show hand';
@@ -422,20 +450,20 @@ socket.on('show hand', (users) => {
 	// console.log('script.js : showing hand');
   // only show hand when there are current hands
   let currentUser = getCurrentUser(users, myId);
-
-  let handList = $('div#user-cards');
-
+  let handList = $('#user-cards');
   if (currentUser === undefined || isJudge) {
     handList.html('').append($('<p>You are the judge</p>'));
+	console.log(currentUser);
+	console.log(isJudge);
   } else {
 
 		// show the card images
-	  handList.html('').append($('<li>' + currentUser['name'] + '</li>'));
+	  handList.html('').append($('<p>' + currentUser['name'] + '</p>'));
 	  for(let i = 0, j = currentUser['images'].length; i < j; i++) {
 	    let myCard =
-	      $('<li><div class="card"><img src=' +
+	      $('<div class="card"><img class="card-img" src=' +
 	      currentUser['images'][i]['giphy']
-	      + '></img></div></li>');
+	      + '></img></div>');
 	    handList.append(myCard);
 	  }
 
@@ -529,15 +557,16 @@ socket.on('reveal winner', (data) => {
 	currentPhase = 'end round';
 });
 
-// ==========================================================================
-// Convenience Methods ======================================================
-// ==========================================================================
+/////////////////////////
+// Convenience Methods //
+/////////////////////////
 
 // pass in all users in the game, and the client's unique ID
 // return the user object for the client
 let getCurrentUser = function(allUsers, currentUserId) {
   for(let i = 0, j = allUsers.length; i < j; i++) {
     if(allUsers[i]['id'] === currentUserId) {
+	  console.log(allUsers);
       return allUsers[i];
     }
   }
