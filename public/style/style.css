@@ -93,7 +93,7 @@ div.gameboard {
 	border-bottom: 2px solid #000000;
 	margin: 0 auto;
 	padding: 10px;
-		/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#2afd9c+0,23cdfc+25,9840fb+50,fc6769+75,fffe9f+100 */
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#2afd9c+0,23cdfc+25,9840fb+50,fc6769+75,fffe9f+100 */
 	background: rgb(42,253,156); /* Old browsers */
 	background: -moz-linear-gradient(-45deg,  rgba(42,253,156,1) 0%, rgba(35,205,252,1) 25%, rgba(152,64,251,1) 50%, rgba(252,103,105,1) 75%, rgba(255,254,159,1) 100%); /* FF3.6-15 */
 	background: -webkit-linear-gradient(-45deg,  rgba(42,253,156,1) 0%,rgba(35,205,252,1) 25%,rgba(152,64,251,1) 50%,rgba(252,103,105,1) 75%,rgba(255,254,159,1) 100%); /* Chrome10-25,Safari5.1-6 */
