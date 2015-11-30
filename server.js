@@ -10,8 +10,8 @@ const mongoose    = require('mongoose');
 const users       = require('./public/js/global');
 
 // Seed files
-const questionArray 	= require('./seeds/qa-array');
-const answerArray 	= require('./seeds/search-terms');
+// const questionArray 	= require('./seeds/qa-array');
+// const answerArray 	= require('./seeds/search-terms');
 
 
 let addedUser = false;
