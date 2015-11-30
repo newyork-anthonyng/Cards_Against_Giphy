@@ -7,10 +7,11 @@ let Answer = require('../models/answer.js');
 let mongoose = require('mongoose');
 
 
-// Connecting to Mongo DB
-mongoose.connect('mongodb://localhost/giphy', (error) => {
+// Connecting to Mongo LAB
+var mongoUri =  process.env.MONGOLAB_URI || 'mongodb://localhost/giphy';
+mongoose.connect(mongoUri, (error) => {
 	if (error) {
-		console.log('Cannot connect to db. Error: ', err);
+		console.log('Cannot connect to db. Error: ', error);
 	} else {
 		console.log('Connected to database.');
 	}

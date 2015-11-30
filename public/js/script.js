@@ -93,7 +93,7 @@ $(function() {
     event.preventDefault();
 
     $.ajax({
-      url: 'http://localhost:3000/startRound'
+      url: 'https://secret-stream-8173.herokuapp.com/startRound'
     });
   });
 
@@ -325,7 +325,7 @@ $(function() {
 
 					// start next round
 					$.ajax({
-						url: 'http://localhost:3000/startRound'
+						url: 'https://secret-stream-8173.herokuapp.com/startRound'
 					});
 
 				}, 2000);

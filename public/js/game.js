@@ -71,7 +71,7 @@ let Game = (function() {
     // deal random terms to user
     dealCards: function(user) {
       // use request module to hit route and populate our hand
-      request('http://localhost:3000/api/randomTerms/6', (err, res, body) => {
+      request('https://secret-stream-8173.herokuapp.com/api/randomTerms/6', (err, res, body) => {
         if(!err && res.statusCode == 200) {
           // use JSON.parse to transform body into Array
           user['hand'] = JSON.parse(body);
@@ -89,7 +89,7 @@ let Game = (function() {
       let formattedSearchTerm = searchTerm.split(' ').join('+');
 
       // use request module to hit route and get img_url for our searchTerm
-      request('http://localhost:3000/api/createCards/' + searchTerm,
+      request('https://secret-stream-8173.herokuapp.com/api/createCards/' + searchTerm,
         (err, res, body) => {
           if(!err && res.statusCode == 200) {
             let image = JSON.parse(body);
@@ -101,7 +101,7 @@ let Game = (function() {
     // get question for current round
     createQuestion: function() {
       // use request module to hit route and get a question
-      request('http://localhost:3000/api/createQuestion', (err, res, body) => {
+      request('https://secret-stream-8173.herokuapp.com/api/createQuestion', (err, res, body) => {
         if(!err && res.statusCode == 200) {
           currentQuestion = body;
         }
