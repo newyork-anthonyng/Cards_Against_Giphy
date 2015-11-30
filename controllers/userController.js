@@ -1,8 +1,10 @@
 'use strict';
+
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-const secret = "iahsofh"; // this needs to be moved out of the app!
+// const secret = "";
+const secret = process.env.SECRET;
 
 function create(req, res){
 
@@ -67,16 +69,16 @@ function auth(req, res){
   let userParams = req.body;
   // Validation for undefined email or password
   if (userParams.username == undefined || userParams.password == undefined)
-  res.status(401).send({message: "incorrect credentials"});
+    res.status(401).send({message: "incorrect credentials"});
 
   User.findOne({ username: userParams.username }, (err, user) => {
     user.authenticate(userParams.password, (err, isMatch) => {
-      if (err) throw err;
+      if (err) console.log(err);
       // check if passwords match and token generation
       if (isMatch) {
         // token is made and set to expire in 5 hours / not related to logout
-        res.status(200).send({message: "valid credentials", token: jwt.sign(user, secret, {expiresIn: '5h'})});
-
+        res.status(200).send({message: "valid credentials",
+            token: jwt.sign(user, secret, {expiresIn: '5h'})});
       } else {
         res.status(401).send({message: "invalid credentials"});
       };

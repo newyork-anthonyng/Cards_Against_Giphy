@@ -1,8 +1,9 @@
 'use strict';
-let mongoose = require('mongoose');
+
+const mongoose = require('mongoose');
 
 let AnswerSchema = new mongoose.Schema({
-	id: Number,
+	id: 	Number,
 	text: String,
 	// total wins: Number,
 });

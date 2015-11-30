@@ -1,17 +1,13 @@
 'use strict';
-let request = require('request');
+
+const request = require('request');
 
 let Game = (function() {
 
-  // each player will be an object with an id, name, images, and submitted card
   let players         = [];
   let judge           = undefined;
   let judgeIndex      = undefined;
   let currentQuestion = undefined;
-
-  // game phases. We still need to check if this is necessary.
-  let phases          = ['round start', 'player chooses', 'judging', 'winner revealed'];
-  let currentPhase    = 0;
 
   return {
     getPlayers: function() {
@@ -27,18 +23,17 @@ let Game = (function() {
       return judge;
     },
 
-    // start round
     startRound: function(users) {
       this.resetGame();
-      console.log('Game.js : starting round');
 
       // reset players and add in all players
       players = [];
+
       for(let i = 0, j = users.length; i < j; i++) {
         let newPlayer = {};
         newPlayer.id = users[i]['id'];
         newPlayer.name = users[i]['name'];
-        // key: images will hold an array of objects, which have keys of...
+        // The key, "images" will hold an array of objects, which have keys of
         // 'id', 'giphy', 'still'
         newPlayer.images = [];
         newPlayer.submitted = undefined;
@@ -51,11 +46,10 @@ let Game = (function() {
       // create question
       this.createQuestion();
 
-      // set up initial judge
+      // set up judge
       if(!judge) {
         for(let i = 0, j = users.length; i < j; i++) {
           if(users[i]['isJudge']) {
-            console.log('user: ' + users[i]['name'] + ' is the judge.');
             judge = users[i]['id'];
             judgeIndex = i;
             break;
@@ -63,7 +57,6 @@ let Game = (function() {
         }
       } else {
         // make the next player the judge
-        console.log('inside of game start round.');
         if(judgeIndex === players.length - 1) {
           judgeIndex = 0;
         } else {
@@ -75,16 +68,13 @@ let Game = (function() {
       return players;
     },
 
-    // deal cards (random terms) to user
+    // deal random terms to user
     dealCards: function(user) {
-      console.log('Game.js : dealing cards');
-
       // use request module to hit route and populate our hand
-      request('http://localhost:3000/api/randomTerms/6', (err, res, body) => {
+      request('https://secret-stream-8173.herokuapp.com/api/randomTerms/6', (err, res, body) => {
         if(!err && res.statusCode == 200) {
           // use JSON.parse to transform body into Array
           user['hand'] = JSON.parse(body);
-          // console.log(user['name'] + ': ' + user['hand']);
 
           for(let i = 0, j = user['hand'].length; i < j; i++) {
             this.getImgURL(user, user['hand'][i]);
@@ -95,14 +85,11 @@ let Game = (function() {
 
     // convert the random terms into img_urls
     getImgURL: function(user, searchTerm) {
-      // console.log('Game.js : getting img_url');
-
       // format search term so that we are able to use it in Giphy API
-      // replace spaces with '+'s
       let formattedSearchTerm = searchTerm.split(' ').join('+');
 
       // use request module to hit route and get img_url for our searchTerm
-      request('http://localhost:3000/api/createCards/' + searchTerm,
+      request('https://secret-stream-8173.herokuapp.com/api/createCards/' + searchTerm,
         (err, res, body) => {
           if(!err && res.statusCode == 200) {
             let image = JSON.parse(body);
@@ -113,23 +100,17 @@ let Game = (function() {
 
     // get question for current round
     createQuestion: function() {
-      console.log('Game.js : getting question');
-
       // use request module to hit route and get a question
-      request('http://localhost:3000/api/createQuestion', (err, res, body) => {
+      request('https://secret-stream-8173.herokuapp.com/api/createQuestion', (err, res, body) => {
         if(!err && res.statusCode == 200) {
           currentQuestion = body;
-          // console.log('Current question is: ' + currentQuestion);
         }
       });
 
     },
 
     // player submitted card
-    // takes a User's ID, and a card giphy url
     submitCard: function(userId, imgURL) {
-      console.log('Game.js submit card');
-
       // find player object
       let currentPlayer = undefined;
       for(let i = 0, j = players.length; i < j; i++) {
@@ -139,7 +120,6 @@ let Game = (function() {
         }
       }
 
-      // set their Submitted key equal to the image
       currentPlayer['submitted'] = imgURL;
     },
 
@@ -154,6 +134,7 @@ let Game = (function() {
           return false;
         }
       }
+
       return true;
     },
 
@@ -166,26 +147,34 @@ let Game = (function() {
 
       let submittedCards = [];
 
-      // go through all players
       for(let i = 0, j = players.length; i < j; i++) {
         if(players[i]['submitted']) {
-          submittedCards.push(players[i]['submitted']);
+          let myPlayer = {};
+          myPlayer['userId'] = players[i]['id'];
+          myPlayer['imgURL'] = players[i]['submitted'];
+          myPlayer['name']   = players[i]['name'];
+          submittedCards.push(myPlayer);
         }
       }
 
-      // add all of the submitted cards into an array
       return submittedCards;
-    },
-
-    // declare winner
-    declareWinner: function(userId) {
-
     },
 
     // reset all game variables
     resetGame: function() {
       players         = [];
       currentQuestion = undefined;
+    },
+
+    // return the username of the Player who submitted that card
+    getCardsOwner: function(imgURL) {
+      let mySubmittedCards = this.getSubmittedCards();
+
+      for(let i = 0, j = mySubmittedCards.length; i < j; i++) {
+        if(imgURL === mySubmittedCards[i]['imgURL']) {
+          return mySubmittedCards[i]['name'];
+        }
+      }
     }
 
   }

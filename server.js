@@ -7,44 +7,96 @@ const io          = require('socket.io')(server);
 const request     = require('request');
 const bodyParser  = require('body-parser');
 const mongoose    = require('mongoose');
-const users        = require('./public/js/global');
+const users       = require('./public/js/global');
+
+// Seed files
+// const questionArray 	= require('./seeds/qa-array');
+// const answerArray 	= require('./seeds/search-terms');
+
 
 let addedUser = false;
 
 const userRoutes  = require('./routes/userRoutes');
-const gameRoutes  = require('./routes/gameRoutes.js');
 const apiRoutes   = require('./routes/apiRoutes');
 const Game        = require('./public/js/game');
 
-// Temporary Link to Models
-let Question	  = require('./models/question');
-let answer		  = require('./controllers/answerController');
+// Models
+const Question 	= require('./models/question');
+const Answer 	= require('./models/answer');
+
+// set up port that our heroku server will be using (HEROKU)
+// app.listen(process.env.PORT || 3000 )
 
 // set up port that our server will be using
-app.set('port', 3000);
+	// This is different from app.listent(3000?)
+app.set('port', process.env.PORT || 3000);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', userRoutes);
-app.use('/game', gameRoutes);
 app.use('/api', apiRoutes);
 
 app.use(express.static('public'));
 
-// connect to MongoDB
-mongoose.connect('mongodb://localhost/giphy', (err) => {
+// Connect to MongoLab_URI (HEROKU)
+var mongoUri =  process.env.MONGOLAB_URI || 'mongodb://localhost/giphy';
+mongoose.connect(mongoUri, (err) => {
   if(err) {
-    console.log('Mongo connection error.', err);
+    console.log('MongoLab connection error.', err);
   } else {
-    console.log('Mongo connection successful');
+    console.log('MongoLab connection successful');
+
+	// // Create questions collection
+	// Question.remove(function(err, p){
+	// 	if(err){
+	// 		throw err;
+	// 	} else{
+	// 		console.log('No Of Documents deleted:' + p);
+	// 	}
+	// });
+	//
+	// Question.collection.insert(questionArray, function(err, data){
+	// 	if (err) {
+	// 		throw err;
+	// 	} else {
+	// 		console.info('Questions were successfully stored.', data.length);
+	// 	}
+	// });
+	//
+	// // Create answers collection
+	// Answer.remove(function(err, p){
+	// 	if(err){
+	// 		throw err;
+	// 	} else{
+	// 		console.log('No Of Documents deleted:' + p);
+	// 	}
+	// });
+	//
+	// Answer.collection.insert(answerArray, function(err, data){
+	// 	if (err) {
+	// 		throw err;
+	// 	} else {
+	// 		console.info('Answers were successfully stored.', data.length);
+	// 	}
+	// });
+
   }
 });
 
+// connect to MongoDB
+// mongoose.connect('mongodb://localhost/giphy', (err) => {
+//   if(err) {
+//     console.log('Mongo connection error.', err);
+//   } else {
+//     console.log('Mongo connection successful');
+//   }
+// });
+
 // ===========================================================================
 // Emit events ===============================================================
-// user joined, send message, disconnect
+// user joined, send message, disconnect =====================================
 // ===========================================================================
-// Socket pattern: IO will emit events from server.js
+// Socket pattern: IO will emit events from server.js ========================
 // In script.js, we will receive these events and manipulate the DOM as needed
 // ===========================================================================
 
@@ -57,7 +109,7 @@ io.on('connection', (socket) => {
 
     userObj.name = username;
     userObj.id = socket.id;
-    // check if user was first
+    // check if user was first, and set them as judge
     if (users.length === 0) {
       userObj.isJudge = true;
     } else {
@@ -97,7 +149,6 @@ io.on('connection', (socket) => {
 
   // userId and myCard are getting passed as keys in an object
   socket.on('submit card', (data) => {
-    console.log('server.js submitting card');
     Game.submitCard(data['userId'], data['myCard']);
 
     io.emit('submit card', data);
@@ -105,7 +156,11 @@ io.on('connection', (socket) => {
 
   // myCard is getting passed as a key in an object (imgURL)
   socket.on('reveal winner', (data) => {
-    io.emit('reveal winner', data);
+    let winnerObject = {};
+    winnerObject['imgURL'] = data['myCard'];
+    winnerObject['name'] = Game.getCardsOwner(winnerObject['imgURL']);
+
+    io.emit('reveal winner', winnerObject);
   });
 
   socket.on('disconnect', () => {
@@ -121,7 +176,7 @@ io.on('connection', (socket) => {
   });
 });
 
-// // Show user's hand
+// Show user's hand
 app.get('/showHand', (req, res) => {
   res.send('Showing Hand');
 });
