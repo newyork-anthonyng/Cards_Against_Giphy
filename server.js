@@ -10,8 +10,8 @@ const mongoose    = require('mongoose');
 const users       = require('./public/js/global');
 
 // Seed files
-const questionArr 	= require('./seeds/qa-array');
-const answerArr 	= require('./seeds/search-terms');
+const questionArray 	= require('./seeds/qa-array');
+const answerArray 	= require('./seeds/search-terms');
 
 
 let addedUser = false;
@@ -45,23 +45,41 @@ mongoose.connect(mongoUri, (err) => {
     console.log('MongoLab connection error.', err);
   } else {
     console.log('MongoLab connection successful');
-	Vampire.remove(function(err, p){
-	if(err){
-		throw err;
-	} else{
-		console.log('No Of Documents deleted:' + p);
-	}
-});
 
-	Vampire.collection.insert(vampArr, function(err, data){
-		if (err) {
-				throw err;
-		} else {
-				console.info('vamps were successfully stored.', data.length);
-		}
+	// // Create questions collection
+	// Question.remove(function(err, p){
+	// 	if(err){
+	// 		throw err;
+	// 	} else{
+	// 		console.log('No Of Documents deleted:' + p);
+	// 	}
+	// });
+	//
+	// Question.collection.insert(questionArray, function(err, data){
+	// 	if (err) {
+	// 		throw err;
+	// 	} else {
+	// 		console.info('Questions were successfully stored.', data.length);
+	// 	}
+	// });
+	//
+	// // Create answers collection
+	// Answer.remove(function(err, p){
+	// 	if(err){
+	// 		throw err;
+	// 	} else{
+	// 		console.log('No Of Documents deleted:' + p);
+	// 	}
+	// });
+	//
+	// Answer.collection.insert(answerArray, function(err, data){
+	// 	if (err) {
+	// 		throw err;
+	// 	} else {
+	// 		console.info('Answers were successfully stored.', data.length);
+	// 	}
+	// });
 
-
-	});
   }
 });
 
