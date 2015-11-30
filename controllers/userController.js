@@ -3,8 +3,8 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-const secret = "iahsofh";
-// const secret = process.env.SECRET;
+// const secret = "";
+const secret = process.env.SECRET;
 
 function create(req, res){
 

@@ -4,8 +4,8 @@ const express     = require('express');
 const router      = express.Router();
 const user        = require('../controllers/userController');
 const expressJwt  = require('express-jwt');
-const secret      = "iahsofh";
-// const secret = process.env.SECRET;
+// const secret      = "";
+const secret = process.env.SECRET;
 
 router.route('/user/auth')
   .post(user.auth);

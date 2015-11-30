@@ -63,7 +63,7 @@ router.get('/createCards/:searchTerm', (req, res) => {
 router.get('/createQuestion', (req, res) => {
 
 	Question.find({pick: 1}, (err, output) => {
-		let whatWeQuestion = output[Math.ceil(Math.random()*423)]['text'];
+		let whatWeQuestion = output[Math.ceil(Math.random()*347)]['text'];
 		res.send(whatWeQuestion);
 	});
 });
