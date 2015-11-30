@@ -10,7 +10,7 @@ let mongoose = require('mongoose');
 var mongoUri =  process.env.MONGOLAB_URI || 'mongodb://localhost/giphy';
 mongoose.connect(mongoUri, (error) => {
 	if (error) {
-		console.log('Cannot connect to db. Error: ', err);
+		console.log('Cannot connect to db. Error: ', error);
 	} else {
 		console.log('Connected to database.');
 	}
