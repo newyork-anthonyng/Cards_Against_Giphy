@@ -9,6 +9,11 @@ const bodyParser  = require('body-parser');
 const mongoose    = require('mongoose');
 const users       = require('./public/js/global');
 
+// Seed files
+const questionArr 	= require('./seeds/qa-array');
+const answerArr 	= require('./seeds/search-terms');
+
+
 let addedUser = false;
 
 const userRoutes  = require('./routes/userRoutes');
@@ -16,7 +21,8 @@ const apiRoutes   = require('./routes/apiRoutes');
 const Game        = require('./public/js/game');
 
 // Models
-let Question	  = require('./models/question');
+const Question 	= require('./models/question');
+const Answer 	= require('./models/answer');
 
 // set up port that our heroku server will be using (HEROKU)
 // app.listen(process.env.PORT || 3000 )
@@ -39,6 +45,23 @@ mongoose.connect(mongoUri, (err) => {
     console.log('MongoLab connection error.', err);
   } else {
     console.log('MongoLab connection successful');
+	Vampire.remove(function(err, p){
+	if(err){
+		throw err;
+	} else{
+		console.log('No Of Documents deleted:' + p);
+	}
+});
+
+	Vampire.collection.insert(vampArr, function(err, data){
+		if (err) {
+				throw err;
+		} else {
+				console.info('vamps were successfully stored.', data.length);
+		}
+
+
+	});
   }
 });
 
